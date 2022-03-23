@@ -1,0 +1,271 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Amatic SC', cursive;
+  font-family: 'Mochiy Pop One', sans-serif;
+}
+
+.mobile {
+  display: none;
+}
+.nav {
+  padding: 0em 0em 0em 0em;
+  display: flex;
+  align-items: center;
+  height: 10vh;
+  background-image: linear-gradient(to bottom, #0bd4c2, #a2a5ff);
+  background-color: #3d5ec9;
+}
+
+.gif {
+  padding-left: 0em;
+  margin-top: -1em;
+  height: 15vh;
+}
+
+.WebsiteName {
+  font-size: 1.5em;
+  color: white;
+  font-family: 'Shojumaru', cursive;
+}
+.main {
+  display: flex;
+  height: 90vh;
+  /* background-image: url("../../../public/images/twasat.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 0em -3em; */
+}
+
+.backgrounde {
+  background-image: url('../public/images/backGroundOff.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.absolute {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  position: absolute;
+}
+
+.top {
+  height: 97%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding: 0em 3em 0em 4em;
+}
+.bottom {
+  display: flex;
+  justify-content: end;
+  padding-right: 1em;
+}
+
+.OnlineMarket {
+  font-size: 1.5em;
+  color: #09c522;
+  padding: 0em 0em 0em 0em;
+  display: flex;
+}
+
+.underline {
+  padding: 0em 0em 1em 0em;
+
+  width: fit-content;
+  border-bottom: 5px #09c522 solid;
+}
+
+.BetterProduct {
+  font-size: 1.5em;
+
+  color: #3d5ec9;
+  margin: 0.5em 0em 1em 0em;
+}
+/* Buttons */
+
+.ButtonsDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5em 0em 0em 0em;
+}
+
+.Customer {
+  border-radius: 25px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+  border: none;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  padding: 0.3em 1em 0.3em 1em;
+  margin: 0em 0.5em;
+  background-color: #3d5ec9;
+}
+
+.Customer:hover {
+  background-color: white;
+  color: #3d5ec9;
+}
+
+.Delivery_man {
+  border-radius: 25px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+  border: none;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  padding: 0.4em 0.8em 0.4em 0.8em;
+  margin: 0em 0.5em;
+  background-color: #a2a5ff;
+}
+
+.Delivery_man:hover {
+  background-color: white;
+  color: #a2a5ff;
+}
+
+@media only screen and (max-width: 600px) {
+  .mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .computer {
+    display: none;
+  }
+
+  .navMobile {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    background-image: linear-gradient(to bottom, #0bd4c2, #a2a5ff);
+    background-color: #3d5ec9;
+  }
+
+  .gifMobile {
+    margin-bottom: 0.5em;
+    height: 15vh;
+  }
+
+  .nameMobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .nameMobile p {
+    font-size: 0.9em;
+    margin-top: -1em;
+  }
+  .WebsiteName {
+    margin-top: 0.5em;
+    color: white;
+    font-family: 'Shojumaru', cursive;
+  }
+
+  .img {
+    margin: 2em 0em;
+    width: 80%;
+  }
+
+  /* Buttons */
+
+  .ButtonsDivMobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 4em;
+  }
+
+  .CustomerMobile {
+    border-radius: 25px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    border: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+      rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    padding: 0.3em 1em 0.3em 1em;
+    background-color: #3d5ec9;
+  }
+
+  .Delivery_manMobile {
+    border-radius: 25px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    border: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+      rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    padding: 0.4em 0.8em 0.4em 0.8em;
+    margin: 1em 0em 0em 0em;
+    background-color: #a2a5ff;
+  }
+
+  .footerMobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 1em;
+    background-color: #09c522;
+  }
+
+  .footerMobile a {
+    font-size: 1em;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 0.5em;
+  }
+
+  .ContactMobile {
+    margin: 1em 0em;
+  }
+
+  .ContactMobile img {
+    transform: scale(1.5);
+    margin: 0em 1em;
+  }
+}
+
+@media only screen and (max-width: 1140px) {
+  .absolute {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    position: absolute;
+  }
+
+  .top {
+    height: 97%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 0em 3em 0em 4em;
+  }
+  .talk {
+    display: none;
+  }
+
+  .ButtonsDiv {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 1.5em 0em 0em 0em;
+  }
+}
