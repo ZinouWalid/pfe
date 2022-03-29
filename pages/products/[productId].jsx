@@ -2,8 +2,7 @@ import React from 'react'
 import ProductInfo from '../../components/ProductInfo'
 
 const productId = ({ product }) => {
-
-  return <ProductInfo product={product} />
+  return <ProductInfo key={product.id} product={product} />
 }
 
 export default productId

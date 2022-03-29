@@ -6,7 +6,7 @@ import { searchProducts } from '../../React-Context-Api/productsActions'
 import ProductsCategories from '../../components/ProductsCategories'
 
 export default function Home({}) {
-  const [{basket}, dispatch] = useStateValue()
+  const [{ basket }, dispatch] = useStateValue()
   const [products, setProducts] = useState([])
   const [pages, setPages] = useState([])
   const [categories, setCategories] = useState([])
@@ -28,19 +28,14 @@ export default function Home({}) {
         'https://zino-products-api.herokuapp.com/products'
       )
 
-      const data = await response.json().then((data) => {
-        dispatch(searchProducts(data))
-        return data
-      })
+      const data = await response.json()
       setProducts(data)
     }
-    setTimeout(function () {
-      fetchProducts()
-    }, 1000)
+    fetchProducts()
   }, [])
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-gray-200">
+    <div className='relative flex min-h-screen flex-col bg-gray-200'>
       <Header />
       <ProductsCategories categories={categories} />
       <Footer />

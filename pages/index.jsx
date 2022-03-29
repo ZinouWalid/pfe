@@ -12,13 +12,13 @@ function Welcome() {
           />
           <div className='nameMobile'>
             <h1 className='WebsiteName'>WZ-S H O P</h1>
-            <p>Online Market Store & Delivery</p>
+            <p>Boutique en ligne et livraison</p>
           </div>
         </nav>
 
         <img className='img' src='../public/images//tofForMobile.png' alt='' />
 
-        <p>Keep Going As :</p>
+        <p>Continuez comme :</p>
 
         <div className='ButtonsDivMobile'>
           <button
@@ -28,7 +28,7 @@ function Welcome() {
               window.location.assign('/products')
             }}
           >
-            Customer
+            Consomateur
           </button>
           <button
             className='Delivery_manMobile'
@@ -37,15 +37,15 @@ function Welcome() {
               window.location.assign('/rider/register/signin')
             }}
           >
-            Delivery man
+            Livreur
           </button>
         </div>
 
         <footer className='footerMobile'>
           <a href=''>Services</a>
-          <a href=''>About us</a>
+          <a href=''>À propos de nous</a>
           <a href=''>Contact</a>
-          <a href=''>help</a>
+          <a href=''>Aide</a>
           <div className='ContactMobile'>
             <img src='https://img.icons8.com/ios-glyphs/30/000000/facebook.png' />
             <img src='https://img.icons8.com/ios-glyphs/30/000000/google-logo--v1.png' />{' '}
@@ -67,21 +67,22 @@ function Welcome() {
           <div className='absolute'>
             <div className='top'>
               <div className='OnlineMarket'>
-                <span className='underline'>Online Market Store & </span>{' '}
-                <p> &nbsp; Delivery</p>
+                <span className='underline'>Boutique en ligne et </span>{' '}
+                <p> &nbsp; livraison</p>
               </div>
               <h1 className='BetterProduct'>
-                Better Products at the Right Price
+                De meilleurs produits au juste prix
               </h1>
               <p className='talk'>
-                The Hyphenate does a detailed stop by step tutorial on how to
-                remove a background/single color (such as a green screen) in
-                Adobe Photoshop. This quick and easy tutorial shows you how to
-                delete a background using the color range tool.
+                Le trait d'union fait un tutoriel détaillé étape par étape sur
+                la façon de supprimer un arrière-plan/une seule couleur (comme
+                un écran vert) dans Adobe Photoshop. Ce tutoriel simple et
+                rapide vous montre comment supprimer un arrière-plan à l'aide de
+                l'outil gamme de couleurs.
               </p>
               <div className='ButtonsDiv'>
                 <a className='Customer' href={'/products'}>
-                  Customer
+                  Consomateur
                 </a>
                 <button
                   className='Delivery_man'
@@ -90,7 +91,7 @@ function Welcome() {
                     window.location.assign('/rider/register/signin')
                   }}
                 >
-                  Delivery man
+                  livreur
                 </button>
               </div>
             </div>

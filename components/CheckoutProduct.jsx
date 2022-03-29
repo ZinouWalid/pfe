@@ -24,12 +24,12 @@ function CheckoutProduct({ product }) {
           readOnly
         />
         <p>{price}</p>
-        <p className='font-semibold my-4'>Quantity : {quantity}</p>
+        <p className='font-semibold my-4'>Quantité : {quantity}</p>
         <button
           className="mt-5 rounded border-2 border-red-500 bg-amber-300 p-2 text-sm hover:border-red-700 hover:bg-amber-500"
           onClick={() => dispatch(removeFromBasket(id))}
         >
-          Remove from Basket
+          Retirer du Panier
         </button>
       </div>
     </div>

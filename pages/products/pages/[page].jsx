@@ -7,7 +7,6 @@ import Pagination from '../../../components/Pagination'
 
 const Page = ({ products, currentPage }) => {
   const [pages, setPages] = useState([])
-  const [categories, setCategories] = useState([])
 
   //Fetch the pages
   useEffect(() => {
@@ -30,27 +29,14 @@ const Page = ({ products, currentPage }) => {
         return data
       })
     }
-    setTimeout(function () {
-      fetchPages()
-    }, 1000)
+    fetchPages()
   }, [])
 
-  //Fetch the categories
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const response = await fetch(
-        'https://zino-products-api.herokuapp.com/categories'
-      )
-      const data = await response.json()
-      setCategories(data)
-    }
-    fetchCategories()
-  }, [])
-
+ 
   return (
-    <div className="relative flex min-h-screen flex-col bg-gray-200">
+    <div className='relative flex min-h-screen flex-col bg-gray-200'>
       <Header />
-      <CategoriesFilter categories={categories} />
+      <CategoriesFilter/>
       <Body products={products} />
       <Pagination
         pages={pages}

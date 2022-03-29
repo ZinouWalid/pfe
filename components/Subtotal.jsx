@@ -13,17 +13,17 @@ function Subtotal() {
   }, [basket])
 
   return (
-    <div className="flex h-32 w-full max-w-xl flex-col justify-between rounded border border-gray-300 bg-gray-100 p-2 md:p-5">
+    <div className='flex h-32 w-full max-w-xl flex-col justify-between rounded border border-gray-300 bg-gray-100 p-2 md:p-5'>
       <CurrencyFormat
         renderText={(value) => (
           <>
             <p>
               {/* Part of the homework */}
-              Subtotal ({basket?.length || 0} items):
+              Total ({basket?.length || 0} articles):
               <strong> {value} DA</strong>
             </p>
-            <small className="subtotal__gift">
-              <p>Delivery costs not included at this stage</p>
+            <small className='subtotal__gift'>
+              <p>Frais de livraison non inclus à ce stade</p>
             </small>
           </>
         )}
@@ -32,12 +32,12 @@ function Subtotal() {
         displayType={'text'}
         thousandSeparator={true}
       />
-      <Link href="/checkout/delivery">
+      <Link href='/checkout/delivery'>
         <button
           disabled={basket.length == 0}
-          className="h-8 w-full rounded-sm border border-amber-500 bg-amber-400 hover:bg-amber-500"
+          className='h-8 w-full rounded-sm border border-amber-500 bg-amber-400 hover:bg-amber-500'
         >
-          Proceed to Checkout
+          Procéder au Paiement
         </button>
       </Link>
     </div>

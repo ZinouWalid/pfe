@@ -2,13 +2,15 @@ import React from 'react'
 import CategoriesFilter from '../../../components/CategoriesFilter'
 import Header from '../../../components/Header'
 import Body from '../../../components/HomeBody'
+import Footer from '../../../components/Footer'
 
-const CategoryId = ({ products, categories }) => {
+const CategoryId = ({ products }) => {
   return (
     <div className='min-h-screen bg-gray-200'>
       <Header />
       <CategoriesFilter />
       <Body products={products} />
+      <Footer/>
     </div>
   )
 }
