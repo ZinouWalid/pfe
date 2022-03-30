@@ -3,7 +3,7 @@ import Subtotal from '../../components/Subtotal'
 import CheckoutProduct from '../../components/CheckoutProduct'
 import { getCookie } from '../../lib/useCookie'
 
-const checkout = () => {
+const Checkout = () => {
   const [basket, setBasket] = useState([])
 
   useEffect(() => {
@@ -28,4 +28,4 @@ const checkout = () => {
   )
 }
 
-export default checkout
+export default Checkout
