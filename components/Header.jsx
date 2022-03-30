@@ -7,14 +7,14 @@ import { filterProducts } from '../React-Context-Api/productsActions'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { getCookie } from '../lib/useCookie'
 import Suggestions from './Suggestions'
+import { setSuggestions } from '../React-Context-Api/suggestionsActions'
 import Sidebar from './Sidebar'
 
 function Header() {
-  const [{}, dispatch] = useStateValue()
+  const [{ suggestions }, dispatch] = useStateValue()
   const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [localBasket, setLocalBasket] = useState([])
-  const [suggestions, setSuggestions] = useState([])
   const [showSidebar, setShowSidebar] = useState(false)
 
   //filter products after we search
@@ -34,7 +34,7 @@ function Header() {
       )
 
       const data = await response.json()
-      setProducts(data.slice(0, data.length - 2))
+      setProducts(data)
     }
     fetchProducts()
   }, [])
@@ -66,14 +66,14 @@ function Header() {
   const handleChange = (e) => {
     setSearchTerm(e.target.value.toLowerCase())
 
-    //Clearing old data from previous searches
-    setSuggestions(null)
-
     console.log('Suggestions for you Search : ', searchTerm, suggestions)
     products.map(({ id, name, tags, img }) => {
       searchTerm.split(' ').map((word) => {
-        if (tags.join('').includes(word)) {
-          setSuggestions([...suggestions, { id, name, img }])
+        if (tags.includes(word.toLowerCase())) {
+          //check if the product doesn't already exist in the suggestions
+          if (suggestions.findIndex((sugg) => sugg.id === id) === -1) {
+            dispatch(setSuggestions([...suggestions, { id, name, img }]))
+          }
         }
       })
     })
@@ -96,7 +96,7 @@ function Header() {
           <img
             src='https://e7.pngegg.com/pngimages/644/743/png-clipart-a-o-t-wings-of-freedom-eren-yeager-bertholdt-hoover-attack-on-titan-logo-others-angle-emblem.png'
             alt=''
-            className='mx-2 h-6 rounded-full md:h-12'
+            className='mx-2 h-6 rounded-full md:h-12 hover:bg-gray-800'
           />
           <h2 className='flex font-bold mr-2'>
             AOT <span className='ml-1 hidden md:block'>Commerce</span>
@@ -104,8 +104,6 @@ function Header() {
         </a>
       </Link>
 
-      {/* searchTerm, input and suggestions */}
-      {/* <div className='flex flex-col items-center justify-between max-w-3xl flex-1 '> */}
       <form
         className='my-auto mx-auto flex max-w-3xl flex-1 items-stretch text-slate-900'
         onSubmit={(e) => {
@@ -127,10 +125,26 @@ function Header() {
           <SearchOutlinedIcon />
         </button>
       </form>
-      {/* <div>
-          {suggestions.length && <Suggestions suggestions={suggestions} />}
+      <div>
+        {/* <div
+          className={`fixed top-16 left-60 right-60 h-40 ${
+            !suggestions && 'hidden'
+          }`}
+        >
+          <ul className='flex overflow-scroll z-30 flex-col w-full rounded-xl list-none bg-gray-200'>
+            {suggestions.map(({ id, name, img }) => (
+              <li>
+                <Link href={`/products/${id}`} passHref>
+                  <a className='flex justify-between items-center border p-1 hover:bg-gray-100 cursor-pointer bg-white'>
+                    <p className='text-gray-600'>{name}</p>
+                    <img src={img} alt='' className='h-12 object-contain' />
+                  </a>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div> */}
-      {/* </div> */}
+      </div>
 
       {/* Basket */}
       <div className='mx-2 hidden md:block'>

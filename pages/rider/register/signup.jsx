@@ -1,7 +1,11 @@
 import React from 'react'
 import SignUp from '../../../components/Login/SignUp'
 const signup = () => {
-  return <SignUp />
+  return (
+    <div className='py-2 bg-gray-100 min-h-screen'>
+      <SignUp />
+    </div>
+  )
 }
 
 export default signup

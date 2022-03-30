@@ -3,7 +3,9 @@ import SignIn from '../../../components/Login/SignIn'
 
 const signin = () => {
   return (
-    <SignIn />
+    <div className='py-2 bg-gray-100 min-h-screen'>
+      <SignIn />
+    </div>
   )
 }
 

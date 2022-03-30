@@ -14,7 +14,7 @@ function ImagesSlider() {
     'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/80/0823/1.jpg?4854',
   ]
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,

@@ -8,7 +8,7 @@ import {
   SEARCH_PRODUCTS,
   UPDATE_QUANTITY,
 } from './productsActions'
-
+import { SET_SUGGESTIONS } from './suggestionsActions'
 import { setCookie, removeCookie } from '../lib/useCookie'
 
 //Basket empty
@@ -16,6 +16,7 @@ export const initialState = {
   basket: [],
   products: [],
   filteredProducts: [],
+  suggestions: [],
 }
 
 //Selector
@@ -95,6 +96,10 @@ const reducer = (state = initialState, action) => {
 
     case FILTER_PRODUCTS:
       return { ...state, filteredProducts: action.payload }
+
+    case SET_SUGGESTIONS:
+      
+      return { ...state, suggestions: action.payload }
 
     default:
       return state

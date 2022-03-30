@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react'
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 
 function Welcome() {
   return (
@@ -29,6 +31,9 @@ function Welcome() {
             }}
           >
             Consomateur
+            <span className='mx-4'>
+              <AddShoppingCartIcon />
+            </span>
           </button>
           <button
             className='Delivery_manMobile'
@@ -38,6 +43,9 @@ function Welcome() {
             }}
           >
             Livreur
+            <span className='mx-4'>
+              <LocalShippingIcon />
+            </span>
           </button>
         </div>
 
@@ -83,6 +91,9 @@ function Welcome() {
               <div className='ButtonsDiv'>
                 <a className='Customer' href={'/products'}>
                   Consomateur
+                  <span className='mx-4'>
+                    <AddShoppingCartIcon />
+                  </span>
                 </a>
                 <button
                   className='Delivery_man'
@@ -92,6 +103,9 @@ function Welcome() {
                   }}
                 >
                   livreur
+                  <span className='mx-4'>
+                    <LocalShippingIcon />
+                  </span>
                 </button>
               </div>
             </div>
