@@ -4,11 +4,14 @@ import React, { useState } from 'react'
 export default function Login() {
   const initialValues = {
     name: '',
+    email: '',
     phoneNumber: '',
     haveMoto: false,
     havePermis: false,
     militaryFree: false,
     startingDate: new Date(),
+    password: '',
+    passwordConfirm: '',
   }
 
   const [values, setValues] = useState(initialValues)
@@ -23,7 +26,7 @@ export default function Login() {
       }),
     })
 
-    //return to page 01
+    //return to page 01'
   }
 
   const handleInputChange = (e) => {
@@ -58,6 +61,20 @@ export default function Login() {
               value={values.name}
               onChange={handleInputChange}
               placeholder='name'
+              className={
+                'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
+              }
+              required
+            />
+            <label className='text-left'>
+              Quel est votre e-mail? <i className='text-red-500'>*</i>
+            </label>
+            <input
+              name='email'
+              type='email'
+              value={values.email}
+              onChange={handleInputChange}
+              placeholder='E-mail'
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
@@ -150,6 +167,35 @@ export default function Login() {
               }
               required
             />
+            <label className='text-left'>
+              Créez votre mot de passe
+              <i className='text-red-500'>*</i>
+            </label>
+            <input
+              name='password'
+              type='password'
+              value={values.password}
+              onChange={handleInputChange}
+              placeholder='mot de passe'
+              className={
+                'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
+              }
+              required
+            />
+            <label className='text-left'>
+              Retaper votre mot de passe <i className='text-red-500'>*</i>
+            </label>
+            <input
+              name='passwordConfirm'
+              type='password'
+              value={values.repeatPassword}
+              onChange={handleInputChange}
+              placeholder='mot de passse'
+              className={
+                'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
+              }
+              required
+            />
             <div className='mt-3 flex items-center justify-center'>
               <button
                 className={
@@ -157,14 +203,14 @@ export default function Login() {
                 }
                 type='submit'
               >
-                Login
+                S&apos;inscrire
               </button>
             </div>
           </form>
           <div className='mt-3 flex items-center justify-center'>
             <Link href='/rider/register/signin' passHref>
               <a className='justify-center text-amber-500 hover:underline'>
-                Need to login? Sign in now
+                Besoin de vous connecter ? Connectez vous maintenant
               </a>
             </Link>
           </div>

@@ -7,11 +7,11 @@ import { filterProducts } from '../React-Context-Api/productsActions'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { getCookie } from '../lib/useCookie'
 import Suggestions from './Suggestions'
-import { setSuggestions } from '../React-Context-Api/suggestionsActions'
 import Sidebar from './Sidebar'
+import * as Realm from 'realm-web'
 
 function Header() {
-  const [{ suggestions }, dispatch] = useStateValue()
+  const [suggestions, setSuggestions] = useState([])
   const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [localBasket, setLocalBasket] = useState([])
@@ -63,27 +63,39 @@ function Header() {
     setSearchTerm('')
   }
 
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value.toLowerCase())
-
-    console.log('Suggestions for you Search : ', searchTerm, suggestions)
-    products.map(({ id, name, tags, img }) => {
-      searchTerm.split(' ').map((word) => {
-        if (tags.includes(word.toLowerCase())) {
-          //check if the product doesn't already exist in the suggestions
-          if (suggestions.findIndex((sugg) => sugg.id === id) === -1) {
-            dispatch(setSuggestions([...suggestions, { id, name, img }]))
-          }
-        }
-      })
-    })
+  const fetchSuggestions = async () => {
+    const REALM_APP_ID = 'pfe-etnhz'
+    const app = new Realm.App({ id: REALM_APP_ID })
+    const credentials = Realm.Credentials.anonymous()
+    let allSuggestions = []
+    try {
+      console.log('Fetching suggestions')
+      const user = await app.logIn(credentials)
+      allSuggestions = await user.functions.searchProductsAutoComplete(
+        searchTerm
+      )
+      //setProducts(() => allSuggestions)
+      console.log('SUGGESTIONS  : ', allSuggestions)
+      setSuggestions(allSuggestions)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value.toLowerCase())
+    console.log('CHANGEEE !!', searchTerm)
+  }
+
+  useEffect(async () => {
+    searchTerm.length > 2 ? await fetchSuggestions() : setSuggestions([])
+  }, [searchTerm])
+
   return (
-    <nav className='fixed top-0 left-0 right-0 flex justify-between h-14 w-full items-center bg-slate-900 text-white lg:h-16 z-30'>
+    <nav className='fixed top-0 left-0 right-0 flex justify-between h-14 w-full items-center bg-slate-900 text-white lg:h-16 z-30' onClick={()=>setSuggestions([])}>
       <button
         onClick={() => setShowSidebar(!showSidebar)}
-        className='md:hidden ml-2 md:mx-4 text-amber-500 hover:bg-gray-800 hover:rounded-full p-1 md:scale-125 z-20 cursor-pointer '
+        className='lg:hidden ml-2 md:mx-4 text-amber-500 hover:bg-gray-800 hover:rounded-full p-1 md:scale-125 z-20 cursor-pointer '
       >
         <p className='font-bold text-2xl hover:text-3xl'>
           <MenuIcon />
@@ -125,25 +137,23 @@ function Header() {
           <SearchOutlinedIcon />
         </button>
       </form>
-      <div>
-        {/* <div
-          className={`fixed top-16 left-60 right-60 h-40 ${
-            !suggestions && 'hidden'
-          }`}
-        >
-          <ul className='flex overflow-scroll z-30 flex-col w-full rounded-xl list-none bg-gray-200'>
-            {suggestions.map(({ id, name, img }) => (
-              <li>
-                <Link href={`/products/${id}`} passHref>
-                  <a className='flex justify-between items-center border p-1 hover:bg-gray-100 cursor-pointer bg-white'>
-                    <p className='text-gray-600'>{name}</p>
-                    <img src={img} alt='' className='h-12 object-contain' />
-                  </a>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div> */}
+      <div
+        className={`fixed z-40 top-14 left-60 right-60 ${
+          !suggestions && 'hidden'
+        }`}
+      >
+        <ul className='flex overflow-scroll  flex-col rounded'>
+          {suggestions.map(({ id, name, img }) => (
+            <li>
+              <Link href={`/products/${id}`} passHref>
+                <a className='flex justify-between items-center px-2 py-1 hover:bg-gray-100 cursor-pointer bg-white'>
+                  <p className='text-gray-600'>{name}</p>
+                  <img src={img} alt='' className='h-12 object-contain' />
+                </a>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* Basket */}

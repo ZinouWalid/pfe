@@ -21,8 +21,8 @@ function Product({ product }) {
   }
 
   //increase quantity function
-  async function decreaseQuantity() {
-    if (quantity > 0) {
+  function decreaseQuantity() {
+    if (quantity > 1) {
       setQuantity(quantity - 1)
     } else {
       return dispatch(removeFromBasket(id))
@@ -60,7 +60,7 @@ function Product({ product }) {
           precision={0.5}
           readOnly
         />
-        <p>{price}</p>
+        <p className='text-gray-700'>{price}</p>
 
         {/* show the button if the quantity is 0 or showButton = true */}
         {showButton && (

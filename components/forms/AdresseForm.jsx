@@ -64,7 +64,7 @@ const AdresseForm = () => {
         }}
       >
         <div className="flex justify-between">
-          <div className="my-4 flex flex-col">
+          <div className="my-4 flex flex-col" key={"1"}>
             <label htmlFor="f_name">first name * </label>
             <input
               onChange={handleInputChange}
@@ -77,7 +77,7 @@ const AdresseForm = () => {
               required
             />
           </div>
-          <div className="my-4 flex flex-col">
+          <div className="my-4 flex flex-col" key={"2"}>
             <label htmlFor="l_name">last name *</label>
             <input
               onChange={handleInputChange}
@@ -91,8 +91,8 @@ const AdresseForm = () => {
             />
           </div>
         </div>
-        <div className="my-4 flex flex-col">
-          <label for="phone">phone number *</label>
+        <div className="my-4 flex flex-col" key={"3"}>
+          <label htmlFor="phone">phone number *</label>
           <div className="flex">
             <p className="border border-gray-400 p-1">+213</p>
             <input
@@ -107,7 +107,7 @@ const AdresseForm = () => {
             />
           </div>
         </div>
-        <div className="my-4 flex flex-col">
+        <div className="my-4 flex flex-col" key={"4y"}>
           <label htmlFor="address">address *</label>
           <textarea
             onChange={handleInputChange}
@@ -122,7 +122,7 @@ const AdresseForm = () => {
             required
           />
         </div>
-        <div className="my-4 flex flex-col">
+        <div className="my-4 flex flex-col" key={"5"}>
           <label>region *</label>
           <select
             name="region"
@@ -140,7 +140,7 @@ const AdresseForm = () => {
             ))}
           </select>
         </div>
-        <div className="my-4 flex flex-col">
+        <div className="my-4 flex flex-col" key={"6"}>
           <label>city *</label>
           <select
             name="city"
@@ -160,7 +160,7 @@ const AdresseForm = () => {
         {/* --------------PAYEMENT-------------- */}
         <div className="mx-auto my-6 w-full border border-amber-500"></div>
 
-        <div className="mx-auto mb-4 mt-2 flex w-3/4 flex-col items-center">
+        <div className="mx-auto mb-4 mt-2 flex w-3/4 flex-col items-center" key={"7"}>
           <h1 className="mt-2 mb-4 border-b border-gray-500 text-xl font-bold">
             PAYEMENT
           </h1>

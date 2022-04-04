@@ -3,14 +3,15 @@ import CategoriesFilter from '../../../components/CategoriesFilter'
 import Header from '../../../components/Header'
 import Body from '../../../components/HomeBody'
 import Footer from '../../../components/Footer'
+import * as Realm from 'realm-web'
 
-const CategoryId = ({ products }) => {
+const CategoryId = ({ products, category }) => {
   return (
-    <div className='min-h-screen bg-gray-200'>
+    <div className='min-h-screen bg-gray-200 p-1'>
       <Header />
-      <CategoriesFilter />
+      <CategoriesFilter category={category} />
       <Body products={products} />
-      <Footer/>
+      <Footer />
     </div>
   )
 }
@@ -41,12 +42,24 @@ export async function getStaticProps(context) {
   const { params } = context
 
   //fetching products by category
-  const response = await fetch(
-    `https://zino-products-api.herokuapp.com/products?category=${params.categoryId}`
-  )
-  const products = await response.json()
-
+  //const response = await fetch(
+  //  `https://zino-products-api.herokuapp.com/products?category=${params.categoryId}`
+  //)
+  //const products = await response.json()
+  
+  const REALM_APP_ID = process.env.REALM_APP_ID
+  const app = new Realm.App({ id: REALM_APP_ID })
+  const credentials = Realm.Credentials.anonymous()
+  let products = []
+  try {
+    const user = await app.logIn(credentials)
+    products = await user.functions.getProductsByCategory(params.categoryId)
+  } catch (error) {
+    console.error(error)
+  }
+  
+ 
   return {
-    props: { products },
+    props: { products, category: params.categoryId },
   }
 }

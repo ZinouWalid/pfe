@@ -17,7 +17,7 @@ const CategoriesFilter = ({}) => {
   }, [])
 
   return (
-    <div className='hidden md:block'>
+    <div className='hidden lg:block'>
       <div className='fixed top-16 z-10 flex h-10 w-full items-center justify-around bg-gray-200 text-sm shadow-xl '>
         {categories.map((cat, index) =>
           cat.key == 'all' ? (

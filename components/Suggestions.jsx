@@ -9,7 +9,7 @@ const Suggestions = () => {
     <div className='w-4/5 fixed top-32 mx-auto'>
       <ul className='flex z-30 flex-col w-full rounded-xl list-none'>
         {suggestions.map((sugg) => (
-          <li>{sugg}</li>
+          <li key={sugg.id}>{sugg}</li>
         ))}
       </ul>
     </div>

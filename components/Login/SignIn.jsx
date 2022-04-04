@@ -74,7 +74,7 @@ export default function Login() {
                 }
                 value='Login'
               >
-                S'identifier
+                S&apos;identifier
               </button>
             </div>
           </form>

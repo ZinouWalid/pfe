@@ -4,6 +4,7 @@ import Footer from '../../../components/Footer'
 import Header from '../../../components/Header'
 import CategoriesFilter from '../../../components/CategoriesFilter'
 import Pagination from '../../../components/Pagination'
+import * as Realm from 'realm-web'
 
 const Page = ({ products, currentPage }) => {
   const [pages, setPages] = useState([])
@@ -52,15 +53,24 @@ export default Page
 
 export async function getStaticProps(context) {
   const { params } = context
-  const response = await fetch(
-    `https://zino-products-api.herokuapp.com/products?_page=${
-      params.page.split('_')[1]
-    }&_limit=30`
-  )
-  const data = await response.json()
-
+  //const response = await fetch(
+  //  `https://zino-products-api.herokuapp.com/products?_page=${
+  //    params.page.split('_')[1]
+  //  }&_limit=30`
+  //)
+  //const data = await response.json()
+ const REALM_APP_ID = process.env.REALM_APP_ID
+  const app = new Realm.App({ id: REALM_APP_ID })
+  const credentials = Realm.Credentials.anonymous()
+  let products = {}
+  try {
+    const user = await app.logIn(credentials)
+    products = await user.functions.getPageProducts({pageNumber:params.page.split('_')[1],nPerPage:30})
+  } catch (error) {
+    console.error(error)
+  }
   return {
-    props: { products: data, currentPage: params.page.split('_')[1] },
+    props: { products, currentPage: params.page.split('_')[1] },
   }
 }
 

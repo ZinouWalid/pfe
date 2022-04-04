@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 
-function Welcome() {
+
+function Welcome({}) {
+  
   return (
     <div>
       <div className='mobile'>
@@ -56,9 +58,9 @@ function Welcome() {
           <a href=''>Aide</a>
           <div className='ContactMobile'>
             <img src='https://img.icons8.com/ios-glyphs/30/000000/facebook.png' />
-            <img src='https://img.icons8.com/ios-glyphs/30/000000/google-logo--v1.png' />{' '}
-            <img src='https://img.icons8.com/ios-glyphs/30/000000/linkedin.png' />{' '}
-          </div>{' '}
+            <img src='https://img.icons8.com/ios-glyphs/30/000000/google-logo--v1.png' />
+            <img src='https://img.icons8.com/ios-glyphs/30/000000/linkedin.png' />
+          </div>
         </footer>
       </div>
       <div className='computer'>
@@ -71,22 +73,22 @@ function Welcome() {
           <h1 className='WebsiteName'>WZ-S H O P</h1>
         </nav>
         <div className='main'>
-          <div className='backgrounde'></div>{' '}
+          <div className='backgrounde'></div>
           <div className='absolute'>
             <div className='top'>
               <div className='OnlineMarket'>
-                <span className='underline'>Boutique en ligne et </span>{' '}
+                <span className='underline'>Boutique en ligne et </span>
                 <p> &nbsp; livraison</p>
               </div>
               <h1 className='BetterProduct'>
                 De meilleurs produits au juste prix
               </h1>
               <p className='talk'>
-                Le trait d'union fait un tutoriel détaillé étape par étape sur
-                la façon de supprimer un arrière-plan/une seule couleur (comme
-                un écran vert) dans Adobe Photoshop. Ce tutoriel simple et
-                rapide vous montre comment supprimer un arrière-plan à l'aide de
-                l'outil gamme de couleurs.
+                Le trait d&apos;union fait un tutoriel détaillé étape par étape
+                sur la façon de supprimer un arrière-plan/une seule couleur
+                (comme un écran vert) dans Adobe Photoshop. Ce tutoriel simple
+                et rapide vous montre comment supprimer un arrière-plan à
+                l&apos;aide de l&apos;outil gamme de couleurs.
               </p>
               <div className='ButtonsDiv'>
                 <a className='Customer' href={'/products'}>
