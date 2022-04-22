@@ -22,7 +22,7 @@ const Notifications = () => {
   //fetches the realm object from the server for the client orders
   useEffect(() => {
     const fetchNotifications = async () => {
-      const REALM_APP_ID = process.env.REALM_APP_ID
+      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
       const credentials = Realm.Credentials.anonymous()
       let orders = []
