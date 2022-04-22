@@ -5,12 +5,12 @@ import CloseIcon from '@mui/icons-material/Close'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 
-const NotificationsPage = ({ notification }) => {
+const NotificationsPage = ({ notifications }) => {
   const [showMore, setShowMore] = useState(false)
 
   return (
     <div>
-      {notification.map((order) => (
+      {notifications.map((order) => (
         <div
           key={order.id}
           className='w-full max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 dark:text-gray-800'
