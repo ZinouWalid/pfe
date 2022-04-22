@@ -1,15 +1,22 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
-export default function Login() {
+export default function Login({ csrfToken }) {
+  const router = useRouter()
+  const { data: session } = useSession()
   const [values, setValues] = useState({
     user: {
-      name: '',
       email: '',
+      password: '',
     },
   })
+  //Error message when the client sign in
+  const [err, setErr] = useState('')
 
   const handleChange = (e) => {
+    const { name, value } = e.target
     setValues({
       user: {
         ...values.user,
@@ -20,17 +27,35 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await fetch('/api/riders', {
-      method: 'GET',
-    }).then(async (data) => {
-      const resp = await data.json()
-      console.log('Auth Rider : ', resp)
+    console.log('Submiting values : ', values.user)
+
+    const result = await signIn('rider-provider', {
+      redirect: false,
+
+      email: values.user.email,
+      password: values.user.password,
     })
+    console.log('Rider signed in : ', result, session)
+
+    if (!result.error) {
+      // set some auth state
+      router.push(`/rider/${session?.user.id}`)
+      //router.replace('/rider')
+    } else {
+      //alert(JSON.stringify(result.error))
+      setErr(result.error)
+      setValues({
+        user: {
+          email: '',
+          password: '',
+        },
+      })
+    }
   }
 
   return (
     <div className='flex '>
-      <div className='border-primaryBorder shadow-default m-auto w-full max-w-md rounded-lg border bg-white py-10 px-1'>
+      <div className='border-primaryBorder shadow-default mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
         <div className='text-primary m-6'>
           <div className='mt-3 flex items-center justify-center'>
             <h1 className='text-primary mt-4 mb-2 text-2xl font-medium'>
@@ -38,22 +63,13 @@ export default function Login() {
             </h1>
           </div>
           <form
+            action='/rider/auth/signin'
             onSubmit={(e) => {
               handleSubmit(e)
             }}
           >
-            <label className='text-left'>Nom :</label>
-            <input
-              name='name'
-              type='text'
-              value={values.user.name}
-              onChange={handleChange}
-              placeholder='name'
-              className={
-                'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
-              }
-              required
-            />
+            {/* --------------csrfToken-------------- */}
+            <input name='csrfToken' type='hidden' defaultValue={csrfToken} />
             <label>E-mail :</label>
             <input
               name='email'
@@ -61,6 +77,18 @@ export default function Login() {
               value={values.user.email}
               onChange={handleChange}
               placeholder='email'
+              className={
+                'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
+              }
+              required
+            />
+            <label className='text-left'>Mot de passe :</label>
+            <input
+              name='password'
+              type='password'
+              value={values.user.password}
+              onChange={handleChange}
+              placeholder='mot de passe'
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
@@ -79,7 +107,7 @@ export default function Login() {
             </div>
           </form>
           <div className='mt-3 flex items-center justify-center'>
-            <Link href='/rider/register/signup' passHref>
+            <Link href='/rider/auth/signup' passHref>
               <a className='justify-center text-amber-500 hover:underline'>
                 Besoin de vous inscrire? Inscription gratuite
               </a>

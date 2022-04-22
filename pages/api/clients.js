@@ -1,19 +1,17 @@
 import { hashPassword, verifyPassword } from '../../lib/passwordHandler'
 import { getSession } from 'next-auth/react'
 const { connectToDatabase } = require('../../lib/mongodb')
-import connectDB from '../../lib/connectDB'
-import Riders from '../../models/riderModel'
 import { v4 } from 'uuid'
 
 export default async function handler(req, res) {
   // switch the methods
   switch (req.method) {
     case 'GET': {
-      return getRiders(req, res)
+      return getClients(req, res)
     }
 
     case 'POST': {
-      return addRider(req, res)
+      return addClient(req, res)
     }
     //PUT is a method of modifying resource where the client sends data that updates the entire resource . PATCH is a method of modifying resources where the client sends partial data that is to be updated without modifying the entire data
     //case 'PUT': {
@@ -21,40 +19,22 @@ export default async function handler(req, res) {
     //}
 
     case 'PATCH': {
-      return updateRider(req, res)
+      return updateClient(req, res)
     }
     case 'DELETE': {
-      return deleteRider(req, res)
+      return deleteClient(req, res)
     }
   }
 }
 
-async function addRider(req, res) {
-  connectDB()
+async function addClient(req, res) {
   try {
     //Getting the body fields
-    const {
+    const { date, username, email, password } = JSON.parse(req.body)
+    console.log('Client : ', {
       date,
-      name,
+      username,
       email,
-      phoneNumber,
-      haveMoto,
-      havePermis,
-      militaryFree,
-      region,
-      startingDate,
-      password,
-    } = JSON.parse(req.body)
-    console.log('Rider : ', {
-      date,
-      name,
-      email,
-      phoneNumber,
-      haveMoto,
-      havePermis,
-      militaryFree,
-      region,
-      startingDate,
       password,
     })
     // connect to the database
@@ -62,16 +42,8 @@ async function addRider(req, res) {
 
     //check for existing email
     const checkExistingMail = await db
-      .collection('riders')
+      .collection('clients')
       .find({ email: email })
-      .toArray()
-
-    //check for existing phone
-    const checkExistingPhoneNumber = await db
-      .collection('riders')
-      .find({
-        phoneNumber: phoneNumber,
-      })
       .toArray()
 
     if (checkExistingMail.length) {
@@ -83,38 +55,42 @@ async function addRider(req, res) {
       client.close()
       return
     }
-    if (checkExistingPhoneNumber.length) {
+
+    //check for existing username
+    const checkExistingUsername = await db
+      .collection('clients')
+      .find({ username: username })
+      .toArray()
+
+    if (checkExistingUsername.length) {
       console.log(
-        'Phone number already exists : ',
-        checkExistingPhoneNumber[0].phoneNumber
+        'Username already exists : ',
+        checkExistingUsername[0].username
       )
       res.status(422).send({
-        message: "Le numéro de téléphone de l'utilisateur existe déjà",
+        message: "Username de l'utilisateur existe déjà",
         success: false,
       })
       client.close()
       return
     }
+
     const hashedPass = await hashPassword(password)
     // add the Rider and hashing the password
     //JSON.parse() takes a JSON string and transforms it into a JavaScript object.
-
-    await db.collection('riders').insertOne({
+    await db.collection('clients').insertOne({
       id: v4().toString(),
       date,
-      name,
+      username,
       email,
-      phoneNumber,
-      haveMoto,
-      havePermis,
-      militaryFree,
-      region,
-      startingDate,
       password: hashedPass,
     })
-
+    console.log(username, ' added successfully !!')
     // return a message
-    return res.status(200).json({ message: 'Inscription avec succés !' })
+    return res.status(200).send({
+      message: 'Client added successfully',
+      success: true,
+    })
   } catch (error) {
     // return an error
     console.log('ERORRRRRRRRRRRRRRRRRRR ! ', error)
@@ -125,15 +101,18 @@ async function addRider(req, res) {
   }
 }
 
-async function getRiders(req, res) {
-  connectDB()
+async function getClients(req, res) {
   try {
     // connect to the database
+    let { db } = await connectToDatabase()
     // fetch the Riders
-    let riders = await Riders.find({ name: 'rider 1' }).toArray()
-    // return the Riders
+    let Clients = await db
+      .collection('clients')
+      .find({ name: 'rider 1' })
+      .toArray()
+    // return the Clients
     return res.json({
-      message: riders,
+      message: Clients,
       success: true,
     })
   } catch (error) {
@@ -145,8 +124,7 @@ async function getRiders(req, res) {
   }
 }
 
-async function updateRider(req, res) {
-  connectDB()
+async function updateClient(req, res) {
   try {
     const session = await getSession({ req: req })
 
@@ -162,7 +140,7 @@ async function updateRider(req, res) {
     // connect to the database
     let { db, client } = await connectToDatabase()
 
-    const rider = await Riders.findOne({ email: userEmail })
+    const rider = await db.collection('clients').findOne({ email: userEmail })
     if (!rider) {
       res.status(404).json({ message: 'User not found.' })
       client.close()
@@ -182,10 +160,9 @@ async function updateRider(req, res) {
     // update the published status of the Rider
     const hashedPassword = await hashPassword(newPassword)
 
-    const result = await Riders.updateOne(
-      { email: userEmail },
-      { $set: { password: hashedPassword } }
-    )
+    const result = await db
+      .collection('clients')
+      .updateOne({ email: userEmail }, { $set: { password: hashedPassword } })
 
     client.close()
     res.status(200).json({ message: 'Password updated!' })
@@ -198,14 +175,13 @@ async function updateRider(req, res) {
   }
 }
 
-async function deleteRider(req, res) {
-  connectDB()
+async function deleteClient(req, res) {
   try {
     // Connecting to the database
     let { db } = await connectToDatabase()
 
     // Deleting the Rider
-    await db.collection('riders').deleteOne({})
+    await db.collection('clients').deleteOne({})
 
     // returning a message
     return res.json({

@@ -1,7 +1,10 @@
+import { City } from 'country-state-city'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 
-export default function Login() {
+export default function Register() {
+  const router=useRouter()
   const initialValues = {
     name: '',
     email: '',
@@ -10,6 +13,7 @@ export default function Login() {
     havePermis: false,
     militaryFree: false,
     startingDate: new Date(),
+    region: '',
     password: '',
     passwordConfirm: '',
   }
@@ -18,15 +22,26 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await fetch('/api/riders', {
-      method: 'POST',
-      body: JSON.stringify({
-        date: new Date(),
-        ...values,
-      }),
-    })
-
-    //return to page 01'
+    console.log('values submited: ', values)
+    if (values.password === values.passwordConfirm) {
+      await fetch('/api/riders', {
+        method: 'POST',
+        body: JSON.stringify({
+          date: new Date(),
+          ...values,
+          //password: await hashPassword(values.password),
+        }),
+      }).then((response) => {
+        console.log('response returned : ', response.json())
+        if (response.success) {
+          //return to page 01'
+          router.push('/rider/auth/signin')
+          alert('Succès !!')
+        }
+      })
+    } else {
+      alert('password not match')
+    }
   }
 
   const handleInputChange = (e) => {
@@ -46,12 +61,8 @@ export default function Login() {
               Créez votre compte
             </h1>
           </div>
-          <form
-            action='/rider/login/signup'
-            onSubmit={(e) => {
-              handleSubmit(e)
-            }}
-          >
+          <form action='/rider/auth/signup' onSubmit={handleSubmit}>
+            {/* ----------------Nom------------- */}
             <label className='text-left'>
               Quel est votre nom? <i className='text-red-500'>*</i>
             </label>
@@ -60,12 +71,14 @@ export default function Login() {
               type='text'
               value={values.name}
               onChange={handleInputChange}
-              placeholder='name'
+              placeholder='nom'
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
               required
             />
+
+            {/* ----------------E-mail------------- */}
             <label className='text-left'>
               Quel est votre e-mail? <i className='text-red-500'>*</i>
             </label>
@@ -80,6 +93,8 @@ export default function Login() {
               }
               required
             />
+
+            {/* ----------------Num téléphone------------- */}
             <label>
               Quel est votre numéro de téléphone?{' '}
               <i className='text-red-500'>*</i>
@@ -94,15 +109,18 @@ export default function Login() {
               </p>
               <input
                 name='phoneNumber'
-                type='tel'
-                value={values.password}
+                type='text'
+                value={values.phoneNumber}
                 onChange={handleInputChange}
                 placeholder='0000 000 000'
                 className={
                   'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
                 }
+                reaquired
               />
             </div>
+
+            {/* ----------------Moto------------- */}
             <label className='text-left'>
               Avez-vous une moto? <i className='text-red-500'>*</i>
             </label>
@@ -119,6 +137,8 @@ export default function Login() {
               <option value={true}>Oui </option>
               <option value={false}>Non </option>
             </select>
+
+            {/* ----------------Permis------------- */}
             <label className='text-left'>
               Avez-vous le permis de catégorie A?{' '}
               <i className='text-red-500'>*</i>
@@ -136,6 +156,8 @@ export default function Login() {
               <option value={true}>Oui </option>
               <option value={false}>Non </option>
             </select>
+
+            {/* ----------------Service militaire------------- */}
             <label className='text-left'>
               Etes-vous dégagés du service militaire?
               <i className='text-red-500'>*</i>
@@ -153,6 +175,33 @@ export default function Login() {
               <option value={true}>Oui </option>
               <option value={false}>Non </option>
             </select>
+
+            {/* ------------Region------------- */}
+            <label className='text-left'>
+              dans quelle région veux-tu travailler?{' '}
+              <i className='text-red-500'>*</i>
+            </label>
+            <select
+              name='region'
+              value={values.region}
+              onChange={handleInputChange}
+              className={
+                'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
+              }
+              required
+            >
+              <option value={null}>Sélectionner </option>
+              {City.getCitiesOfCountry('DZ').map((region) => (
+                <option
+                  value={region.stateCode + ' - ' + region.name}
+                  key={region.stateCode}
+                >
+                  {region.stateCode + ' - ' + region.name}
+                </option>
+              ))}
+            </select>
+
+            {/* ----------------Date de debut------------- */}
             <label className='text-left'>
               A partir de quand pouvez vous commencer?
               <i className='text-red-500'>*</i>
@@ -167,6 +216,8 @@ export default function Login() {
               }
               required
             />
+
+            {/* ----------------Mot de passe------------- */}
             <label className='text-left'>
               Créez votre mot de passe
               <i className='text-red-500'>*</i>
@@ -180,15 +231,18 @@ export default function Login() {
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
+              minLength='6'
               required
             />
+
+            {/* ----------------Confirmer mot de passe------------- */}
             <label className='text-left'>
-              Retaper votre mot de passe <i className='text-red-500'>*</i>
+              Confirmer votre mot de passe <i className='text-red-500'>*</i>
             </label>
             <input
               name='passwordConfirm'
               type='password'
-              value={values.repeatPassword}
+              value={values.passwordConfirm}
               onChange={handleInputChange}
               placeholder='mot de passse'
               className={
@@ -208,7 +262,7 @@ export default function Login() {
             </div>
           </form>
           <div className='mt-3 flex items-center justify-center'>
-            <Link href='/rider/register/signin' passHref>
+            <Link href='/rider/auth/signin' passHref>
               <a className='justify-center text-amber-500 hover:underline'>
                 Besoin de vous connecter ? Connectez vous maintenant
               </a>

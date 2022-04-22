@@ -1,32 +1,36 @@
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { useStateValue } from '../../React-Context-Api/context'
-import { Country, State, City } from 'country-state-city'
+import { City } from 'country-state-city'
 import CurrencyFormat from 'react-currency-format'
 import { getBasketTotal } from '../../React-Context-Api/reducer'
-import { clearBasket } from '../../React-Context-Api/basketActions'
+import { getCookie } from '../../lib/useCookie'
+import { useSession } from 'next-auth/react'
 
 export default function Login() {
-  const [{}, dispatch] = useStateValue()
+  const { data: session } = useSession()
+  const [{ basket }, dispatch] = useStateValue()
 
   //we use an object that contains all variables as a global state instead of declaring each variable individualy which a better approach
   const initialValues = {
-    firstName: '',
-    lastName: '',
+    clientId: session?.user.id,
+    firstName: session?.user.email,
+    //lastName: '',
     phoneNumber: '',
-    email: '',
+    email: session?.user.email,
     address: '',
     region: '',
     city: '',
   }
   const [values, setValues] = useState(initialValues)
 
-  const [basket, setBasket] = useState([])
+  const [myOrder, setMyOrder] = useState([])
 
   useEffect(() => {
-    setBasket(JSON.parse(localStorage.getItem('basket')))
-  }, [])
-  console.log('Payement basket : ', basket)
+    function updateBasket() {
+      setMyOrder(getCookie('basket'))
+    }
+    updateBasket()
+  }, [myOrder])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -35,8 +39,8 @@ export default function Login() {
       body: JSON.stringify({
         date: new Date(),
         ...values,
-        products: basket,
-        totalAmount: parseInt(getBasketTotal(basket) || 0) + 20,
+        products: myOrder,
+        totalAmount: parseInt(getBasketTotal(myOrder) || 0) + 20,
       }),
     })
     //clear the basket after validating the Order
@@ -56,12 +60,12 @@ export default function Login() {
   }
 
   return (
-    <div className='flex bg-gray-100 p-2'>
-      <div className='border-primaryBorder shadow-default m-auto w-full max-w-xl rounded-lg border bg-white px-1'>
+    <div className='flex bg-gray-100 m-auto min-w-3/5 mb-4'>
+      <div className='shadow-default m-auto w-full max-w-xl rounded-lg border bg-white px-1'>
         <div className='text-primary m-6 '>
           <div className='mt-3 flex items-center justify-center'>
             <h1 className='text-primary mt-4 mb-2 text-2xl font-medium'>
-              Validate your order
+              Valider votre commande
             </h1>
           </div>
           <form
@@ -80,15 +84,16 @@ export default function Login() {
               id='f_name'
               name='firstName'
               placeholder='First Name'
-              value={values.firstName}
+              value={session?.user.name}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
+              disabled={true}
               required
             />
 
             {/* ----Prénom----- */}
-            <label className='text-left'>
+            {/* <label className='text-left'>
               Quel est votre prénom? <i className='text-red-500'>*</i>
             </label>
             <input
@@ -102,7 +107,7 @@ export default function Login() {
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
               required
-            />
+            /> */}
 
             {/* ----Telephone----- */}
             <label>
@@ -139,10 +144,11 @@ export default function Login() {
               id='email'
               placeholder='E-mail'
               name='email'
-              value={values.email}
+              value={session?.user.email}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
+              disabled={true}
               required
             />
 
@@ -180,7 +186,10 @@ export default function Login() {
             >
               <option value={null}>Sélectionner </option>
               {City.getCitiesOfCountry('DZ').map((region) => (
-                <option value={region.stateCode}>
+                <option
+                  value={region.stateCode + ' - ' + region.name}
+                  key={region.stateCode}
+                >
                   {region.stateCode + ' - ' + region.name}
                 </option>
               ))}
@@ -200,17 +209,21 @@ export default function Login() {
               required
             >
               <option value={null}>Sélectionner </option>
-              {City.getCitiesOfState('DZ', values.region).map((city) => (
-                <option value={city.name}>{city.name}</option>
-              ))}
+              {City.getCitiesOfState('DZ', values.region.split(' ')[0]).map(
+                (city) => (
+                  <option value={city.name} key={city.name}>
+                    {city.name}
+                  </option>
+                )
+              )}
             </select>
 
             {/* --------------PAYEMENT-------------- */}
             <div className='mx-auto my-2 w-full border border-amber-500'></div>
 
             <div className='mx-auto mb-4 mt-2 flex w-full flex-col items-center'>
-              <h1 className='mt-2 mb-4 border-b border-gray-500 text-xl font-bold'>
-                PAYEMENT
+              <h1 className='mt-2 mb-4 border-b border-gray-500 text-xl font-bold uppercase'>
+                paiment
               </h1>
 
               <div className='mb-6 flex flex-col items-center justify-between'>
@@ -221,37 +234,50 @@ export default function Login() {
                     alt=''
                     className='mx-4'
                   />
-                  <p>Cash on delivery</p>
+                  <p>Paiement à la livraison</p>
                 </div>
                 <p className='my-6 w-10/12 text-sm text-gray-600'>
-                  Pay for your order on delivery: <br />
-                  <strong>.</strong> In cash, be sure to have the exact amount
-                  of payment. Our deliverers do not have change. <br />
-                  <strong>.</strong> Payment will be made directly to the
-                  delivery provider.
+                  Payez votre commande à la livraison: <br />
+                  <strong>.</strong> En espèces, assurez-vous d&apos;avoir le
+                  montant exact de paiement. Nos livreurs ne sont pas munis de
+                  monnaie. <br />
+                  <strong>.</strong> Le paiement se fera directement auprès du
+                  prestataire de livraison.
                 </p>
                 <div className='w-8/12'>
                   <CurrencyFormat
                     renderText={(value) => (
                       <div className=' flex flex-col'>
                         <div className='flex justify-between'>
-                          <div> Total of Articles</div>
+                          <div> Total des Articles</div>
                           <div className='font-bold'> {value} DA</div>
                         </div>
                         <p className='flex justify-between'>
-                          Delivery Amount<strong>20 DA</strong>
+                          Montant de la livraison<strong>20 DA</strong>
                         </p>
                         <div className='mx-auto my-2 w-full border border-gray-500'></div>
                         <p className='flex justify-between'>
-                          Total
+                          Totale
                           <i className='font-bold text-green-600'>
-                            {parseInt(getBasketTotal(basket) + 20)} DA
+                            <CurrencyFormat
+                              renderText={(value) => (
+                                <div className=' flex flex-col'>
+                                  <p className='mb-1 text-sm font-normal'>
+                                    {value} DA
+                                  </p>
+                                </div>
+                              )}
+                              decimalScale={2}
+                              value={parseInt(getBasketTotal(myOrder) + 20)} // Part of the homework
+                              displayType={'text'}
+                              thousandSeparator={true}
+                            />
                           </i>
                         </p>
                       </div>
                     )}
                     decimalScale={2}
-                    value={getBasketTotal(basket) || 0} // Part of the homework
+                    value={getBasketTotal(myOrder) || 0} // Part of the homework
                     displayType={'text'}
                     thousandSeparator={true}
                   />

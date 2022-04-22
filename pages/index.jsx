@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import Header from '../components/Header'
 
 
 function Welcome({}) {
   
   return (
     <div>
+      <Header />
       <div className='mobile'>
         <nav className='navMobile'>
           <img
@@ -29,7 +31,7 @@ function Welcome({}) {
             className='CustomerMobile'
             type=''
             onClick={() => {
-              window.location.assign('/products')
+              window.location.assign('/client')
             }}
           >
             Consomateur
@@ -41,7 +43,7 @@ function Welcome({}) {
             className='Delivery_manMobile'
             type=''
             onClick={() => {
-              window.location.assign('/rider/register/signin')
+              window.location.assign('/rider/auth/signin')
             }}
           >
             Livreur
@@ -91,7 +93,7 @@ function Welcome({}) {
                 l&apos;aide de l&apos;outil gamme de couleurs.
               </p>
               <div className='ButtonsDiv'>
-                <a className='Customer' href={'/products'}>
+                <a className='Customer' href={'/client'}>
                   Consomateur
                   <span className='mx-4'>
                     <AddShoppingCartIcon />
@@ -101,7 +103,7 @@ function Welcome({}) {
                   className='Delivery_man'
                   type=''
                   onClick={() => {
-                    window.location.assign('/rider/register/signin')
+                    window.location.assign('/rider/auth/signin')
                   }}
                 >
                   livreur

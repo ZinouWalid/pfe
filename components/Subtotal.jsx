@@ -32,7 +32,7 @@ function Subtotal() {
         displayType={'text'}
         thousandSeparator={true}
       />
-      <Link href='/checkout/delivery'>
+      <Link href='/client/register/signin' passHref>
         <button
           disabled={basket.length == 0}
           className='h-8 w-full rounded-sm border border-amber-500 bg-amber-400 hover:bg-amber-500'

@@ -1,27 +1,28 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Footer = () => {
   return (
     <div className='bg-slate-900 h-96 mt-10'>
-      <footer className='px-4 divide-y dark:bg-coolGray-800 dark:text-white'>
+      <footer className='px-4 divide-y dark:bg-coolGray-800 text-white'>
         <div className='container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0'>
           <div className='lg:w-1/3'>
-            <a
-              rel='noopener noreferrer'
-              href='#'
-              className='flex justify-center space-x-3 lg:justify-start'
-            >
-              <div className='flex items-center justify-center w-12 h-12 rounded-full dark:bg-violet-400'>
-                <img
-                  src='https://e7.pngegg.com/pngimages/644/743/png-clipart-a-o-t-wings-of-freedom-eren-yeager-bertholdt-hoover-attack-on-titan-logo-others-angle-emblem.png'
-                  alt=''
-                  className='mx-2 h-6 rounded-full md:h-12'
-                />
-              </div>
-              <span className='self-center text-2xl font-semibold'>
-                AOT Commerce
-              </span>
-            </a>
+            <Link href={'/client'} passHref>
+              <a
+                className='flex justify-center space-x-3 lg:justify-start'
+              >
+                <div className='flex items-center justify-center w-12 h-12 rounded-full dark:bg-violet-400'>
+                  <img
+                    src='https://e7.pngegg.com/pngimages/644/743/png-clipart-a-o-t-wings-of-freedom-eren-yeager-bertholdt-hoover-attack-on-titan-logo-others-angle-emblem.png'
+                    alt=''
+                    className='mx-2 h-6 rounded-full md:h-12'
+                  />
+                </div>
+                <span className='self-center text-2xl font-semibold'>
+                  AOT Commerce
+                </span>
+              </a>
+            </Link>
           </div>
           <div className='grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4'>
             <div className='space-y-3'>

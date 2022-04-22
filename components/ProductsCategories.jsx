@@ -10,7 +10,7 @@ const ProductsCategories = ({ categories }) => {
           key={cat.key}
         >
           {cat.key == 'all' ? (
-            <Link href={`/products/pages/page_1`} passHref>
+            <Link href={`/client/pages/page_1`} passHref>
               <a>
                 <img
                   src={cat.img}
@@ -20,7 +20,7 @@ const ProductsCategories = ({ categories }) => {
               </a>
             </Link>
           ) : (
-            <Link href={`/products/categories/${cat.key}`} passHref>
+            <Link href={`/client/categories/${cat.key}`} passHref>
               <a>
                 <img
                   src={cat.img}

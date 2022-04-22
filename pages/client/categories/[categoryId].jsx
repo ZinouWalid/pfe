@@ -5,11 +5,11 @@ import Body from '../../../components/HomeBody'
 import Footer from '../../../components/Footer'
 import * as Realm from 'realm-web'
 
-const CategoryId = ({ products, category }) => {
+const CategoryId = ({ products }) => {
   return (
     <div className='min-h-screen bg-gray-200 p-1'>
       <Header />
-      <CategoriesFilter category={category} />
+      <CategoriesFilter/>
       <Body products={products} />
       <Footer />
     </div>
@@ -60,6 +60,6 @@ export async function getStaticProps(context) {
   
  
   return {
-    props: { products, category: params.categoryId },
+    props: { products},
   }
 }

@@ -10,7 +10,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Link from 'next/link'
 import { getCookie } from '../lib/useCookie'
 
-const Sidebar = ({ showSidebar }) => {
+const Sidebar = ({ showSidebar, hideFilters }) => {
   const [showFilters, setShowFilters] = useState(false)
   const [categories, setCategories] = useState([])
   const [localBasket, setLocalBasket] = useState([])
@@ -50,66 +50,58 @@ const Sidebar = ({ showSidebar }) => {
             </a>
           </Link>
         </li>
-        <li className=''>
-          <button
-            className='flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <p className='text-gray-400'>
-              <FilterAltIcon />
-            </p>
-            <span
-              className='flex-1 ml-3 text-left whitespace-nowrap'
-              sidebar-toggle-item
+        {!hideFilters && (
+          <li className=''>
+            <button
+              className='flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+              onClick={() => setShowFilters(!showFilters)}
             >
-              Filtrer
-            </span>
-            <p className='text-white '>
-              {showFilters ? (
-                <KeyboardArrowDownIcon />
-              ) : (
-                <KeyboardArrowUpIcon />
-              )}
-            </p>
-          </button>
-          <ul
-            id='dropdown-example'
-            className={`${showFilters && 'hidden'} py-2 space-y-2`}
-          >
-            {categories.map((cat, index) =>
-              cat.key == 'all' ? (
-                <li className='box-border '>
-                  <Link href={`/products/pages/page_1`} passHref>
-                    <a className='flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'>
-                      <p className='hover:cursor-pointer'>{cat.value}</p>
-                    </a>
-                  </Link>
-                </li>
-              ) : (
-                <li className='box-border'>
-                  <Link href={`/products/categories/${cat.key}`} passHref>
-                    <a
-                      className='flex items-center p-2 pl-11 w-full text-base  font-normal text-gray-900 rounded-lg transition duration-75 
-                        group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
-                    >
-                      <p className='hover:cursor-pointer'>{cat.value}</p>
-                    </a>
-                  </Link>
-                </li>
-              )
-            )}
-          </ul>
-        </li>
-        <li>
-          <Link href='#' passHref>
-            <a className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'>
               <p className='text-gray-400'>
-                <StarIcon />
+                <FilterAltIcon />
               </p>
-              <span className='flex-1 ml-3 whitespace-nowrap'>Favouris</span>
-            </a>
-          </Link>
-        </li>
+              <span
+                className='flex-1 ml-3 text-left whitespace-nowrap'
+                sidebar-toggle-item
+              >
+                Filtrer
+              </span>
+              <p className='text-white '>
+                {showFilters ? (
+                  <KeyboardArrowDownIcon />
+                ) : (
+                  <KeyboardArrowUpIcon />
+                )}
+              </p>
+            </button>
+            <ul
+              id='dropdown-example'
+              className={`${showFilters && 'hidden'} py-2 space-y-2`}
+            >
+              {categories.map((cat, index) =>
+                cat.key == 'all' ? (
+                  <li className='box-border '>
+                    <Link href={`/products/pages/page_1`} passHref>
+                      <a className='flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'>
+                        <p className='hover:cursor-pointer'>{cat.value}</p>
+                      </a>
+                    </Link>
+                  </li>
+                ) : (
+                  <li className='box-border'>
+                    <Link href={`/products/categories/${cat.key}`} passHref>
+                      <a
+                        className='flex items-center p-2 pl-11 w-full text-base  font-normal text-gray-900 rounded-lg transition duration-75 
+                        group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+                      >
+                        <p className='hover:cursor-pointer'>{cat.value}</p>
+                      </a>
+                    </Link>
+                  </li>
+                )
+              )}
+            </ul>
+          </li>
+        )}
         <li>
           <Link href='#' passHref>
             <a className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'>
@@ -142,18 +134,14 @@ const Sidebar = ({ showSidebar }) => {
         <div className='border-gray-500 border'></div>
         <li>
           <Link href='#' passHref>
-            <a
-              className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
-            >
+            <a className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'>
               <svg
                 className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'
                 fill='currentColor'
                 viewBox='0 0 20 20'
                 xmlns='http://www.w3.org/2000/svg'
               >
-                <path
-                  d='M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z'
-                ></path>
+                <path d='M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z'></path>
               </svg>
               <span className='flex-1 ml-3 whitespace-nowrap'>Sign In</span>
             </a>
@@ -161,18 +149,14 @@ const Sidebar = ({ showSidebar }) => {
         </li>
         <li>
           <Link href='#' passHref>
-            <a
-              className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
-            >
+            <a className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'>
               <svg
                 className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'
                 fill='currentColor'
                 viewBox='0 0 20 20'
                 xmlns='http://www.w3.org/2000/svg'
               >
-                <path
-                  d='M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z'
-                ></path>
+                <path d='M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z'></path>
               </svg>
               <span className='flex-1 ml-3 whitespace-nowrap'>Sign Up</span>
             </a>
@@ -180,9 +164,7 @@ const Sidebar = ({ showSidebar }) => {
         </li>
         <li>
           <Link href='#' passHref>
-            <a
-              className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
-            >
+            <a className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'>
               <p className='text-gray-400'>
                 <HelpIcon />
               </p>

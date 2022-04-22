@@ -32,6 +32,15 @@ const reducer = (state = initialState, action) => {
     case ADD_TO_BASKET:
       console.log('ADD_TO_BASKET : ')
 
+      //check if the product is already in the basket
+      const isProductInBasket = state.basket.find(
+        (product) => product.id == action.payload.id
+      )
+      //if the product is already in the basket we break
+      if (isProductInBasket) {
+        break
+      }
+
       //remove old basket and add the new one to the cookie
       removeCookie('basket')
       setCookie('basket', [...state.basket, action.payload])

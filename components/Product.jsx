@@ -25,6 +25,9 @@ function Product({ product }) {
     if (quantity > 1) {
       setQuantity(quantity - 1)
     } else {
+      setQuantity(0)
+      setShowQuantity(false)
+      setShowButton(true)
       return dispatch(removeFromBasket(id))
     }
   }
@@ -43,8 +46,8 @@ function Product({ product }) {
         setShowButton(false)
       }}
     >
-      <Link href={`/products/${id}`} passHref>
-        <a href=''>
+      <Link href={`/client/products/${id}`} passHref>
+        <a>
           <img
             src={img}
             alt=''
@@ -57,7 +60,7 @@ function Product({ product }) {
         <Rating
           name='read-only'
           value={rating?.split(' ')[0] || 2.5}
-          precision={0.5}
+          precision={0.1}
           readOnly
         />
         <p className='text-gray-700'>{price}</p>

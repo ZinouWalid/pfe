@@ -1,14 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStateValue } from '../React-Context-Api/context'
 import Rating from '@mui/material/Rating'
 import {
   removeFromBasket,
   addToBasket,
 } from '../React-Context-Api/basketActions'
+import { updateQuantity } from '../React-Context-Api/productsActions'
 
 const ProductInfo = ({ product }) => {
   const [{}, dispatch] = useStateValue()
-  const { id, img, name, price, rating } = { ...product }
+  const { id, img, name, price, rating,productQuantity } = { ...product }
+  const [showButton, setShowButton] = useState(true)
+  const [showQuantity, setShowQuantity] = useState(false)
+  const [quantity, setQuantity] = useState(1)
+
+  //increase quantity function
+  function increaseQuantity() {
+    setQuantity(quantity + 1)
+  }
+
+  //increase quantity function
+  function decreaseQuantity() {
+    if (quantity > 1) {
+      setQuantity(quantity - 1)
+      setShowButton(false)
+      setShowQuantity(true)
+    } else {
+      setQuantity(0)
+      setShowQuantity(false)
+      setShowButton(true)
+      return dispatch(removeFromBasket(id))
+    }
+  }
+  //Update the product quantity when it changes
+  useEffect(() => {
+    dispatch(updateQuantity({ ...product, tags: [], quantity }))
+  }, [quantity])
+
   return (
     <section className='min-h-screen overflow-hidden bg-gray-100 text-gray-700'>
       <div className='container mx-auto px-5 py-20'>
@@ -83,18 +111,51 @@ const ProductInfo = ({ product }) => {
               cardigan.
             </p>
             <div className='mt-6 mb-5 border-b-2 border-gray-200'></div>
-            <div className='flex'>
+            <div className='flex justify-between items-center'>
               <span className='title-font text-2xl font-medium text-gray-900'>
                 {price}
               </span>
-              <button
-                className='ml-auto flex rounded border-0 bg-amber-500 py-2 px-6 text-white hover:bg-amber-600 focus:outline-none'
-                onClick={() =>
-                  dispatch(addToBasket({ ...product, tags: [], quantity: 1 }))
-                }
-              >
-                Ajouter au panier
-              </button>
+
+              {/* Add to basket button */}
+              {showButton && (
+                <button
+                  className='ml-auto flex rounded border-0 bg-amber-500 py-2 px-6 text-white hover:bg-amber-600 focus:outline-none'
+                  onClick={() => {
+                    setShowQuantity(true)
+                    setShowButton(false)
+                    dispatch(addToBasket(product))
+                  }}
+                >
+                  Ajouter au panier
+                </button>
+              )}
+
+              {/* Quantity */}
+              {showQuantity && (
+                <div className='mt-6 h-10 w-32'>
+                  <div className='relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent'>
+                    {/* DEcrease Button */}
+                    <button
+                      className='h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-amber-500 hover:text-gray-700'
+                      onClick={decreaseQuantity}
+                    >
+                      <span className='m-auto text-2xl font-thin'>−</span>
+                    </button>
+                    <input
+                      type='number'
+                      className='text-md flex w-full items-center bg-gray-300 p-2 text-center font-semibold text-gray-700 outline-none hover:text-black focus:text-black  focus:outline-none'
+                      value={productQuantity || quantity}
+                    ></input>
+                    {/* Increase Button */}
+                    <button
+                      className='h-full w-20 cursor-pointer rounded-r bg-gray-300 text-gray-600 hover:bg-amber-500 hover:text-gray-700'
+                      onClick={increaseQuantity}
+                    >
+                      <span className='m-auto text-2xl font-thin'>+</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

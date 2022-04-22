@@ -15,18 +15,18 @@ function Pagination({
 
   function goToPreviousPage() {
     if (currentPage > 1) {
-      return `/products/pages/page_${parseInt(currentPage) - 1}`
-    } else return `/products/pages/page_${currentPage}`
+      return `/client/pages/page_${parseInt(currentPage) - 1}`
+    } else return `/client/pages/page_${currentPage}`
   }
 
   function goToNextPage() {
     if (currentPage < numberOfPages) {
-      return `/products/pages/page_${parseInt(currentPage) + 1}`
-    } else return `/products/pages/page_${currentPage}`
+      return `/client/pages/page_${parseInt(currentPage) + 1}`
+    } else return `/client/pages/page_${currentPage}`
   }
 
   function lastPage(event) {
-    return `/products/pages/page_${numberOfPages}`
+    return `/client/pages/page_${numberOfPages}`
   }
 
   const getPaginationGroup = () => {
@@ -37,7 +37,7 @@ function Pagination({
 
   return (
     <div className="text-yellow z-20 mx-auto mt-6 flex items-center">
-      <Link href={'/products/pages/page_1'} passHref>
+      <Link href={'/client/pages/page_1'} passHref>
         <a className="mx-4 rotate-180 font-bold" title="First page">
           <LastPageIcon />
         </a>
