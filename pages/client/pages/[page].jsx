@@ -74,7 +74,7 @@ export async function getStaticProps(context) {
   //  }&_limit=30`
   //)
   //const data = await response.json()
-  const REALM_APP_ID = process.env.REALM_APP_ID
+  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
   const app = new Realm.App({ id: REALM_APP_ID })
   const credentials = Realm.Credentials.anonymous()
   let products = {}
@@ -94,7 +94,7 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   const paths = []
-  const REALM_APP_ID = process.env.REALM_APP_ID
+  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
   const app = new Realm.App({ id: REALM_APP_ID })
   const credentials = Realm.Credentials.anonymous()
   let products = []

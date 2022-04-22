@@ -47,7 +47,7 @@ export async function getStaticProps(context) {
   //)
   //const products = await response.json()
   
-  const REALM_APP_ID = process.env.REALM_APP_ID
+  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
   const app = new Realm.App({ id: REALM_APP_ID })
   const credentials = Realm.Credentials.anonymous()
   let products = []
