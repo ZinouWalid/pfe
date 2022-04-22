@@ -80,7 +80,7 @@ const OrdersPage = ({ orders }) => {
               {showMore && (
                 <div className='flex flex-col items-center mx-auto max-h-96 h-fit py-5'>
                   <div className='flex flex-col overflow-y-scroll p-2'>
-                    {order.products.map(
+                    {order.products?.map(
                       ({ id, name, price, img, quantity }) => {
                         return (
                           <div
