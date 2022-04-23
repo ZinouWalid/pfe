@@ -1,30 +1,110 @@
 import React, { useState } from 'react'
-import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle'
+import InventoryIcon from '@mui/icons-material/Inventory'
 import CurrencyFormat from 'react-currency-format'
-import CloseIcon from '@mui/icons-material/Close'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-
+const r = [
+  {
+    id: '62335d2e73d98557eda3ebf2',
+    date: '2022-03-17T16:09:16.623Z',
+    firstName: 'aaaaaaaaa',
+    lastName: 'aaaaaaaa2',
+    phoneNumber: '111111111',
+    email: 'a@a.com',
+    address: 'd',
+    region: '02',
+    city: 'Oued Sly',
+    products: [
+      {
+        id: '34815cf0-7ee0-11ec-8e9d-0da3379c480d',
+        name: 'ELIT DRAGE GOUT AMANDE 60G',
+        price: '175 DA',
+        rating: '5 out of 5',
+        category: 'epicerie-bonbons-chocolat',
+        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
+        quantity: 1,
+      },
+      {
+        id: '14815cf0-7ee0-11ec-8e9d-0da3379c480d',
+        name: 'ELIT DRAGE GOUT AMANDE 60G',
+        price: '175 DA',
+        rating: '5 out of 5',
+        category: 'epicerie-bonbons-chocolat',
+        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
+        quantity: 3,
+      },
+      {
+        id: '24815cf0-7ee0-11ec-8e9d-0da3379c480d',
+        name: 'ELIT DRAGE GOUT AMANDE 60G',
+        price: '175 DA',
+        rating: '5 out of 5',
+        category: 'epicerie-bonbons-chocolat',
+        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
+        quantity: 3,
+      },
+    ],
+    totalAmount: 670,
+  },
+  {
+    id: '12335d2e73d98557eda3ebf2',
+    date: '2022-03-17T16:09:16.623Z',
+    firstName: 'bbbbbbb',
+    lastName: 'bbbbb2',
+    phoneNumber: '111111111',
+    email: 'a@a.com',
+    address: 'd',
+    region: '02',
+    city: 'Oued Sly',
+    products: [
+      {
+        id: '34815cf0-7ee0-11ec-8e9d-0da3379c480d',
+        name: 'ELIT DRAGE GOUT AMANDE 60G',
+        price: '175 DA',
+        rating: '5 out of 5',
+        category: 'epicerie-bonbons-chocolat',
+        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
+        quantity: 1,
+      },
+      {
+        id: '14815cf0-7ee0-11ec-8e9d-0da3379c480d',
+        name: 'ELIT DRAGE GOUT AMANDE 60G',
+        price: '175 DA',
+        rating: '5 out of 5',
+        category: 'epicerie-bonbons-chocolat',
+        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
+        quantity: 3,
+      },
+      {
+        id: '24815cf0-7ee0-11ec-8e9d-0da3379c480d',
+        name: 'ELIT DRAGE GOUT AMANDE 60G',
+        price: '175 DA',
+        rating: '5 out of 5',
+        category: 'epicerie-bonbons-chocolat',
+        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
+        quantity: 3,
+      },
+    ],
+    totalAmount: 670,
+  },
+]
 const OrdersPage = ({ orders }) => {
   const [showMore, setShowMore] = useState(false)
 
   return (
-    <div>
-      {orders.map((order) => (
+    <div className='p-1 bg-gray-100 mt-16'>
+      {r.map((order) => (
         <div
           key={order.id}
-          className='w-full max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 dark:text-gray-800'
+          className='w-full my-2 max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 bg-gray-200 dark:text-gray-800'
           role='alert'
         >
           <div className='flex'>
-            <PersonPinCircleIcon className='w-8 h-8 rounded-full shadow-lg' />
+            <InventoryIcon className='w-8 h-8 rounded-full shadow-lg' />
 
             <div className='ml-3 text-sm font-normal'>
               {/* -----------Nom et Prénom----------- */}
               <span className='text-sm font-semibold text-gray-900 dark:text-gray-800'>
-                <p className='capitalize mb-2'>
-                  {order.firstName} {order.lastName}
-                </p>
+                <p className='capitalize mb-2'>{order.date.split('T')[0]}</p>
               </span>
               {/* -----------Adresse----------- */}
               <p className='mb-1 text-sm font-normal'>
@@ -133,17 +213,10 @@ const OrdersPage = ({ orders }) => {
                   </div>
                 </div>
               )}
-              <button className='mt-4 py-1.5 text-base bg-green-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '>
-                accepter la commande
+              <button className='mt-4 py-1.5 text-base bg-red-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '>
+                annuler la commande
               </button>
             </div>
-            <button
-              type='button'
-              className='ml-auto text-gray-400 rounded-full p-1 hover:bg-gray-300 h-8 w-8 '
-              title='Fermer'
-            >
-              <CloseIcon />
-            </button>
           </div>
         </div>
       ))}

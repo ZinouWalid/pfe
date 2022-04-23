@@ -3,6 +3,8 @@ import * as Realm from 'realm-web'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
 import OrdersPage from '../../components/client/OrdersPage'
 
 const Notifications = () => {
@@ -42,8 +44,9 @@ const Notifications = () => {
 
   return (
     <div>
-      d
+      <Header hideSearch={true} />
       <OrdersPage orders={orders} />
+      <Footer />
     </div>
   )
 }

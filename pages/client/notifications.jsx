@@ -3,7 +3,8 @@ import * as Realm from 'realm-web'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import NotificationsPage from '../../components/client/OrdersPage'
+import NotificationsPage from '../../components/client/NotificationsPage'
+import Header from '../../components/Header'
 
 const Notifications = () => {
   const { data: session, status } = useSession()
@@ -25,22 +26,24 @@ const Notifications = () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
       const credentials = Realm.Credentials.anonymous()
-      let notifications = []
+      let notifs = []
       try {
         const user = await app.logIn(credentials)
-        notifications = await user.functions.getClientNotifications(
+        notifs = await user.functions.getClientNotifications(
           session.user.id
         )
 
-        setNotifications(notifications)
+        setNotifications(notifs)
       } catch (error) {
         console.error(error)
       }
     }
+    fetchNotifications();
   }, [])
 
   return (
     <div>
+      <Header hideSearch={true} />
       <NotificationsPage notifications={notifications} />
     </div>
   )

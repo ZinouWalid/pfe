@@ -14,8 +14,7 @@ const OrderCard = () => {
       setMyOrder(getCookie('basket'))
     }
     updateBasket()
-    console.log('Order : ', basket)
-  }, [myOrder])
+  }, [basket])
 
   return (
     <div className='flex flex-col items-center mx-auto max-h-96 h-fit bg-white border rounded py-5'>

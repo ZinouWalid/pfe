@@ -1,4 +1,5 @@
 const { connectToDatabase } = require('../../lib/mongodb')
+import { v4 } from 'uuid'
 const ObjectId = require('mongodb').ObjectId
 
 export default async function handler(req, res) {
@@ -27,7 +28,9 @@ async function addOrder(req, res) {
     // connect to the database
     let { db } = await connectToDatabase()
     // add the Order
-    await db.collection('orders').insertOne(JSON.parse(req.body))
+    await db
+      .collection('orders')
+      .insertOne({ id: v4().toString(), ...JSON.parse(req.body) })
     // return a message
     return res.json({
       message: 'Order added successfully',

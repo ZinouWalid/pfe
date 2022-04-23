@@ -33,12 +33,14 @@ function Subtotal() {
         thousandSeparator={true}
       />
       <Link href='/checkout/delivery' passHref>
-        <button
-          disabled={basket.length == 0}
-          className='h-8 w-full rounded-sm border border-amber-500 bg-amber-400 hover:bg-amber-500'
-        >
-          Procéder au Paiement
-        </button>
+        <a>
+          <button
+            disabled={basket.length == 0}
+            className='h-8 w-full rounded-sm border border-amber-500 bg-amber-400 hover:bg-amber-500'
+          >
+            Procéder au Paiement
+          </button>
+        </a>
       </Link>
     </div>
   )

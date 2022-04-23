@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useStateValue } from '../../React-Context-Api/context'
-import { City } from 'country-state-city'
+import { City, Country, State } from 'country-state-city'
+import csc from 'countries-states-cities'
 import CurrencyFormat from 'react-currency-format'
 import { getBasketTotal } from '../../React-Context-Api/reducer'
 import { getCookie } from '../../lib/useCookie'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
 export default function Login() {
   const { data: session } = useSession()
   const [{ basket }, dispatch] = useStateValue()
+  const router = useRouter()
+  const [user, setUser] = useState(session?.user)
 
   //we use an object that contains all variables as a global state instead of declaring each variable individualy which a better approach
   const initialValues = {
-    clientId: session?.user.id,
-    firstName: session?.user.email,
+    clientId: user?.id,
+    name: user?.name,
     //lastName: '',
     phoneNumber: '',
-    email: session?.user.email,
+    email: user?.email,
     address: '',
     region: '',
     city: '',
@@ -26,11 +30,12 @@ export default function Login() {
   const [myOrder, setMyOrder] = useState([])
 
   useEffect(() => {
+    console.log('my cities ', City.getCitiesOfState('DZ', '16'))
     function updateBasket() {
       setMyOrder(getCookie('basket'))
     }
     updateBasket()
-  }, [myOrder])
+  }, [basket])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -48,7 +53,7 @@ export default function Login() {
 
     console.log('Order Validated')
     //return to page 01
-    window.location.href = '/products/pages/page_1'
+    router.push('/client/pages/page_1')
   }
 
   const handleInputChange = (e) => {
@@ -61,6 +66,7 @@ export default function Login() {
 
   return (
     <div className='flex bg-gray-100 m-auto min-w-3/5 mb-4'>
+      {/* {csc.getStatesOfCountry(4).map((i) => i.name)} */}
       <div className='shadow-default m-auto w-full max-w-xl rounded-lg border bg-white px-1'>
         <div className='text-primary m-6 '>
           <div className='mt-3 flex items-center justify-center'>
@@ -69,7 +75,7 @@ export default function Login() {
             </h1>
           </div>
           <form
-            action='/checkout/delivery'
+            action=''
             onSubmit={(e) => {
               handleSubmit(e)
             }}
@@ -79,35 +85,18 @@ export default function Login() {
               Quel est votre nom? <i className='text-red-500'>*</i>
             </label>
             <input
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e)}
               type='text'
-              id='f_name'
-              name='firstName'
-              placeholder='First Name'
-              value={session?.user.name}
+              id='name'
+              name='name'
+              placeholder='nom'
+              value={values.name}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
+              required
               disabled={true}
-              required
             />
-
-            {/* ----Prénom----- */}
-            {/* <label className='text-left'>
-              Quel est votre prénom? <i className='text-red-500'>*</i>
-            </label>
-            <input
-              onChange={handleInputChange}
-              type='text'
-              id='l_name'
-              name='lastName'
-              placeholder='Last Name'
-              value={values.lastName}
-              className={
-                'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
-              }
-              required
-            /> */}
 
             {/* ----Telephone----- */}
             <label>
@@ -125,9 +114,9 @@ export default function Login() {
               <input
                 name='phoneNumber'
                 type='tel'
-                value={values.password}
-                onChange={handleInputChange}
-                placeholder='0000 000 000'
+                value={values.phoneNumber}
+                onChange={(e) => handleInputChange(e)}
+                placeholder='000 000 000'
                 className={
                   'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
                 }
@@ -139,12 +128,12 @@ export default function Login() {
               Quel est votre adresse mail? <i className='text-red-500'>*</i>
             </label>
             <input
-              onChange={handleInputChange}
+              //onChange={e=>handleInputChange(e)}
               type='email'
               id='email'
               placeholder='E-mail'
               name='email'
-              value={session?.user.email}
+              value={values.email}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
@@ -157,14 +146,12 @@ export default function Login() {
               Quel est votre adresse? <i className='text-red-500'>*</i>
             </label>
             <textarea
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e)}
+              value={values.address}
               type='text'
               id='address'
-              placeholder='Address'
+              placeholder='address'
               name='address'
-              value={values.address}
-              rows='4'
-              cols='50'
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
@@ -178,21 +165,15 @@ export default function Login() {
             <select
               name='region'
               value={values.region}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e)}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
               required
             >
-              <option value={null}>Sélectionner </option>
-              {City.getCitiesOfCountry('DZ').map((region) => (
-                <option
-                  value={region.stateCode + ' - ' + region.name}
-                  key={region.stateCode}
-                >
-                  {region.stateCode + ' - ' + region.name}
-                </option>
-              ))}
+              <option value={csc.getCityById(1144)}>
+                {State.getStateByCodeAndCountry('16', 'DZ').name}
+              </option>
             </select>
 
             {/* ----Cité----- */}
@@ -202,20 +183,18 @@ export default function Login() {
             <select
               name='city'
               value={values.city}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e)}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
               required
             >
               <option value={null}>Sélectionner </option>
-              {City.getCitiesOfState('DZ', values.region.split(' ')[0]).map(
-                (city) => (
-                  <option value={city.name} key={city.name}>
-                    {city.name}
-                  </option>
-                )
-              )}
+              {City.getCitiesOfState('DZ', '16').map((city) => (
+                <option value={city.name} key={city.id}>
+                  {city.name}
+                </option>
+              ))}
             </select>
 
             {/* --------------PAYEMENT-------------- */}

@@ -19,7 +19,7 @@ function Header({ hideSearch, hideBasket }) {
   const { data: session } = useSession()
   const [suggestions, setSuggestions] = useState([])
   const [products, setProducts] = useState([])
-  const [{}, dispatch] = useStateValue()
+  const [{basket}, dispatch] = useStateValue()
   const [searchTerm, setSearchTerm] = useState('')
   const [localBasket, setLocalBasket] = useState([])
   const [showSidebar, setShowSidebar] = useState(false)
@@ -34,7 +34,7 @@ function Header({ hideSearch, hideBasket }) {
       setLocalBasket(getCookie('basket'))
     }
     updateBasket()
-  }, [localBasket])
+  }, [basket])
 
   //fetching the products to use them in filtering the user search
   useEffect(() => {

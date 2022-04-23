@@ -3,21 +3,11 @@ import Subtotal from '../../components/Subtotal'
 import CheckoutProduct from '../../components/CheckoutProduct'
 import { getCookie } from '../../lib/useCookie'
 import Header from '../../components/Header'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+
 
 const Checkout = () => {
   const [basket, setBasket] = useState([])
-  const { data: session, status } = useSession()
-  const isUser = session?.user
-  const router = useRouter()
-
-  useEffect(() => {
-    const redirectIfNotAuthenticated = () => {
-      if (!isUser) router.push('/client/auth/signin')
-    }
-    redirectIfNotAuthenticated()
-  }, [isUser])
+ 
 
   //Update our basket when ever the client make changes to the basket
   useEffect(() => {

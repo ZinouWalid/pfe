@@ -1,9 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import OrderCard from '../../components/OrderCard'
 import PayementForm from '../../components/forms/PayementForm'
 import Header from '../../components/Header'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
-const delivery = () => {
+const Delivery = () => {
+   const { data: session, status } = useSession()
+   const isUser = session?.user
+   const router = useRouter()
+
+   useEffect(() => {
+     const redirectIfNotAuthenticated = () => {
+       if (!isUser) router.push('/client/auth/signin')
+     }
+     redirectIfNotAuthenticated()
+   }, [])
+
   return (
     <div className=' bg-gray-100 relative p-2 overflow-x-scroll'>
       <Header hideSearch={true} />
@@ -15,4 +28,4 @@ const delivery = () => {
   )
 }
 
-export default delivery
+export default Delivery
