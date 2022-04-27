@@ -10,7 +10,7 @@ const RiderId = ({ rider, orders }) => {
   const { data: session, status } = useSession()
   const isUser = session?.user
   const router = useRouter()
-  
+
   useEffect(() => {
     const redirectIfNotAuthenticated = () => {
       if (!isUser) router.push('/rider/auth/signin')
@@ -51,7 +51,7 @@ export async function getStaticProps(context) {
     rider = await user.functions.getSingleRider(params.riderId)
 
     //fetching the orders that coresponds to the rider
-    orders = await user.functions.getAllOrders(rider.region)
+    orders = await user.functions.getAllOrders(rider?.region)
   } catch (error) {
     console.warn(error)
   }
@@ -78,11 +78,13 @@ export async function getStaticPaths() {
   //)
   //const data = await response.json()
   const paths = riders.map(({ id }) => {
-    return {
-      params: {
-        riderId: String(id),
-      },
-    }
+    if (id)
+      return {
+        params: {
+          riderId: String(id),
+        },
+      }
+    else return
   })
 
   return {

@@ -15,7 +15,7 @@ import * as Realm from 'realm-web'
 import { useStateValue } from '../React-Context-Api/context'
 import { useSession, signOut } from 'next-auth/react'
 
-function Header({ hideSearch, hideBasket }) {
+function Header({ hideSearch, hideBasket, hideOptions }) {
   const { data: session } = useSession()
   const [suggestions, setSuggestions] = useState([])
   const [products, setProducts] = useState([])
@@ -120,7 +120,7 @@ function Header({ hideSearch, hideBasket }) {
     return str?.length > n ? str.substr(0, n - 1) + '...' : str
   }
 
-   return (
+  return (
     <nav
       className='fixed top-0 left-0 right-0 flex justify-between h-14 w-full items-center bg-slate-900 text-white lg:h-16 z-30'
       onClick={() => setSuggestions([])}
@@ -195,93 +195,101 @@ function Header({ hideSearch, hideBasket }) {
       </div>
 
       {/* ----------Authentication + Options------------ */}
-      <div className='relative ml-auto'>
-        <div className='flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg group hover:text-amber-500 '>
-          {session?.user ? (
-            <p className='text-white'>
-              Bonjour,
-              <span className='font-semibold'> {session.user.name}</span>
-            </p>
-          ) : (
-            <div>
-              <Link href='/client/auth/signin' passHref>
-                <a
-                  className={
-                    'text-md border-blue rounded border bg-amber-500 py-2 px-4 text-white hover:bg-amber-400 focus:border-black focus:outline-none'
-                  }
-                >
-                  S&apos;identifier
-                </a>
-              </Link>
-            </div>
-          )}
-          <button
-            className='text-white text-xs ml-2 '
-            onClick={() => setShowOptions(!showOptions)}
-          >
-            {showOptions ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </button>
-        </div>
-
-        {/* Notifications */}
-        {showOptions && (
-          <ul className='fixed bg-white text-slate-700 rounded top-12 w-fit'>
-            <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
-              <Link
-                href={
-                  session?.user
-                    ? '/client/notifications'
-                    : '/client/auth/signin'
-                }
-                passHref
-              >
-                <a className='capitalize text-sm'>
-                  <span className='mr-2'>
-                    <NotificationsIcon />
-                  </span>
-                  notifications
-                </a>
-              </Link>
-            </li>
-
-            {/* Orders */}
-            <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
-              <Link
-                href={session?.user ? '/client/orders' : '/client/auth/signin'}
-                passHref
-              >
-                <a className='capitalize text-sm'>
-                  <span className='mr-2'>
-                    <InventoryIcon />
-                  </span>
-                  mes commandes
-                </a>
-              </Link>
-
-              {/* Deconnécte */}
-            </li>
-            {session?.user && (
-              <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
-                <Link href='' passHref>
-                  <button
-                    className='capitalize text-sm'
-                    onClick={() =>
-                      signOut('client-provider', {
-                        callbackUrl: 'http://localhost:3000',
-                      })
+      {!hideOptions && (
+        <div className='relative ml-auto'>
+          <div className='flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg group hover:text-amber-500 '>
+            {session?.user ? (
+              <p className='text-white'>
+                Bonjour,
+                <span className='font-semibold'> {session.user.name}</span>
+              </p>
+            ) : (
+              <div>
+                <Link href='/client/auth/signin' passHref>
+                  <a
+                    className={
+                      'text-md border-blue rounded border bg-amber-500 py-2 px-4 text-white hover:bg-amber-400 focus:border-black focus:outline-none'
                     }
                   >
+                    S&apos;identifier
+                  </a>
+                </Link>
+              </div>
+            )}
+            <button
+              className='text-white text-xs ml-2 '
+              onClick={() => setShowOptions(!showOptions)}
+            >
+              {showOptions ? (
+                <KeyboardArrowUpIcon />
+              ) : (
+                <KeyboardArrowDownIcon />
+              )}
+            </button>
+          </div>
+
+          {/* Notifications */}
+          {showOptions && (
+            <ul className='fixed bg-white text-slate-700 rounded top-12 w-fit'>
+              <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
+                <Link
+                  href={
+                    session?.user
+                      ? '/client/notifications'
+                      : '/client/auth/signin'
+                  }
+                  passHref
+                >
+                  <a className='capitalize text-sm'>
                     <span className='mr-2'>
-                      <LogoutIcon />
+                      <NotificationsIcon />
                     </span>
-                    déconnecter
-                  </button>
+                    notifications
+                  </a>
                 </Link>
               </li>
-            )}
-          </ul>
-        )}
-      </div>
+
+              {/* Orders */}
+              <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
+                <Link
+                  href={
+                    session?.user ? '/client/orders' : '/client/auth/signin'
+                  }
+                  passHref
+                >
+                  <a className='capitalize text-sm'>
+                    <span className='mr-2'>
+                      <InventoryIcon />
+                    </span>
+                    mes commandes
+                  </a>
+                </Link>
+
+                {/* Deconnécte */}
+              </li>
+              {session?.user && (
+                <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
+                  <Link href='' passHref>
+                    <button
+                      className='capitalize text-sm'
+                      onClick={() =>
+                        signOut('client-provider', {
+                          callbackUrl: 'http://localhost:3000',
+                        })
+                      }
+                    >
+                      <span className='mr-2'>
+                        <LogoutIcon />
+                      </span>
+                      déconnecter
+                    </button>
+                  </Link>
+                </li>
+              )}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* Basket */}
       {!hideBasket && (

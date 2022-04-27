@@ -12,7 +12,7 @@ function Welcome() {
 
   return (
     <div>
-      <Header hideSearch={true} hideBasket={true} />
+      <Header hideSearch={true} hideBasket={true} hideOptions={true} />
       <div className='mobile'>
         <nav className='navMobile'>
           <img
@@ -45,7 +45,7 @@ function Welcome() {
           </Link>
           <Link
             className='Delivery_manMobile'
-            href={session ? 'rider' : '/rider/auth/signin'}
+            href='/rider/auth/signin'
             passHref
           >
             <a>

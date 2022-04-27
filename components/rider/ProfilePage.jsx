@@ -39,7 +39,7 @@ const ProfilePage = ({ rider }) => {
               <div className='text-sm leading-normal mt-0 mb-2  font-bold uppercase'>
                 <LocationOnIcon className='text-gray-500' />
                 <i className='mr-2 text-lg '></i>
-                Algérie, {rider.region.split(' - ')[1]}
+                Algérie, {rider?.region.split(' - ')[1]}
               </div>
             </div>
             <div className='mt-10 py-10 border-t'>
@@ -51,12 +51,12 @@ const ProfilePage = ({ rider }) => {
                   <div className='text-sm leading-normal mt-0 mb-2 flex items-center'>
                     <EmailIcon className='text-gray-500' />{' '}
                     <i className='text-gray-500 mx-2 font-bold'> : </i>
-                    {rider.email}
+                    {rider?.email}
                   </div>
                   <div className='text-sm leading-normal mt-0 mb-2 flex items-center'>
                     <PhoneIcon className='text-gray-500' />{' '}
                     <i className='text-gray-500 mx-2 font-bold'> : </i>
-                    {rider.phoneNumber}
+                    {rider?.phoneNumber}
                   </div>
                 </div>
               </div>
