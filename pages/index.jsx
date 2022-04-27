@@ -122,6 +122,7 @@ function Welcome() {
                 </button>
               </div>
             </div>
+
             <div className='bottom'>
               <h6 className='copytights'>Copyright © All rights reserved</h6>
             </div>
