@@ -83,11 +83,13 @@ export async function getStaticPaths() {
   //)
   //const data = await response.json()
   const paths = clients.map(({ id }) => {
-    return {
-      params: {
-        clientId: String(id),
-      },
-    }
+    if (id)
+      return {
+        params: {
+          clientId: String(id),
+        },
+      }
+    else return
   })
 
   return {
