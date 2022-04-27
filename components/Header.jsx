@@ -16,7 +16,7 @@ import { useStateValue } from '../React-Context-Api/context'
 import { useSession, signOut } from 'next-auth/react'
 
 function Header({ hideSearch, hideBasket, hideOptions }) {
-  const { data: session } = useSession()
+  const { data: session } = useSession('client-provider')
   const [suggestions, setSuggestions] = useState([])
   const [products, setProducts] = useState([])
   const [{ basket }, dispatch] = useStateValue()
@@ -50,11 +50,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       } catch (error) {
         console.error(error)
       }
-      //const response = await fetch(
-      //  'https://zino-products-api.herokuapp.com/products'
-      //)
-      //
-      //const data = await response.json()
+
       setProducts(dbProducts)
     }
     fetchProducts()
@@ -96,7 +92,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       allSuggestions = await user.functions.searchProductsAutoComplete(
         searchTerm
       )
-      //setProducts(() => allSuggestions)
+
       console.log('SUGGESTIONS  : ', allSuggestions)
       setSuggestions(allSuggestions)
     } catch (error) {
@@ -162,7 +158,6 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
             className='w-5/6 rounded-l border-none px-2 outline-none h-6 md:h-10'
             placeholder='Cherchez un produit, une marque ou une catégorie'
             onChange={handleChange}
-            //value={searchTerm||''}
           />
 
           <button

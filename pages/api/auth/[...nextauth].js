@@ -22,6 +22,7 @@ export default NextAuth({
       if (session?.user) {
         session.user.id = token.id
         session.user.name = token.name
+        session.user.provider = token.provider
       }
       return session
     },
@@ -80,7 +81,12 @@ export default NextAuth({
         }
         //Else send success response
         client.close()
-        return { id: result.id }
+        return {
+          id: result.id,
+          name: result.email.split('@')[0],
+          email: result.email,
+          date: result.date,
+        }
       },
     }),
 

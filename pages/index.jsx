@@ -5,10 +5,13 @@ import Header from '../components/Header'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-
+import { getProviders } from 'next-auth/react'
+import { getSession } from 'next-auth/react'
 function Welcome() {
   const { data: session } = useSession()
   const router = useRouter()
+  console.log('providers : ', getProviders())
+  console.log('session : ', getSession('client-provider'))
 
   return (
     <div>
@@ -110,9 +113,7 @@ function Welcome() {
                   className='Delivery_man'
                   type=''
                   onClick={() => {
-                    window.location.assign(
-                      session ? 'rider' : '/rider/auth/signin'
-                    )
+                    window.location.assign('/rider/auth/signin')
                   }}
                 >
                   livreur

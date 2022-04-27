@@ -10,7 +10,7 @@ const RiderId = ({ rider, orders }) => {
   const { data: session, status } = useSession()
   const isUser = session?.user
   const router = useRouter()
-
+  
   useEffect(() => {
     const redirectIfNotAuthenticated = () => {
       if (!isUser) router.push('/rider/auth/signin')
@@ -78,13 +78,11 @@ export async function getStaticPaths() {
   //)
   //const data = await response.json()
   const paths = riders.map(({ id }) => {
-    if (id)
-      return {
-        params: {
-          riderId: String(id),
-        },
-      }
-    else return
+    return {
+      params: {
+        riderId: String(id),
+      },
+    }
   })
 
   return {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle'
 import CurrencyFormat from 'react-currency-format'
 import CloseIcon from '@mui/icons-material/Close'
@@ -6,11 +6,31 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 
 const NotificationsPage = ({ orders }) => {
-  const [showMore, setShowMore] = useState(false)
+  const [myOrders, setMyOrders] = useState(orders)
+
+  //show order products
+  useEffect(() => {
+    const ordersClone = orders.map((order) => {
+      return { ...order, showMore: false }
+    })
+    setMyOrders(ordersClone)
+  }, [])
+
+  const handleClick = (index) => {
+    let updatedOrder = {
+      ...myOrders[index],
+      showMore: !myOrders[index].showMore,
+    }
+    setMyOrders([
+      ...myOrders.slice(0, index),
+      updatedOrder,
+      ...myOrders.slice(index + 1),
+    ])
+  }
 
   return (
     <div>
-      {orders.map((order) => (
+      {myOrders.map((order, index) => (
         <div
           key={order.id}
           className='w-full max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 dark:text-gray-800'
@@ -65,11 +85,11 @@ const NotificationsPage = ({ orders }) => {
 
               <button
                 className='flex items-center  py-1.5 text-sm font-normal text-center text-gray-900 transition duration-200 ease-in-out '
-                onClick={() => setShowMore(!showMore)}
+                onClick={() => handleClick(index)}
               >
                 Produits
                 <p className='ml-4 hover:bg-gray-300 rounded-full'>
-                  {showMore ? (
+                  {order.showMore ? (
                     <KeyboardArrowDownIcon />
                   ) : (
                     <KeyboardArrowUpIcon />
@@ -77,7 +97,7 @@ const NotificationsPage = ({ orders }) => {
                 </p>
               </button>
 
-              {showMore && (
+              {order.showMore && (
                 <div className='flex flex-col items-center mx-auto max-h-96 h-fit py-5'>
                   <div className='flex flex-col overflow-y-scroll p-2'>
                     {order.products.map(
