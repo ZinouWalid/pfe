@@ -43,7 +43,7 @@ const ProductInfo = ({ product }) => {
         <div className='mx-auto flex flex-wrap lg:w-4/5'>
           <img
             alt='ecommerce'
-            className='w-full rounded border border-gray-200 object-cover object-center lg:w-1/2'
+            className='w-full rounded border border-gray-200 object-contain object-center lg:w-1/2'
             src={img}
           />
           <div className='mt-6 w-full lg:mt-0 lg:w-1/2 lg:py-6 lg:pl-10'>

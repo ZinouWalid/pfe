@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Header from '../Header'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import NotificationsPage from './NotificationsPage'
+import OrdersPage from './OrdersPage'
 import ProfilePage from './ProfilePage'
 const Rider = ({ rider, orders }) => {
   const [showNotifications, setShowNotifications] = useState(false)
@@ -55,7 +55,7 @@ const Rider = ({ rider, orders }) => {
           </button>
         </div>
       </nav>
-      {showNotifications && <NotificationsPage orders={orders} />}
+      {showNotifications && <OrdersPage orders={orders} />}
       {showProfile && <ProfilePage rider={rider} />}
     </div>
   )

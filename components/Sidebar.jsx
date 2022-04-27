@@ -9,11 +9,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Link from 'next/link'
 import { getCookie } from '../lib/useCookie'
+import { useStateValue } from '../React-Context-Api/context'
 
 const Sidebar = ({ showSidebar, hideFilters }) => {
   const [showFilters, setShowFilters] = useState(false)
   const [categories, setCategories] = useState([])
   const [localBasket, setLocalBasket] = useState([])
+  const [{ basket }, dispatch] = useStateValue()
 
   //filter products after we search
   let filteredProducts = []
@@ -23,7 +25,7 @@ const Sidebar = ({ showSidebar, hideFilters }) => {
       setLocalBasket(getCookie('basket'))
     }
     updateBasket()
-  }, [localBasket])
+  }, [basket])
 
   //Fetch the categories
   useEffect(() => {

@@ -16,7 +16,7 @@ const RiderId = ({ rider, orders }) => {
       if (!isUser) router.push('/rider/auth/signin')
     }
     redirectIfNotAuthenticated()
-  }, [isUser])
+  }, [])
 
   return (
     <div className='overflow-x-hidden'>
@@ -51,7 +51,7 @@ export async function getStaticProps(context) {
     rider = await user.functions.getSingleRider(params.riderId)
 
     //fetching the orders that coresponds to the rider
-    orders = await user.functions.getOrdersByRegion(rider.region)
+    orders = await user.functions.getAllOrders(rider.region)
   } catch (error) {
     console.warn(error)
   }

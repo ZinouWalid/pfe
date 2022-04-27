@@ -3,15 +3,14 @@ import Subtotal from '../../components/Subtotal'
 import CheckoutProduct from '../../components/CheckoutProduct'
 import { getCookie } from '../../lib/useCookie'
 import Header from '../../components/Header'
-
+import { useStateValue } from '../../React-Context-Api/context'
 
 const Checkout = () => {
-  const [basket, setBasket] = useState([])
- 
-
-  //Update our basket when ever the client make changes to the basket
+  const [myBasket, setMyBasket] = useState([])
+  const [{ basket }, dispatch] = useStateValue()
+  //Update our myBasket when ever the client make changes to the myBasket
   useEffect(() => {
-    setBasket(getCookie('basket'))
+    setMyBasket(getCookie('basket'))
     //--------------------------------------------------------------
   }, [basket])
 
@@ -26,7 +25,7 @@ const Checkout = () => {
         </div>
         <Subtotal />
       </div>
-      {basket?.map((product) => (
+      {myBasket?.map((product) => (
         <CheckoutProduct key={product.id} product={product} />
       ))}
     </div>

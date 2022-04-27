@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
@@ -19,7 +19,7 @@ function Header({ hideSearch, hideBasket }) {
   const { data: session } = useSession()
   const [suggestions, setSuggestions] = useState([])
   const [products, setProducts] = useState([])
-  const [{basket}, dispatch] = useStateValue()
+  const [{ basket }, dispatch] = useStateValue()
   const [searchTerm, setSearchTerm] = useState('')
   const [localBasket, setLocalBasket] = useState([])
   const [showSidebar, setShowSidebar] = useState(false)
@@ -38,6 +38,7 @@ function Header({ hideSearch, hideBasket }) {
 
   //fetching the products to use them in filtering the user search
   useEffect(() => {
+    console.log('Session : ', session?.user)
     const fetchProducts = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
@@ -115,7 +116,11 @@ function Header({ hideSearch, hideBasket }) {
     trackSuggestions()
   }, [searchTerm])
 
-  return (
+  const truncate = (str, n) => {
+    return str?.length > n ? str.substr(0, n - 1) + '...' : str
+  }
+
+   return (
     <nav
       className='fixed top-0 left-0 right-0 flex justify-between h-14 w-full items-center bg-slate-900 text-white lg:h-16 z-30'
       onClick={() => setSuggestions([])}
@@ -177,9 +182,9 @@ function Header({ hideSearch, hideBasket }) {
           <ul className='flex overflow-scroll flex-col rounded decoration-'>
             {suggestions.map(({ id, name, img }) => (
               <li key={id}>
-                <Link href={`/products/${id}`} passHref>
+                <Link href={`/client/products/${id}`} passHref>
                   <a className='flex justify-between items-center px-2 py-1 hover:bg-gray-100 cursor-pointer bg-white'>
-                    <p className='text-gray-600'>{name}</p>
+                    <p className='text-gray-600'>{truncate(name, 100)}</p>
                     <img src={img} alt='' className='h-12 object-contain' />
                   </a>
                 </Link>
@@ -195,7 +200,7 @@ function Header({ hideSearch, hideBasket }) {
           {session?.user ? (
             <p className='text-white'>
               Bonjour,
-              <span className='font-semibold'>{session.user.name}</span>
+              <span className='font-semibold'> {session.user.name}</span>
             </p>
           ) : (
             <div>
@@ -220,7 +225,7 @@ function Header({ hideSearch, hideBasket }) {
 
         {/* Notifications */}
         {showOptions && (
-          <ul className='fixed bg-white text-slate-700 rounded top-12'>
+          <ul className='fixed bg-white text-slate-700 rounded top-12 w-fit'>
             <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
               <Link
                 href={

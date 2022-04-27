@@ -2,13 +2,14 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import CurrencyFormat from 'react-currency-format'
 import { getCookie } from '../lib/useCookie'
+import { useStateValue } from '../React-Context-Api/context'
 import { getBasketTotal } from '../React-Context-Api/reducer'
 
 function Subtotal() {
-  const [basket, setBasket] = useState([])
-
+  const [{ basket }, dispatch] = useStateValue()
+  const [myBasket, setMyBasket] = useState([])
   useEffect(() => {
-    setBasket(getCookie('basket'))
+    setMyBasket(getCookie('basket'))
     //--------------------------------------------------------------
   }, [basket])
 
@@ -19,7 +20,7 @@ function Subtotal() {
           <>
             <p>
               {/* Part of the homework */}
-              Total ({basket?.length || 0} articles):
+              Total ({myBasket?.length || 0} articles):
               <strong> {value} DA</strong>
             </p>
             <small className='subtotal__gift'>
@@ -28,14 +29,14 @@ function Subtotal() {
           </>
         )}
         decimalScale={2}
-        value={getBasketTotal(basket) || 0} // Part of the homework
+        value={getBasketTotal(myBasket) || 0} // Part of the homework
         displayType={'text'}
         thousandSeparator={true}
       />
       <Link href='/checkout/delivery' passHref>
         <a>
           <button
-            disabled={basket.length == 0}
+            disabled={myBasket.length == 0}
             className='h-8 w-full rounded-sm border border-amber-500 bg-amber-400 hover:bg-amber-500'
           >
             Procéder au Paiement

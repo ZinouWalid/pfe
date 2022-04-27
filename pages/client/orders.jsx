@@ -19,27 +19,29 @@ const Notifications = () => {
       if (!isUser) router.push('/client/auth/signin')
     }
     redirectIfNotAuthenticated()
-  }, [isUser])
+  }, [])
 
   //fetches the realm object from the server for the client orders
   useEffect(() => {
-    const fetchNotifications = async () => {
+    const fetchOrders = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
       const credentials = Realm.Credentials.anonymous()
-      let orders = []
+      let ords = []
       try {
         const user = await app.logIn(credentials)
-        orders = await user.functions.getClientOrders(
+        ords = await user.functions.getClientOrders(
           //You can pass the user id here instead of the session.user.email
-          session.user.email
+          session?.user.id
         )
 
-        setOrders(orders)
+        setOrders(ords)
       } catch (error) {
         console.error(error)
       }
     }
+    fetchOrders()
+    console.log(session?.user.name + ' orders : ' + orders)
   }, [])
 
   return (

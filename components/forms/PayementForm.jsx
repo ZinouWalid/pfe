@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useStateValue } from '../../React-Context-Api/context'
-import { City, Country, State } from 'country-state-city'
-import csc from 'countries-states-cities'
+import { City, State } from 'country-state-city'
 import CurrencyFormat from 'react-currency-format'
 import { getBasketTotal } from '../../React-Context-Api/reducer'
 import { getCookie } from '../../lib/useCookie'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { clearBasket } from '../../React-Context-Api/basketActions'
 
-export default function Login() {
+export default function PayementForm() {
   const { data: session } = useSession()
   const [{ basket }, dispatch] = useStateValue()
   const router = useRouter()
   const [user, setUser] = useState(session?.user)
+  const [deliveryCoast, setDeliveryCoast] = useState(0)
 
   //we use an object that contains all variables as a global state instead of declaring each variable individualy which a better approach
   const initialValues = {
@@ -22,8 +23,8 @@ export default function Login() {
     phoneNumber: '',
     email: user?.email,
     address: '',
-    region: '',
-    city: '',
+    region: State.getStateByCodeAndCountry('16', 'DZ').name,
+    city: { name: '', lat: 0, lon: 0 },
   }
   const [values, setValues] = useState(initialValues)
 
@@ -45,11 +46,11 @@ export default function Login() {
         date: new Date(),
         ...values,
         products: myOrder,
-        totalAmount: parseInt(getBasketTotal(myOrder) || 0) + 20,
+        totalAmount: parseInt(getBasketTotal(myOrder) || 0) + deliveryCoast,
       }),
     })
     //clear the basket after validating the Order
-    //dispatch(clearBasket)
+    dispatch(clearBasket())
 
     console.log('Order Validated')
     //return to page 01
@@ -58,15 +59,54 @@ export default function Login() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setValues({
-      ...values,
-      [name]: value,
-    })
+
+    if (name === 'city') {
+      console.log('city : ', JSON.parse(value))
+      setValues({
+        ...values,
+        city: {
+          name: JSON.parse(value).name,
+          lat: JSON.parse(value).latitude,
+          lon: JSON.parse(value).longitude,
+        },
+      })
+    } else {
+      setValues({
+        ...values,
+        [name]: value,
+      })
+    }
+    console.log('Values : ', values)
   }
+
+  //calculer la distance entre le centre et la distination
+  function distance(lat, lon) {
+    const lat1 = 36.73225
+    const lon1 = 3.08746
+    const p = 0.017453292519943295 // Math.PI / 180
+    const c = Math.cos
+    const a =
+      0.5 -
+      c((lat - lat1) * p) / 2 +
+      (c(lat1 * p) * c(lat * p) * (1 - c((lon - lon1) * p))) / 2
+
+    return 12742 * Math.asin(Math.sqrt(a)) // 2 * R; R = 6371 km
+  }
+
+  //calculer le montant de la livraison
+  const deliveryPrice = (distance) => {
+    return distance > 0 ? Math.floor(distance * 10) : 20
+  }
+
+  useEffect(() => {
+    const { lat, lon } = values.city
+    console.log('Distance : ', lat, lon, distance(lat, lon))
+    if (lat != 0 && lon != 0)
+      setDeliveryCoast(deliveryPrice(distance(lat, lon)))
+  }, [values.city])
 
   return (
     <div className='flex bg-gray-100 m-auto min-w-3/5 mb-4'>
-      {/* {csc.getStatesOfCountry(4).map((i) => i.name)} */}
       <div className='shadow-default m-auto w-full max-w-xl rounded-lg border bg-white px-1'>
         <div className='text-primary m-6 '>
           <div className='mt-3 flex items-center justify-center'>
@@ -85,7 +125,6 @@ export default function Login() {
               Quel est votre nom? <i className='text-red-500'>*</i>
             </label>
             <input
-              onChange={(e) => handleInputChange(e)}
               type='text'
               id='name'
               name='name'
@@ -94,6 +133,7 @@ export default function Login() {
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
+              readOnly
               required
               disabled={true}
             />
@@ -137,6 +177,7 @@ export default function Login() {
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
+              readOnly
               disabled={true}
               required
             />
@@ -165,13 +206,14 @@ export default function Login() {
             <select
               name='region'
               value={values.region}
-              onChange={(e) => handleInputChange(e)}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
+              readOnly
+              disabled={true}
               required
             >
-              <option value={csc.getCityById(1144)}>
+              <option value={State.getStateByCodeAndCountry('16', 'DZ').name}>
                 {State.getStateByCodeAndCountry('16', 'DZ').name}
               </option>
             </select>
@@ -182,16 +224,19 @@ export default function Login() {
             </label>
             <select
               name='city'
-              value={values.city}
+              value={values.city.name}
               onChange={(e) => handleInputChange(e)}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
               required
             >
-              <option value={null}>Sélectionner </option>
+              <option value={null}>Sélectionner</option>
               {City.getCitiesOfState('DZ', '16').map((city) => (
-                <option value={city.name} key={city.id}>
+                <option
+                  value={JSON.stringify(city)}
+                  key={city.id || Math.random() * 1000}
+                >
                   {city.name}
                 </option>
               ))}
@@ -207,7 +252,13 @@ export default function Login() {
 
               <div className='mb-6 flex flex-col items-center justify-between'>
                 <div className='flex items-center justify-center'>
-                  <input type='radio' name='payement' id='payement' checked />
+                  <input
+                    type='radio'
+                    name='payement'
+                    id='payement'
+                    checked
+                    readOnly
+                  />
                   <img
                     src='https://static.jumia.dz/cms/Icons/payment_logo/i-service-cash.png'
                     alt=''
@@ -228,14 +279,15 @@ export default function Login() {
                     renderText={(value) => (
                       <div className=' flex flex-col'>
                         <div className='flex justify-between'>
-                          <div> Total des Articles</div>
-                          <div className='font-bold'> {value} DA</div>
+                          <p> Total des Articles</p>
+                          <p className='font-bold'> {value} DA</p>
                         </div>
                         <p className='flex justify-between'>
-                          Montant de la livraison<strong>20 DA</strong>
+                          Montant de la livraison
+                          <strong>{deliveryCoast} DA</strong>
                         </p>
                         <div className='mx-auto my-2 w-full border border-gray-500'></div>
-                        <p className='flex justify-between'>
+                        <div className='flex justify-between'>
                           Totale
                           <i className='font-bold text-green-600'>
                             <CurrencyFormat
@@ -247,12 +299,14 @@ export default function Login() {
                                 </div>
                               )}
                               decimalScale={2}
-                              value={parseInt(getBasketTotal(myOrder) + 20)} // Part of the homework
+                              value={parseInt(
+                                getBasketTotal(myOrder) + deliveryCoast
+                              )} // Part of the homework
                               displayType={'text'}
                               thousandSeparator={true}
                             />
                           </i>
-                        </p>
+                        </div>
                       </div>
                     )}
                     decimalScale={2}

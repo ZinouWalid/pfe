@@ -2,13 +2,17 @@ import React, { useEffect } from 'react'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import Header from '../components/Header'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
+function Welcome() {
+  const { data: session } = useSession()
+  const router = useRouter()
 
-function Welcome({}) {
-  
   return (
     <div>
-      <Header />
+      <Header hideSearch={true} hideBasket={true} />
       <div className='mobile'>
         <nav className='navMobile'>
           <img
@@ -27,30 +31,30 @@ function Welcome({}) {
         <p>Continuez comme :</p>
 
         <div className='ButtonsDivMobile'>
-          <button
+          <Link
             className='CustomerMobile'
-            type=''
-            onClick={() => {
-              window.location.assign('/client')
-            }}
+            href={session ? 'client' : '/client/auth/signin'}
+            passHref
           >
-            Consomateur
-            <span className='mx-4'>
-              <AddShoppingCartIcon />
-            </span>
-          </button>
-          <button
+            <a>
+              Consomateur
+              <span className='mx-4'>
+                <AddShoppingCartIcon />
+              </span>
+            </a>
+          </Link>
+          <Link
             className='Delivery_manMobile'
-            type=''
-            onClick={() => {
-              window.location.assign('/rider/auth/signin')
-            }}
+            href={session ? 'rider' : '/rider/auth/signin'}
+            passHref
           >
-            Livreur
-            <span className='mx-4'>
-              <LocalShippingIcon />
-            </span>
-          </button>
+            <a>
+              Livreur
+              <span className='mx-4'>
+                <LocalShippingIcon />
+              </span>
+            </a>
+          </Link>
         </div>
 
         <footer className='footerMobile'>
@@ -93,7 +97,10 @@ function Welcome({}) {
                 l&apos;aide de l&apos;outil gamme de couleurs.
               </p>
               <div className='ButtonsDiv'>
-                <a className='Customer' href={'/client'}>
+                <a
+                  className='Customer'
+                  href={session ? 'client' : '/client/auth/signin'}
+                >
                   Consomateur
                   <span className='mx-4'>
                     <AddShoppingCartIcon />
@@ -103,7 +110,9 @@ function Welcome({}) {
                   className='Delivery_man'
                   type=''
                   onClick={() => {
-                    window.location.assign('/rider/auth/signin')
+                    window.location.assign(
+                      session ? 'rider' : '/rider/auth/signin'
+                    )
                   }}
                 >
                   livreur

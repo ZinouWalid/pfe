@@ -3,96 +3,13 @@ import InventoryIcon from '@mui/icons-material/Inventory'
 import CurrencyFormat from 'react-currency-format'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-const r = [
-  {
-    id: '62335d2e73d98557eda3ebf2',
-    date: '2022-03-17T16:09:16.623Z',
-    firstName: 'aaaaaaaaa',
-    lastName: 'aaaaaaaa2',
-    phoneNumber: '111111111',
-    email: 'a@a.com',
-    address: 'd',
-    region: '02',
-    city: 'Oued Sly',
-    products: [
-      {
-        id: '34815cf0-7ee0-11ec-8e9d-0da3379c480d',
-        name: 'ELIT DRAGE GOUT AMANDE 60G',
-        price: '175 DA',
-        rating: '5 out of 5',
-        category: 'epicerie-bonbons-chocolat',
-        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
-        quantity: 1,
-      },
-      {
-        id: '14815cf0-7ee0-11ec-8e9d-0da3379c480d',
-        name: 'ELIT DRAGE GOUT AMANDE 60G',
-        price: '175 DA',
-        rating: '5 out of 5',
-        category: 'epicerie-bonbons-chocolat',
-        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
-        quantity: 3,
-      },
-      {
-        id: '24815cf0-7ee0-11ec-8e9d-0da3379c480d',
-        name: 'ELIT DRAGE GOUT AMANDE 60G',
-        price: '175 DA',
-        rating: '5 out of 5',
-        category: 'epicerie-bonbons-chocolat',
-        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
-        quantity: 3,
-      },
-    ],
-    totalAmount: 670,
-  },
-  {
-    id: '12335d2e73d98557eda3ebf2',
-    date: '2022-03-17T16:09:16.623Z',
-    firstName: 'bbbbbbb',
-    lastName: 'bbbbb2',
-    phoneNumber: '111111111',
-    email: 'a@a.com',
-    address: 'd',
-    region: '02',
-    city: 'Oued Sly',
-    products: [
-      {
-        id: '34815cf0-7ee0-11ec-8e9d-0da3379c480d',
-        name: 'ELIT DRAGE GOUT AMANDE 60G',
-        price: '175 DA',
-        rating: '5 out of 5',
-        category: 'epicerie-bonbons-chocolat',
-        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
-        quantity: 1,
-      },
-      {
-        id: '14815cf0-7ee0-11ec-8e9d-0da3379c480d',
-        name: 'ELIT DRAGE GOUT AMANDE 60G',
-        price: '175 DA',
-        rating: '5 out of 5',
-        category: 'epicerie-bonbons-chocolat',
-        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
-        quantity: 3,
-      },
-      {
-        id: '24815cf0-7ee0-11ec-8e9d-0da3379c480d',
-        name: 'ELIT DRAGE GOUT AMANDE 60G',
-        price: '175 DA',
-        rating: '5 out of 5',
-        category: 'epicerie-bonbons-chocolat',
-        img: 'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/...',
-        quantity: 3,
-      },
-    ],
-    totalAmount: 670,
-  },
-]
+
 const OrdersPage = ({ orders }) => {
   const [showMore, setShowMore] = useState(false)
 
   return (
     <div className='p-1 bg-gray-100 mt-16'>
-      {r.map((order) => (
+      {orders.map((order) => (
         <div
           key={order.id}
           className='w-full my-2 max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 bg-gray-200 dark:text-gray-800'
@@ -120,7 +37,7 @@ const OrdersPage = ({ orders }) => {
               </p>
 
               {/* -----------Montant----------- */}
-              <p className='mb-1 text-sm font-normal'>
+              <div className='mb-1 text-sm font-normal'>
                 <CurrencyFormat
                   renderText={(value) => (
                     <div className=' flex flex-col'>
@@ -134,7 +51,7 @@ const OrdersPage = ({ orders }) => {
                   displayType={'text'}
                   thousandSeparator={true}
                 />
-              </p>
+              </div>
 
               {/* -----------Votre paiment----------- */}
               <p className='mb-1 text-sm font-normal text-green-600'>
@@ -213,7 +130,7 @@ const OrdersPage = ({ orders }) => {
                   </div>
                 </div>
               )}
-              <button className='mt-4 py-1.5 text-base bg-red-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '>
+              <button className='mt-4 py-1.5 text-base bg-red-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-red-500 '>
                 annuler la commande
               </button>
             </div>

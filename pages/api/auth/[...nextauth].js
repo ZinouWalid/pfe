@@ -122,7 +122,12 @@ export default NextAuth({
         }
         //Else send success response
         client.close()
-        return { id: result.id, name: result.email.split('@')[0], email: result.email }
+        return {
+          id: result.id,
+          name: result.email.split('@')[0],
+          email: result.email,
+          date: result.date,
+        }
       },
     }),
   ],
