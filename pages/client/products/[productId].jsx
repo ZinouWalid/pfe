@@ -2,12 +2,14 @@ import React from 'react'
 import ProductInfo from '../../../components/ProductInfo'
 import Header from '../../../components/Header'
 import * as Realm from 'realm-web'
+import Footer from '../../../components/Footer'
 
 const productId = ({ product }) => {
   return (
     <div className='relative flex min-h-screen flex-col '>
       <Header hideSearch={true} />
       <ProductInfo key={product.id} product={product} />
+      <Footer />
     </div>
   )
 }
