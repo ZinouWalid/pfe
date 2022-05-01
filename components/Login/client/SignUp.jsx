@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import Header from '../../Header'
 
 export default function Register() {
   const router = useRouter()
@@ -41,8 +42,9 @@ export default function Register() {
   }
 
   return (
-    <div className='flex'>
-      <div className='border-primaryBorder shadow-default m-auto w-full max-w-md rounded-lg border bg-white px-1'>
+    <div className='flex mt-16'>
+      <Header hideSearch={true} hideBasket={true} hideOptions={true} />
+      <div className='mt-16 border-2 border-slate-700 m-auto w-full max-w-md rounded-lg border bg-white px-1'>
         <div className='text-primary m-6'>
           <div className='mt-3 flex items-center justify-center'>
             <h1 className='text-primary mt-4 mb-2 text-2xl font-medium'>

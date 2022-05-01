@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import Header from '../../Header'
 
 export default function Login({ csrfToken }) {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  console.log('Session : ', session, status)
   const [values, setValues] = useState({
     user: {
       email: '',
@@ -18,6 +20,7 @@ export default function Login({ csrfToken }) {
   const handleChange = (e) => {
     //Reset the err message to empty message
     setErr('')
+    
     const { name, value } = e.target
     setValues({
       user: {
@@ -29,8 +32,11 @@ export default function Login({ csrfToken }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Submiting values : ', values.user)
 
+    //Kill the client session if he is already logged in
+    //signOut('rider-provider')
+
+    //Sign in the client
     const result = await signIn('client-provider', {
       redirect: false,
       email: values.user.email,
@@ -38,9 +44,7 @@ export default function Login({ csrfToken }) {
     })
 
     if (result.error) {
-      // set some auth state
-      // router.push('/checkout/delivery')
-      //alert(JSON.stringify(result.error))
+    
       setErr(result.error)
       setValues({
         user: {
@@ -48,16 +52,20 @@ export default function Login({ csrfToken }) {
           password: '',
         },
       })
-    }else{router.push('/client')}
+    } else {
+      router.push('/client')
+    }
   }
 
   return (
-    <div className='flex '>
-      <div className='border-primaryBorder shadow-default mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
+    <div className='flex mt-16'>
+      <Header hideSearch={true} hideBasket={true} hideOptions={true} />
+
+      <div className='mt-16 border-2 border-slate-700 shadow-lg mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
         <div className='text-primary m-6'>
           <div className=' flex flex-col items-center justify-center mb-4'>
             {err && (
-              <p className='text-red-500 font-medium bg-red-200 p-1 rounded'>
+              <p className='text-red-500 font-medium text-sm bg-red-200 p-1 rounded'>
                 {err}
               </p>
             )}

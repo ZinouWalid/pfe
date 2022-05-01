@@ -16,7 +16,7 @@ import { useStateValue } from '../React-Context-Api/context'
 import { useSession, signOut } from 'next-auth/react'
 
 function Header({ hideSearch, hideBasket, hideOptions }) {
-  const { data: session } = useSession('client-provider')
+  const { data: session, status } = useSession('client-provider')
   const [suggestions, setSuggestions] = useState([])
   const [products, setProducts] = useState([])
   const [{ basket }, dispatch] = useStateValue()
@@ -38,7 +38,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
 
   //fetching the products to use them in filtering the user search
   useEffect(() => {
-    console.log('Session : ', session?.user)
+    console.log('Session : ', session?.user, ' status : ', status)
     const fetchProducts = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
@@ -134,13 +134,13 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       )}
       {/* Logo and title */}
       <Link href={'/'} passHref>
-        <a className='flex items-center '>
+        <a className='flex items-center p-1'>
           <img
             src='https://e7.pngegg.com/pngimages/644/743/png-clipart-a-o-t-wings-of-freedom-eren-yeager-bertholdt-hoover-attack-on-titan-logo-others-angle-emblem.png'
             alt=''
             className='mx-2 h-6 rounded-full md:h-12 hover:bg-gray-800'
           />
-          <h2 className='flex font-bold mr-2'>
+          <h2 className='flex font-bold mr-2 hover:bg-gray-800 rounded-full p-1 '>
             AOT <span className='ml-1 hidden md:block'>Commerce</span>
           </h2>
         </a>
@@ -212,7 +212,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
               </div>
             )}
             <button
-              className='text-white text-xs ml-2 '
+              className='text-white text-xs ml-2 p-1 rounded-full hover:bg-gray-800 '
               onClick={() => setShowOptions(!showOptions)}
             >
               {showOptions ? (
@@ -225,8 +225,8 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
 
           {/* Notifications */}
           {showOptions && (
-            <ul className='fixed bg-white text-slate-700 rounded top-12 w-fit'>
-              <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
+            <ul className='fixed bg-white text-slate-700 rounded top-12 w-fit border border-slate-600'>
+              <li className='flex justify-between items-center hover:bg-gray-100 '>
                 <Link
                   href={
                     session?.user
@@ -235,7 +235,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
                   }
                   passHref
                 >
-                  <a className='capitalize text-sm'>
+                  <a className='capitalize text-sm p-3'>
                     <span className='mr-2'>
                       <NotificationsIcon />
                     </span>
@@ -245,14 +245,14 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
               </li>
 
               {/* Orders */}
-              <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
+              <li className='flex justify-between items-center hover:bg-gray-100 '>
                 <Link
                   href={
                     session?.user ? '/client/orders' : '/client/auth/signin'
                   }
                   passHref
                 >
-                  <a className='capitalize text-sm'>
+                  <a className='capitalize text-sm p-3'>
                     <span className='mr-2'>
                       <InventoryIcon />
                     </span>
@@ -263,14 +263,15 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
                 {/* Deconnécte */}
               </li>
               {session?.user && (
-                <li className='flex justify-between items-center hover:bg-gray-100 p-3'>
+                <li
+                  className='flex justify-between items-center hover:bg-gray-100 
+                '
+                >
                   <Link href='' passHref>
                     <button
-                      className='capitalize text-sm'
+                      className='capitalize text-sm p-3'
                       onClick={() =>
-                        signOut('client-provider', {
-                          callbackUrl: 'http://localhost:3000',
-                        })
+                        signOut({ callbackUrl: 'http://localhost:3000' })
                       }
                     >
                       <span className='mr-2'>

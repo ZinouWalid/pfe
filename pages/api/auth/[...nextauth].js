@@ -20,23 +20,26 @@ export default NextAuth({
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
-        session.user.id = token.id
-        session.user.name = token.name
+        console.log('Session : ', session)
+        console.log('Token : ', token)
+        session.user = token.user
         session.user.provider = token.provider
+        console.log('Session after change: ', session)
       }
       return session
     },
-    jwt: async ({ user, token }) => {
+    jwt: async ({ user, token, account }) => {
       if (user) {
-        console.log('USER : ', user, token)
-        token.id = user.id
-        token.name = user.name
+        //console.log('Token : ', token)
+        //console.log('User : ', user)
+        token.user = user
+        token.provider = account.provider
+        //console.log('Token after change : ', token)
       }
       return token
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-  database: process.env.MONGO_URI,
   pages: {
     signIn: ['/rider/auth/signin', '/client/auth/signin'],
     signOut: '/',
@@ -57,18 +60,15 @@ export default NextAuth({
         let { db, client } = await connectToDatabase()
 
         //Find rider with the email
-        const result = await Riders.findOne({
+        const result = await db.collection('riders').findOne({
           email: credentials.email,
         })
         //Not found - send error res
         if (!result) {
-          client.close()
           console.log('User not found !!!!!!!!!!')
           throw new Error('No rider found with the email')
-        } else {
-          console.log('The rider signed in is : ', result)
         }
-        //Check hased password with DB password
+        //Check hashed password with DB password
         const checkPassword = await verifyPassword(
           credentials.password,
           result.password
@@ -76,7 +76,6 @@ export default NextAuth({
         //Incorrect password - send response
         if (!checkPassword) {
           console.log("Password doesn't match")
-          client.close()
           throw new Error('Password or email does not match')
         }
         //Else send success response
@@ -104,16 +103,13 @@ export default NextAuth({
         let { db, client } = await connectToDatabase()
 
         //Find rider with the email
-        const result = await Clients.findOne({
+        const result = await db.collection('clients').findOne({
           email: credentials.email,
         })
         //Not found - send error res
         if (!result) {
-          client.close()
           console.log('Client not found !!!!!!!!!!')
           throw new Error('No client found with this email')
-        } else {
-          console.log('The client signed in is : ', result)
         }
         //Check hased password with DB password
         const checkPassword = await verifyPassword(
@@ -123,7 +119,6 @@ export default NextAuth({
         //Incorrect password - send response
         if (!checkPassword) {
           console.log('Password doesnt match')
-          client.close()
           throw new Error('Password or email does not match')
         }
         //Else send success response

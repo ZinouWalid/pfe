@@ -95,7 +95,7 @@ export default function PayementForm() {
 
   //calculer le montant de la livraison
   const deliveryPrice = (distance) => {
-    return distance > 0 ? Math.floor(distance * 10) : 20
+    return distance > 0 ? Math.floor(distance * 20) : 200
   }
 
   useEffect(() => {
@@ -231,7 +231,9 @@ export default function PayementForm() {
               }
               required
             >
-              <option value={null}>Sélectionner</option>
+              <option value={null}>
+                {values.city?.name ? values.city?.name : "Sélectionner"}
+              </option>
               {City.getCitiesOfState('DZ', '16').map((city) => (
                 <option
                   value={JSON.stringify(city)}

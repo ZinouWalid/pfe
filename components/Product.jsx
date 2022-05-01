@@ -91,6 +91,7 @@ function Product({ product }) {
                 type='number'
                 className='text-md flex w-full items-center bg-gray-300 p-2 text-center font-semibold text-gray-700 outline-none hover:text-black focus:text-black  focus:outline-none'
                 value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
               ></input>
               {/* Increase Button */}
               <button

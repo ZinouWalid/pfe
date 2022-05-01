@@ -2,9 +2,10 @@ import { City } from 'country-state-city'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import Header from '../../Header'
 
-export default function Register() {
-  const router=useRouter()
+export default function SignUp() {
+  const router = useRouter()
   const initialValues = {
     name: '',
     email: '',
@@ -33,10 +34,9 @@ export default function Register() {
         }),
       }).then((response) => {
         console.log('response returned : ', response.json())
-        if (response.success) {
+        if (response.status === 200) {
           //return to page 01'
           router.push('/rider/auth/signin')
-          alert('Succès !!')
         }
       })
     } else {
@@ -53,8 +53,10 @@ export default function Register() {
   }
 
   return (
-    <div className='flex'>
-      <div className='border-primaryBorder shadow-default m-auto w-full max-w-md rounded-lg border bg-white px-1'>
+    <div className='flex mt-16'>
+      <Header hideSearch={true} hideBasket={true} hideOptions={true} />
+
+      <div className='mt-8 border-2 border-slate-700 m-auto w-full max-w-md rounded-lg border bg-white px-1'>
         <div className='text-primary m-6'>
           <div className='mt-3 flex items-center justify-center'>
             <h1 className='text-primary mt-4 mb-2 text-2xl font-medium'>

@@ -1,142 +1,231 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InventoryIcon from '@mui/icons-material/Inventory'
 import CurrencyFormat from 'react-currency-format'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import { confirmAlert } from 'react-confirm-alert' // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import Link from 'next/link'
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 
 const OrdersPage = ({ orders }) => {
-  const [showMore, setShowMore] = useState(false)
+  const [myOrders, setMyOrders] = useState(orders)
+
+  //show order products
+  useEffect(() => {
+    const ordersClone = orders.map((order) => {
+      return { ...order, showMore: false }
+    })
+    setMyOrders(ordersClone)
+  }, [orders])
+
+  console.log('My orders : ', orders)
+
+  const handleClick = (index) => {
+    let updatedOrder = {
+      ...myOrders[index],
+      showMore: !myOrders[index].showMore,
+    }
+    setMyOrders([
+      ...myOrders.slice(0, index),
+      updatedOrder,
+      ...myOrders.slice(index + 1),
+    ])
+  }
+
+  const cancelOrder = (orderId) => {
+    confirmAlert({
+      title: 'Annuler la commande',
+      message: 'Êtes-vous sûr de faire annuler votre commande?',
+      buttons: [
+        {
+          label: 'Oui',
+          onClick: async () => {
+            await fetch('/api/orders', {
+              method: 'DELETE',
+              body: JSON.stringify({
+                id: orderId,
+              }),
+            })
+          },
+        },
+        {
+          label: 'Non',
+        },
+      ],
+    })
+  }
 
   return (
     <div className='p-1 bg-gray-100 mt-16'>
-      {orders.map((order) => (
-        <div
-          key={order.id}
-          className='w-full my-2 max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 bg-gray-200 dark:text-gray-800'
-          role='alert'
-        >
-          <div className='flex'>
-            <InventoryIcon className='w-8 h-8 rounded-full shadow-lg' />
+      {myOrders.length == 0 ? (
+        <div className='bg-white flex flex-col items-center text-amber-500'>
+          <h1 className='uppercase text-3xl font-bold'>pas de commandes</h1>
+          <img
+            src='https://cdn.dribbble.com/users/357929/screenshots/2276751/media/678caef6068a976e4a0d94bbdba6b660.png?compress=1&resize=400x300&vertical=top'
+            className='h-64 w-full mx-auto object-contain'
+          />
+          <Link href='/client/pages/page_1' passHref>
+            <a className=' text-base hover:underline'>
+              Faire une commande <AddShoppingCartIcon/>
+        </a>
+          </Link>
+        </div>
+      ) : (
+        myOrders.map((order, index) => (
+          <div
+            key={order?.id}
+            className='w-full my-2 max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 dark:text-gray-800'
+          >
+            <div className='flex'>
+              <InventoryIcon className='w-8 h-8 rounded-full shadow-lg' />
 
-            <div className='ml-3 text-sm font-normal'>
-              {/* -----------Nom et Prénom----------- */}
-              <span className='text-sm font-semibold text-gray-900 dark:text-gray-800'>
-                <p className='capitalize mb-2'>{order.date.split('T')[0]}</p>
-              </span>
-              {/* -----------Adresse----------- */}
-              <p className='mb-1 text-sm font-normal'>
-                Adresse : {order.address}
-              </p>
-
-              {/* -----------Cité----------- */}
-              <p className='mb-1 text-sm font-normal'>Cité : {order.city}</p>
-
-              {/* -----------Num telephone----------- */}
-              <p className='mb-1 text-sm font-normal'>
-                Numéro de téléphone : {'0' + order.phoneNumber}
-              </p>
-
-              {/* -----------Montant----------- */}
-              <div className='mb-1 text-sm font-normal'>
-                <CurrencyFormat
-                  renderText={(value) => (
-                    <div className=' flex flex-col'>
-                      <p className='mb-1 text-sm font-normal text-red-600'>
-                        Montant : {value} DA
-                      </p>
-                    </div>
-                  )}
-                  decimalScale={2}
-                  value={order.totalAmount - 20 || 0} // Part of the homework
-                  displayType={'text'}
-                  thousandSeparator={true}
-                />
-              </div>
-
-              {/* -----------Votre paiment----------- */}
-              <p className='mb-1 text-sm font-normal text-green-600'>
-                Coûts de livraison : 20 DA
-              </p>
-
-              {/* -----------Produits----------- */}
-
-              <button
-                className='flex items-center  py-1.5 text-sm font-normal text-center text-gray-900 transition duration-200 ease-in-out '
-                onClick={() => setShowMore(!showMore)}
-              >
-                Produits
-                <p className='ml-4 hover:bg-gray-300 rounded-full'>
-                  {showMore ? (
-                    <KeyboardArrowDownIcon />
-                  ) : (
-                    <KeyboardArrowUpIcon />
-                  )}
+              <div className='ml-3 text-sm font-normal'>
+                {/* -----------Nom et Prénom----------- */}
+                <span className='text-sm font-semibold text-gray-900 dark:text-gray-800'>
+                  <p className='capitalize mb-2'>{order?.date.split('T')[0]}</p>
+                </span>
+                {/* -----------Adresse----------- */}
+                <p className='mb-1 text-sm font-normal'>
+                  Adresse : {order?.address}
                 </p>
-              </button>
 
-              {showMore && (
-                <div className='flex flex-col items-center mx-auto max-h-96 h-fit py-5'>
-                  <div className='flex flex-col overflow-y-scroll p-2'>
-                    {order.products?.map(
-                      ({ id, name, price, img, quantity }) => {
-                        return (
-                          <div
-                            className='flex flex-col items-start my-2'
-                            key={id}
-                          >
-                            {/* Image and Title + Name */}
-                            <div className='flex items-center'>
-                              <img
-                                src={img}
-                                alt=''
-                                className='h-8 object-contain mr-1'
-                              />
-                              <div>
-                                <p className='title-font mb-1 text-xs text-gray-900 w-60'>
-                                  {name}
-                                </p>
-                                {/* Price */}
-                                <p className='text-xs text-amber-500'>
-                                  {price}
-                                </p>
-                                {/* Delete Product and Quantity */}
-                                <div className='flex items-center justify-between'>
-                                  <p className='font-semibold text-xs'>
-                                    Qté : {quantity}
+                {/* -----------Cité----------- */}
+                <p className='mb-1 text-sm font-normal'>
+                  Cité : {order?.city.name}
+                </p>
+
+                {/* -----------Num telephone----------- */}
+                <p className='mb-1 text-sm font-normal'>
+                  Numéro de téléphone : {'0' + order?.phoneNumber}
+                </p>
+
+                {/* -----------Num telephone----------- */}
+                <p className='mb-1 text-sm font-normal'>
+                  État :{' '}
+                  {order?.state == 1
+                    ? 'Prêt à livrer '
+                    : order?.state == 2
+                    ? 'En cours de livraison'
+                    : 'Livré'}
+                </p>
+
+                {/* -----------Montant----------- */}
+                <div className='mb-1 text-sm font-normal'>
+                  <CurrencyFormat
+                    renderText={(value) => (
+                      <div className=' flex flex-col'>
+                        <p className='mb-1 text-sm font-normal text-red-600'>
+                          Montant : {value} DA
+                        </p>
+                      </div>
+                    )}
+                    decimalScale={2}
+                    value={order?.totalAmount - 20 || 0} // Part of the homework
+                    displayType={'text'}
+                    thousandSeparator={true}
+                  />
+                </div>
+
+                {/* -----------Votre paiment----------- */}
+                <p className='mb-1 text-sm font-normal text-green-600'>
+                  Coûts de livraison : 20 DA
+                </p>
+
+                {/* -----------Produits----------- */}
+
+                <button
+                  className='flex items-center  py-1.5 text-sm font-normal text-center text-gray-900  '
+                  onClick={() => handleClick(index)}
+                >
+                  Produits
+                  <p className='ml-4 hover:bg-gray-300 rounded-full transition duration-200 ease-in-out  '>
+                    {order?.showMore ? (
+                      <KeyboardArrowDownIcon />
+                    ) : (
+                      <KeyboardArrowUpIcon />
+                    )}
+                  </p>
+                </button>
+
+                {order?.showMore && (
+                  <div className='flex flex-col items-center mx-auto max-h-96 h-fit py-5'>
+                    <div className='flex flex-col overflow-y-scroll p-2'>
+                      {order?.products.map(
+                        ({ id, name, price, img, quantity }) => {
+                          return (
+                            <div
+                              className='flex flex-col items-start my-2'
+                              key={id}
+                            >
+                              {/* Image and Title + Name */}
+                              <div className='flex items-center'>
+                                <img
+                                  src={img}
+                                  alt=''
+                                  className='h-8 object-contain mr-1'
+                                />
+                                <div>
+                                  <p className='title-font mb-1 text-xs text-gray-900 w-60'>
+                                    {name}
                                   </p>
-                                  <CurrencyFormat
-                                    renderText={(value) => (
-                                      <div className=' flex flex-col'>
-                                        <p className='mb-1 text-sm font-normal'>
-                                          ( Total :{value} DA )
-                                        </p>
-                                      </div>
-                                    )}
-                                    decimalScale={2}
-                                    value={
-                                      parseInt(quantity) * parseInt(price) || 0
-                                    } // Part of the homework
-                                    displayType={'text'}
-                                    thousandSeparator={true}
-                                  />
-                                  <p></p>
+                                  {/* Price */}
+                                  <p className='text-xs text-amber-500'>
+                                    {price}
+                                  </p>
+                                  {/* Delete Product and Quantity */}
+                                  <div className='flex items-center justify-between'>
+                                    <p className='font-semibold text-xs'>
+                                      Qté : {quantity}
+                                    </p>
+                                    <CurrencyFormat
+                                      renderText={(value) => (
+                                        <div className=' flex flex-col'>
+                                          <p className='mb-1 text-sm font-normal'>
+                                            ( Total :{value} DA )
+                                          </p>
+                                        </div>
+                                      )}
+                                      decimalScale={2}
+                                      value={
+                                        parseInt(quantity) * parseInt(price) ||
+                                        0
+                                      } // Part of the homework
+                                      displayType={'text'}
+                                      thousandSeparator={true}
+                                    />
+                                    <p></p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        )
-                      }
-                    )}
+                          )
+                        }
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-              <button className='mt-4 py-1.5 text-base bg-red-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-red-500 '>
-                annuler la commande
-              </button>
+                )}
+                <button
+                  className={`mt-4 py-1.5 text-base p-2 rounded-lg font-normal text-center text-gray-900 uppercase ${
+                    order?.state == 1
+                      ? 'bg-red-400 hover:bg-red-500'
+                      : order?.state == 2
+                      ? 'bg-amber-400 hover:bg-amber-500'
+                      : 'bg-green-400 hover:bg-green-500'
+                  }`}
+                  onClick={() => order?.state == 1 && cancelOrder(order?.id)}
+                >
+                  {order?.state == 1
+                    ? 'annuler la commande '
+                    : order?.state == 2
+                    ? 'En cours de livraison ...'
+                    : 'Livré'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   )
 }

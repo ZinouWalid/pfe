@@ -12,13 +12,7 @@ const Notifications = () => {
   const router = useRouter()
   const [notifications, setNotifications] = useState([])
 
-  //redirect the user if he's not authenticated to the signin page
-  useEffect(() => {
-    const redirectIfNotAuthenticated = () => {
-      if (!isUser) router.push('/client/auth/signin')
-    }
-    redirectIfNotAuthenticated()
-  }, [isUser])
+  useEffect(() => {}, [status, session])
 
   //fetches the realm object from the server for the client notifications
   useEffect(() => {
@@ -29,24 +23,38 @@ const Notifications = () => {
       let notifs = []
       try {
         const user = await app.logIn(credentials)
-        notifs = await user.functions.getClientNotifications(
-          session.user.id
-        )
+        notifs = await user.functions.getClientNotifications(session?.user.id)
 
         setNotifications(notifs)
       } catch (error) {
         console.error(error)
       }
     }
-    fetchNotifications();
+    fetchNotifications()
   }, [])
 
-  return (
-    <div>
-      <Header hideSearch={true} />
-      <NotificationsPage notifications={notifications} />
-    </div>
-  )
+  if (status === 'authenticated') {
+    return (
+      <div>
+        <Header hideSearch={true} />
+        <NotificationsPage notifications={notifications} />
+      </div>
+    )
+  } else {
+    return (
+      <div className='flex flex-col justify-between p-8 items-center h-screen'>
+        <p className='text-4xl mb-2'>Loading...</p>
+        <Link href='/client/auth/signin' passHref>
+          <p>
+            Vous devrez peut-être vous connecter à votre compte,
+            <a className='text-amber-500 hover:underline hover:cursor-pointer'>
+              S&apos;identifier?
+            </a>
+          </p>
+        </Link>
+      </div>
+    )
+  }
 }
 
 export default Notifications

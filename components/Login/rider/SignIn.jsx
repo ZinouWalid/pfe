@@ -1,21 +1,29 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import Header from '../../Header'
 
-export default function Login({ csrfToken }) {
+export default function SignIn({ csrfToken }) {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [values, setValues] = useState({
     user: {
       email: '',
       password: '',
     },
   })
+
+  //track the session when it changes
+  useEffect(() => {}, [session, status])
+
   //Error message when the client sign in
   const [err, setErr] = useState('')
 
   const handleChange = (e) => {
+    //Reset the err message to empty message
+    setErr('')
+
     const { name, value } = e.target
     setValues({
       user: {
@@ -27,22 +35,22 @@ export default function Login({ csrfToken }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Submiting values : ', values.user)
-
+    //Kill the client session if he is already logged in
+    //Sign in the rider
     const result = await signIn('rider-provider', {
       redirect: false,
-
       email: values.user.email,
       password: values.user.password,
     })
+
     console.log('Rider signed in : ', result, session)
 
-    if (!result.error) {
+    if (!result.error && session?.user.provider == 'rider-provider') {
       // set some auth state
+      console.log('Redirecting rider to /rider/id')
       router.push(`/rider/${session?.user.id}`)
-      //router.replace('/rider')
     } else {
-      //alert(JSON.stringify(result.error))
+      console.log('Errrror : ', result.error)
       setErr(result.error)
       setValues({
         user: {
@@ -51,13 +59,21 @@ export default function Login({ csrfToken }) {
         },
       })
     }
+    //signOut('client-provider')
   }
 
   return (
-    <div className='flex '>
-      <div className='border-primaryBorder shadow-default mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
+    <div className='flex mt-16'>
+      <Header hideSearch={true} hideBasket={true} hideOptions={true} />
+
+      <div className='mt-16 border-2 border-slate-700 shadow-lg mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
         <div className='text-primary m-6'>
-          <div className='mt-3 flex items-center justify-center'>
+          <div className='mt-3 flex flex-col items-center justify-center'>
+            {err && (
+              <p className='text-red-500 text-sm font-medium bg-red-200 p-1 rounded'>
+                {err}
+              </p>
+            )}
             <h1 className='text-primary mt-4 mb-2 text-2xl font-medium'>
               Connectez-vous à votre compte
             </h1>

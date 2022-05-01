@@ -10,22 +10,33 @@ const RiderId = ({ rider, orders }) => {
   const { data: session, status } = useSession()
   const isUser = session?.user
   const router = useRouter()
-  
-  useEffect(() => {
-    const redirectIfNotAuthenticated = () => {
-      if (!isUser) router.push('/rider/auth/signin')
-    }
-    redirectIfNotAuthenticated()
-  }, [])
 
-  return (
-    <div className='overflow-x-hidden'>
-      <div>
-        <Rider rider={rider} orders={orders} />
-        <Footer />
+  useEffect(() => {}, [status, session])
+
+  if (status === 'authenticated') {
+    return (
+      <div className='overflow-x-hidden'>
+        <div>
+          <Rider rider={rider} orders={orders} />
+          <Footer />
+        </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return (
+      <div className='flex flex-col justify-between p-8 items-center h-screen'>
+        <p className='text-4xl mb-2'>Loading...</p>
+        <Link href='/client/auth/signin' passHref>
+          <p>
+            Vous devrez peut-être vous connecter à votre compte,
+            <a className='text-amber-500 hover:underline hover:cursor-pointer'>
+              S&apos;identifier?
+            </a>
+          </p>
+        </Link>
+      </div>
+    )
+  }
 }
 
 export default RiderId

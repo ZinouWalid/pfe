@@ -110,6 +110,7 @@ async function addRider(req, res) {
       militaryFree,
       region,
       startingDate,
+      orders: [], //delivered orders
       password: hashedPass,
     })
 
@@ -148,47 +149,28 @@ async function getRiders(req, res) {
 async function updateRider(req, res) {
   connectDB()
   try {
-    const session = await getSession({ req: req })
-
-    if (!session) {
-      res.status(401).json({ message: 'Not authenticated!' })
-      return
-    }
-
-    const userEmail = session.user.email
-    const oldPassword = req.body.oldPassword
-    const newPassword = req.body.newPassword
+    const delivery = JSON.parse(req.body)
 
     // connect to the database
     let { db, client } = await connectToDatabase()
 
-    const rider = await Riders.findOne({ email: userEmail })
-    if (!rider) {
-      res.status(404).json({ message: 'User not found.' })
-      client.close()
-      return
-    }
-
-    //Check if the old password is correct
-    const currentPassword = rider.password
-    const passwordsAreEqual = await verifyPassword(oldPassword, currentPassword)
-
-    if (!passwordsAreEqual) {
-      res.status(403).json({ message: 'Invalid password.' })
-      client.close()
-      return
-    }
-
-    // update the published status of the Rider
-    const hashedPassword = await hashPassword(newPassword)
-
-    const result = await Riders.updateOne(
-      { email: userEmail },
-      { $set: { password: hashedPassword } }
+    const rider = await db.collection('riders').findOne(
+      {
+        id: delivery.riderId,
+      },
+      { _id: false }
+    )
+    console.log('My Orders : ', rider.orders)
+    // update the Orders with the new Order
+    await db.collection('riders').updateOne(
+      {
+        id: delivery.riderId,
+      },
+      { $addToSet: { orders: { ...delivery } } }
     )
 
     client.close()
-    res.status(200).json({ message: 'Password updated!' })
+    res.status(200).json({ message: 'Rider Orders updated!' })
   } catch (error) {
     // return an error
     return res.json({

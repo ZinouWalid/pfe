@@ -1,6 +1,5 @@
 const { connectToDatabase } = require('../../lib/mongodb')
 import { v4 } from 'uuid'
-const ObjectId = require('mongodb').ObjectId
 
 export default async function handler(req, res) {
   // switch the methods
@@ -13,7 +12,7 @@ export default async function handler(req, res) {
       return addOrder(req, res)
     }
 
-    case 'PUT': {
+    case 'PATCH': {
       return updateOrder(req, res)
     }
 
@@ -28,9 +27,10 @@ async function addOrder(req, res) {
     // connect to the database
     let { db } = await connectToDatabase()
     // add the Order
+    //state : 1 => ready , 2 => in progress , 3 => delivered
     await db
       .collection('orders')
-      .insertOne({ id: v4().toString(), ...JSON.parse(req.body) })
+      .insertOne({ id: v4().toString(), ...JSON.parse(req.body), state: 1 })
     // return a message
     return res.json({
       message: 'Order added successfully',
@@ -51,7 +51,7 @@ async function getOrders(req, res) {
     let { db } = await connectToDatabase()
     // fetch the Orders
     let Orders = await db
-      .collection('Orders')
+      .collection('orders')
       .find({})
       .sort({ published: -1 })
       .toArray()
@@ -71,18 +71,31 @@ async function getOrders(req, res) {
 
 async function updateOrder(req, res) {
   try {
+    const { id, clientId, riderId, riderName } = JSON.parse(req.body)
+
     // connect to the database
     let { db } = await connectToDatabase()
 
-    // update the published status of the Order
-    await db.collection('Orders').updateOne(
+    // update the state of the Order
+    //state : 1 => ready , 2 => in progress , 3 => delivered
+    await db.collection('orders').updateOne(
       {
-        _id: new ObjectId(req.body),
+        id: id,
       },
-      { $set: { published: true } }
+      { $set: { state: 2 } }
     )
 
+    //notify the client
+    await db.collection('notifications').insertOne({
+      id: v4().toString(),
+      clientId: clientId,
+      riderId: riderId,
+      riderName: riderName,
+      message: 'Votre commande a été acceptée par ' + riderName,
+      date: new Date(),
+    })
     // return a message
+    console.log('Order updated successfully : ', id)
     return res.json({
       message: 'Order updated successfully',
       success: true,
@@ -98,12 +111,14 @@ async function updateOrder(req, res) {
 
 async function deleteOrder(req, res) {
   try {
+    const { id } = JSON.parse(req.body)
+
     // Connecting to the database
     let { db } = await connectToDatabase()
 
     // Deleting the Order
-    await db.collection('Orders').deleteOne({
-      _id: new ObjectId(req.body),
+    await db.collection('orders').deleteOne({
+      id: id,
     })
 
     // returning a message

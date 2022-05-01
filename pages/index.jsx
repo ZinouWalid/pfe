@@ -7,11 +7,17 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { getProviders } from 'next-auth/react'
 import { getSession } from 'next-auth/react'
+
 function Welcome() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
-  console.log('providers : ', getProviders())
-  console.log('session : ', getSession('client-provider'))
+
+  useEffect(() => {
+    console.log('/ page')
+
+    console.log('Session.user : ', session?.user)
+    console.log('Status : ', status)
+  }, [status, session])
 
   return (
     <div>
@@ -36,7 +42,7 @@ function Welcome() {
         <div className='ButtonsDivMobile'>
           <Link
             className='CustomerMobile'
-            href={session ? 'client' : '/client/auth/signin'}
+            href={session?.user ? 'client' : '/client/auth/signin'}
             passHref
           >
             <a>
@@ -102,7 +108,7 @@ function Welcome() {
               <div className='ButtonsDiv'>
                 <a
                   className='Customer'
-                  href={session ? 'client' : '/client/auth/signin'}
+                  href={session?.user ? 'client' : '/client/auth/signin'}
                 >
                   Consomateur
                   <span className='mx-4'>

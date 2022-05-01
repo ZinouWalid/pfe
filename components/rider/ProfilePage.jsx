@@ -39,7 +39,8 @@ const ProfilePage = ({ rider }) => {
               <div className='text-sm leading-normal mt-0 mb-2  font-bold uppercase'>
                 <LocationOnIcon className='text-gray-500' />
                 <i className='mr-2 text-lg '></i>
-                Algérie, {rider?.region.split(' - ')[1]}
+                {/* Algérie, {rider?.region.split(' - ')[1]} */}
+                Algérie, {rider?.region?.split(' - ')[1]}
               </div>
             </div>
             <div className='mt-10 py-10 border-t'>
@@ -55,7 +56,7 @@ const ProfilePage = ({ rider }) => {
                   </div>
                   <div className='text-sm leading-normal mt-0 mb-2 flex items-center'>
                     <PhoneIcon className='text-gray-500' />{' '}
-                    <i className='text-gray-500 mx-2 font-bold'> : </i>
+                    <i className='text-gray-500 mx-2 font-bold'> : </i>0
                     {rider?.phoneNumber}
                   </div>
                 </div>
@@ -63,7 +64,7 @@ const ProfilePage = ({ rider }) => {
             </div>
             <button
               className='flex mx-auto mb-4 bg-red-200 text-red-500 p-2 rounded hover:bg-red-300 hover:border border-red-900 box-border uppercase'
-              onClick={() => signOut({callbackUrl:'/rider/auth/signin'})}
+              onClick={() => signOut({ callbackUrl: '/rider/auth/signin' })}
             >
               déconnecter
             </button>

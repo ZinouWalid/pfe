@@ -4,112 +4,37 @@ import CurrencyFormat from 'react-currency-format'
 import CloseIcon from '@mui/icons-material/Close'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import { confirmAlert } from 'react-confirm-alert'
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import Link from 'next/link'
 
-const OrdersPage = ({ rider, orders }) => {
-  const [myOrders, setMyOrders] = useState(orders)
-  const [buttonMsg, setButtonMsg] = useState('accepter la commande')
+const OrdersPage = ({ rider, deliveries }) => {
+  const [myDeliveries, setMyDeliveries] = useState(deliveries)
 
-  //show order products
+  //show delivery products
   useEffect(() => {
-    const ordersClone = orders.map((order) => {
+    const ordersClone = deliveries?.map((order) => {
       return { ...order, showMore: false }
     })
-    setMyOrders(ordersClone)
-  }, [orders])
+    setMyDeliveries(ordersClone)
+  }, [deliveries])
 
   const handleClick = (index) => {
     let updatedOrder = {
-      ...myOrders[index],
-      showMore: !myOrders[index].showMore,
+      ...myDeliveries[index],
+      showMore: !myDeliveries[index].showMore,
     }
-    setMyOrders([
-      ...myOrders.slice(0, index),
+    setMyDeliveries([
+      ...myDeliveries.slice(0, index),
       updatedOrder,
-      ...myOrders.slice(index + 1),
+      ...myDeliveries.slice(index + 1),
     ])
   }
 
-  //const updateOrder = async (order) => {
-  //  console.log('Updating The Order State : ', order.id)
-  //  await fetch('/api/orders', {
-  //    method: 'PATCH',
-  //    body: JSON.stringify({
-  //      id: order.id,
-  //      clientId: order.clientId,
-  //      riderId: rider.id,
-  //      riderName: rider.name,
-  //    }),
-  //  })
-  //
-  //  console.log('Updated The Rider Orders Array : ', order.id)
-  //  await fetch('/api/riders', {
-  //    method: 'PATCH',
-  //    body: JSON.stringify({
-  //      riderId: rider.id,
-  //      ...order,
-  //      date: new Date(),
-  //    }),
-  //  })
-  //}
-
-  const updateOrder = (order) => {
-    confirmAlert({
-      title: 'Accepter la commande',
-      message: 'Êtes-vous sûr de faire accepter cette commande?',
-      buttons: [
-        {
-          label: 'Oui',
-          onClick: async () => {
-            console.log('Updating The Order State : ', order.id)
-
-            await fetch('/api/orders', {
-              method: 'PATCH',
-              body: JSON.stringify({
-                id: order.id,
-                clientId: order.clientId,
-                riderId: rider.id,
-                riderName: rider.name,
-              }),
-            })
-
-            console.log('Update The Rider Orders Array : ', order.id)
-
-            await fetch('/api/riders', {
-              method: 'PATCH',
-              body: JSON.stringify({
-                riderId: rider.id,
-                ...order,
-                date: new Date(),
-              }),
-            })
-          },
-        },
-        {
-          label: 'Non',
-        },
-      ],
-    })
-  }
   return (
     <div>
-      {myOrders.length == 0 ? (
-        <div className='bg-white flex flex-col items-center text-amber-500'>
-          <h1 className='uppercase text-3xl font-bold'>pas de commandes</h1>
-
-          <img
-            src='https://cdn.dribbble.com/users/357929/screenshots/2276751/media/678caef6068a976e4a0d94bbdba6b660.png?compress=1&resize=400x300&vertical=top'
-            className='h-64 w-full mx-auto object-contain'
-          />
-        </div>
-      ) : (
-        myOrders.map((order, index) => (
+      {myDeliveries &&
+        myDeliveries.map((delivery, index) => (
           <div
-            key={order?.id}
-            className='w-full max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 dark:text-gray-800'
-            role='alert'
+            key={delivery?.id}
+            className='w-full max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 dark:text-gray-800 '
           >
             <div className='flex'>
               <PersonPinCircleIcon className='w-8 h-8 rounded-full shadow-lg' />
@@ -118,22 +43,22 @@ const OrdersPage = ({ rider, orders }) => {
                 {/* -----------Nom et Prénom----------- */}
                 <span className='text-sm font-semibold text-gray-900 dark:text-gray-800'>
                   <p className='capitalize mb-2'>
-                    {order?.name || order?.email.split('@')[0]}
+                    {delivery?.name || delivery?.email.split('@')[0]}
                   </p>
                 </span>
                 {/* -----------Adresse----------- */}
                 <p className='mb-1 text-sm font-normal'>
-                  Adresse : {order?.address}
+                  Adresse : {delivery?.address}
                 </p>
 
                 {/* -----------Cité----------- */}
                 <p className='mb-1 text-sm font-normal'>
-                  Cité : {order?.city.name}
+                  Cité : {delivery?.city.name}
                 </p>
 
                 {/* -----------Num telephone----------- */}
                 <p className='mb-1 text-sm font-normal'>
-                  Numéro de téléphone : {'0' + order?.phoneNumber}
+                  Numéro de téléphone : {'0' + delivery?.phoneNumber}
                 </p>
 
                 {/* -----------Montant----------- */}
@@ -147,7 +72,7 @@ const OrdersPage = ({ rider, orders }) => {
                       </div>
                     )}
                     decimalScale={2}
-                    value={order?.totalAmount - 20 || 0} // Part of the homework
+                    value={delivery?.totalAmount - 20 || 0} // Part of the homework
                     displayType={'text'}
                     thousandSeparator={true}
                   />
@@ -166,7 +91,7 @@ const OrdersPage = ({ rider, orders }) => {
                 >
                   Produits
                   <p className='ml-4 hover:bg-gray-300 rounded-full'>
-                    {order?.showMore ? (
+                    {delivery?.showMore ? (
                       <KeyboardArrowDownIcon />
                     ) : (
                       <KeyboardArrowUpIcon />
@@ -174,10 +99,10 @@ const OrdersPage = ({ rider, orders }) => {
                   </p>
                 </button>
 
-                {order?.showMore && (
+                {delivery?.showMore && (
                   <div className='flex flex-col items-center mx-auto max-h-96 h-fit py-5'>
                     <div className='flex flex-col overflow-y-scroll p-2'>
-                      {order?.products.map(
+                      {delivery?.products.map(
                         ({ id, name, price, img, quantity }) => {
                           return (
                             <div
@@ -230,18 +155,10 @@ const OrdersPage = ({ rider, orders }) => {
                     </div>
                   </div>
                 )}
-                <button
-                  className='mt-4 py-1.5 text-base bg-green-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '
-                  //onClick={() => updateOrder(order)}
-                  onClick={() => order?.state == 1 && updateOrder(order)}
-                >
-                  {buttonMsg}
-                </button>
               </div>
             </div>
           </div>
-        ))
-      )}
+        ))}
     </div>
   )
 }

@@ -62,7 +62,7 @@
 }
 .bottom {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   padding-right: 1em;
 }
 
@@ -264,7 +264,7 @@
 
   .ButtonsDiv {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     margin: 1.5em 0em 0em 0em;
   }

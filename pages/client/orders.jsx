@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import * as Realm from 'realm-web'
-import { useSession } from 'next-auth/react'
+import { useSession, getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import OrdersPage from '../../components/client/OrdersPage'
+import SignIn from '../../components/Login/client/SignIn'
 
-const Notifications = () => {
+const Orders = () => {
   const { data: session, status } = useSession()
-  const isUser = session?.user
+  const [user, setUser] = useState(session?.user)
   const router = useRouter()
   const [orders, setOrders] = useState([])
 
-  //redirect the user if he's not authenticated to the signin page
-  useEffect(() => {
-    const redirectIfNotAuthenticated = () => {
-      if (!isUser) router.push('/client/auth/signin')
-    }
-    redirectIfNotAuthenticated()
-  }, [])
+  useEffect(() => {}, [status, session])
 
   //fetches the realm object from the server for the client orders
   useEffect(() => {
@@ -34,7 +29,6 @@ const Notifications = () => {
           //You can pass the user id here instead of the session.user.email
           session?.user.id
         )
-
         setOrders(ords)
       } catch (error) {
         console.error(error)
@@ -42,40 +36,42 @@ const Notifications = () => {
     }
     fetchOrders()
     console.log(session?.user.name + ' orders : ' + orders)
-  }, [])
+  }, [status])
 
-  return (
-    <div>
-      <Header hideSearch={true} />
-      <OrdersPage orders={orders} />
-      <Footer />
-    </div>
-  )
+  console.log('orders : ', orders)
+
+  if (status === 'authenticated') {
+    return (
+      <div>
+        <Header hideSearch={true} />
+        <OrdersPage orders={orders} />
+        <Footer />
+      </div>
+    )
+  } else {
+    return (
+      <div className='flex flex-col justify-between p-8 items-center h-screen'>
+        <p className='text-4xl mb-2'>Loading...</p>
+        <Link href='/client/auth/signin' passHref>
+          <p>
+            Vous devrez peut-être vous connecter à votre compte,
+            <a className='text-amber-500 hover:underline hover:cursor-pointer'>
+              S&apos;identifier?
+            </a>
+          </p>
+        </Link>
+      </div>
+    )
+  }
 }
 
-export default Notifications
-
-//export async function getStaticProps(context) {
-//  //getting URL params
-//  //fetching products by category
-//  //const response = await fetch(
-//  //  `https://zino-products-api.herokuapp.com/products?category=${params.categoryId}`
-//  //)
-//  //const products = await response.json()
-//  console.log('Notification Session : ', session)
-//  const REALM_APP_ID = process.env.REALM_APP_ID
-//  const app = new Realm.App({ id: REALM_APP_ID })
-//  const credentials = Realm.Credentials.anonymous()
-//  let notifications = []
-//  try {
-//    const user = await app.logIn(credentials)
-//    notifications = await user.functions.getClientNotifications(session.user.id)
-//  } catch (error) {
-//    console.error(error)
-//  }
+export default Orders
 //
+//export async function getServerSideProps(context) {
 //  return {
-//    props: { notifications },
+//    props: {
+//      session: await getSession(context),
+//    },
 //  }
 //}
 //

@@ -12,12 +12,6 @@ const Page = ({ products, currentPage }) => {
   //Fetch the pages
   useEffect(() => {
     const fetchPages = async () => {
-      //const response = await fetch(
-      //  'https://zino-products-api.herokuapp.com/products'
-      //)
-
-      //const data = await response.json()
-
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
       const credentials = Realm.Credentials.anonymous()
@@ -44,7 +38,6 @@ const Page = ({ products, currentPage }) => {
         console.error(error)
       }
 
-      //const data = await response.json()
     }
     fetchPages()
   }, [])

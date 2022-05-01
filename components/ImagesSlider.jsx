@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Slider from 'react-slick'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
 function ImagesSlider({ category }) {
   const [sliderProducts, setSliderProducts] = useState([
@@ -23,10 +21,8 @@ function ImagesSlider({ category }) {
   }
 
   //Setting the slider images
-  console.log('category', category)
   useEffect(() => {
     const fetchSliderProducts = async (category) => {
-      console.log('Slider category: ', category)
       const response = await fetch(
         `https://zino-products-api.herokuapp.com/products?category=${category}`
       )
@@ -40,7 +36,6 @@ function ImagesSlider({ category }) {
     <div className='mt-12 lg:mt-24 flex h-3/6 w-full items-center justify-center rounded bg-white shadow-lg'>
       {/*Images Slider*/}
 
-      <ChevronLeftIcon />
       <Slider {...settings} className='w-5/6 overflow-x-visible'>
         {sliderProducts.map((product, index) => (
           <div key={index} className='flex'>
@@ -48,7 +43,6 @@ function ImagesSlider({ category }) {
           </div>
         ))}
       </Slider>
-      <ChevronRightIcon />
     </div>
   )
 }
