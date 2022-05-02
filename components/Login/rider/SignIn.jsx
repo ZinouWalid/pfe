@@ -45,7 +45,7 @@ export default function SignIn({ csrfToken }) {
 
     console.log('Rider signed in : ', result, session)
 
-    if (!result.error && session?.user.provider == 'rider-provider') {
+    if (!result.error) {
       // set some auth state
       console.log('Redirecting rider to /rider/id')
       router.push(`/rider/${session?.user.id}`)
