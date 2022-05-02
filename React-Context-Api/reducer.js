@@ -22,7 +22,7 @@ export const initialState = {
 export const getBasketTotal = (basket) =>
   basket?.reduce(
     (amount, item) =>
-      parseInt(item.price?.split(' ')[0]) * parseInt(item.quantity) + amount,
+      parseInt(item.price?.replace(',','').split(' ')[0]) * parseInt(item.quantity) + amount,
     0
   )
 
