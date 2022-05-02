@@ -31,7 +31,9 @@ const Notifications = () => {
       }
     }
     fetchNotifications()
-  }, [])
+  }, [status])
+
+  console.log(session?.user.id, ' notifications : ', notifications)
 
   if (status === 'authenticated') {
     return (

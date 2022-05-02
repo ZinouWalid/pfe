@@ -25,10 +25,9 @@ const Orders = () => {
       let ords = []
       try {
         const user = await app.logIn(credentials)
-        ords = await user.functions.getClientOrders(
-          //You can pass the user id here instead of the session.user.email
-          session?.user.id
-        )
+        
+        //You can pass the user id here instead of the session.user.email
+        ords = await user.functions.getClientOrders(session?.user.id)
         setOrders(ords)
       } catch (error) {
         console.error(error)

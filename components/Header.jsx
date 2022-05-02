@@ -38,7 +38,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
 
   //fetching the products to use them in filtering the user search
   useEffect(() => {
-    console.log('Session : ', session?.user, ' status : ', status)
+    console.log('Session.user : ', session?.user, ' status : ', status)
     const fetchProducts = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
