@@ -2,19 +2,25 @@ import {
   ADD_TO_BASKET,
   CLEAR_BASKET,
   REMOVE_FROM_BASKET,
-} from './basketActions'
+} from './Actions/basketActions'
 import {
   FILTER_PRODUCTS,
   SEARCH_PRODUCTS,
   UPDATE_QUANTITY,
-} from './productsActions'
+} from './Actions/productsActions'
+import {
+  SET_CLIENT_SESSION,
+  REMOVE_CLIENT_SESSION,
+} from './Actions/clientActions'
+import { SET_RIDER_SESSION, REMOVE_RIDER_SESSION } from './Actions/riderActions'
 import { setCookie, removeCookie } from '../lib/useCookie'
 
-//Basket empty
 export const initialState = {
   basket: [],
   products: [],
   filteredProducts: [],
+  client: {},
+  rider: {},
 }
 
 //Selector
@@ -22,7 +28,9 @@ export const initialState = {
 export const getBasketTotal = (basket) =>
   basket?.reduce(
     (amount, item) =>
-      parseInt(item.price?.replace(',','').split(' ')[0]) * parseInt(item.quantity) + amount,
+      parseInt(item.price?.replace(',', '').split(' ')[0]) *
+        parseInt(item.quantity) +
+      amount,
     0
   )
 
@@ -76,12 +84,13 @@ const reducer = (state = initialState, action) => {
       return { ...state, basket: newBasket }
 
     case UPDATE_QUANTITY:
+      console.log('UPDATE_QUANTITY : ', basket)
+
       const basket = state.basket.map((product) =>
         product.id === action.payload.id && product.name === action.payload.name
           ? action.payload
           : product
       )
-      console.log('UPDATE_QUANTITY : ', basket)
 
       //remove old basket and add the new one to the cookie
       removeCookie('basket')
@@ -93,7 +102,6 @@ const reducer = (state = initialState, action) => {
 
     case CLEAR_BASKET:
       //remove the basket from localStorage after we validate the order
-      //localStorage.removeItem('basket')
       removeCookie('basket')
       return { ...state, basket: [] }
 
@@ -103,6 +111,32 @@ const reducer = (state = initialState, action) => {
 
     case FILTER_PRODUCTS:
       return { ...state, filteredProducts: action.payload }
+
+    case SET_CLIENT_SESSION:
+      console.log('SET_CLIENT_SESSION : ', action.payload)
+
+      //create a cookie with the client session
+      setCookie('clientSession', action.payload)
+      return { ...state, client: action.payload }
+
+    case REMOVE_CLIENT_SESSION:
+      console.log('REMOVE_CLIENT_SESSION')
+      //remove the client session from the cookie
+      removeCookie('clientSession')
+      return { ...state, client: {} }
+
+    case SET_RIDER_SESSION:
+      console.log('SET_RIDER_SESSION : ', action.payload)
+
+      //create a cookie with the RIDER session
+      setCookie('riderSession', action.payload)
+      return { ...state, rider: action.payload }
+
+    case REMOVE_RIDER_SESSION:
+      console.log('REMOVE_RIDER_SESSION')
+      //remove the RIDER session from the cookie
+      removeCookie('riderSession')
+      return { ...state, rider: {} }
 
     default:
       return state

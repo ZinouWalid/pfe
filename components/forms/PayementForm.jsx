@@ -6,7 +6,7 @@ import { getBasketTotal } from '../../React-Context-Api/reducer'
 import { getCookie } from '../../lib/useCookie'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { clearBasket } from '../../React-Context-Api/basketActions'
+import { clearBasket } from '../../React-Context-Api/Actions/basketActions'
 
 export default function PayementForm() {
   const { data: session } = useSession()
@@ -23,7 +23,7 @@ export default function PayementForm() {
     phoneNumber: '',
     email: user?.email,
     address: '',
-    region: State.getStateByCodeAndCountry('16', 'DZ').name,
+    region: { name: '', lat: 0, lon: 0 },
     city: { name: '', lat: 0, lon: 0 },
   }
   const [values, setValues] = useState(initialValues)
@@ -31,7 +31,6 @@ export default function PayementForm() {
   const [myOrder, setMyOrder] = useState([])
 
   useEffect(() => {
-    console.log('my cities ', City.getCitiesOfState('DZ', '16'))
     function updateBasket() {
       setMyOrder(getCookie('basket'))
     }
@@ -46,6 +45,7 @@ export default function PayementForm() {
         date: new Date(),
         ...values,
         products: myOrder,
+        coast: deliveryCoast,
         totalAmount: parseInt(getBasketTotal(myOrder) || 0) + deliveryCoast,
       }),
     })
@@ -59,13 +59,22 @@ export default function PayementForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-
     if (name === 'city') {
-      console.log('city : ', JSON.parse(value))
       setValues({
         ...values,
         city: {
           name: JSON.parse(value).name,
+          lat: JSON.parse(value).latitude,
+          lon: JSON.parse(value).longitude,
+        },
+      })
+    } else if (name === 'region') {
+      console.log('region : ', JSON.parse(value))
+      setValues({
+        ...values,
+        region: {
+          name: JSON.parse(value).name,
+          isoCode: JSON.parse(value).isoCode,
           lat: JSON.parse(value).latitude,
           lon: JSON.parse(value).longitude,
         },
@@ -76,13 +85,12 @@ export default function PayementForm() {
         [name]: value,
       })
     }
-    console.log('Values : ', values)
   }
 
   //calculer la distance entre le centre et la distination
   function distance(lat, lon) {
-    const lat1 = 36.73225
-    const lon1 = 3.08746
+    const lat1 = values.region.lat
+    const lon1 = values.region.lon
     const p = 0.017453292519943295 // Math.PI / 180
     const c = Math.cos
     const a =
@@ -95,12 +103,11 @@ export default function PayementForm() {
 
   //calculer le montant de la livraison
   const deliveryPrice = (distance) => {
-    return distance > 0 ? Math.floor(distance * 20) : 200
+    return distance > 0 ? Math.round(Math.floor(distance * 10) / 10) * 10 : 200
   }
 
   useEffect(() => {
     const { lat, lon } = values.city
-    console.log('Distance : ', lat, lon, distance(lat, lon))
     if (lat != 0 && lon != 0)
       setDeliveryCoast(deliveryPrice(distance(lat, lon)))
   }, [values.city])
@@ -205,17 +212,26 @@ export default function PayementForm() {
             </label>
             <select
               name='region'
-              value={values.region}
+              value={values.region?.name}
+              onChange={(e) => handleInputChange(e)}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
-              readOnly
-              disabled={true}
               required
             >
-              <option value={State.getStateByCodeAndCountry('16', 'DZ').name}>
-                {State.getStateByCodeAndCountry('16', 'DZ').name}
+              <option value={null}>
+                {values.region?.name
+                  ? values.region.isoCode + ' - ' + values.region?.name
+                  : 'Sélectionner'}
               </option>
+              {State.getStatesOfCountry('DZ').map((state) => (
+                <option
+                  value={JSON.stringify(state)}
+                  key={state.id || Math.random() * 1000}
+                >
+                  {state.isoCode + ' - ' + state.name}
+                </option>
+              ))}
             </select>
 
             {/* ----Cité----- */}
@@ -232,16 +248,18 @@ export default function PayementForm() {
               required
             >
               <option value={null}>
-                {values.city?.name ? values.city?.name : "Sélectionner"}
+                {values.city?.name ? values.city?.name : 'Sélectionner'}
               </option>
-              {City.getCitiesOfState('DZ', '16').map((city) => (
-                <option
-                  value={JSON.stringify(city)}
-                  key={city.id || Math.random() * 1000}
-                >
-                  {city.name}
-                </option>
-              ))}
+              {City.getCitiesOfState('DZ', values.region?.isoCode).map(
+                (city) => (
+                  <option
+                    value={JSON.stringify(city)}
+                    key={city.id || Math.random() * 1000}
+                  >
+                    {city.name}
+                  </option>
+                )
+              )}
             </select>
 
             {/* --------------PAYEMENT-------------- */}

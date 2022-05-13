@@ -1,8 +1,5 @@
 import { hashPassword, verifyPassword } from '../../lib/passwordHandler'
-import { getSession } from 'next-auth/react'
 const { connectToDatabase } = require('../../lib/mongodb')
-import connectDB from '../../lib/connectDB'
-import Riders from '../../models/riderModel'
 import { v4 } from 'uuid'
 
 export default async function handler(req, res) {
@@ -30,7 +27,6 @@ export default async function handler(req, res) {
 }
 
 async function addRider(req, res) {
-  connectDB()
   try {
     //Getting the body fields
     const {
@@ -127,12 +123,17 @@ async function addRider(req, res) {
 }
 
 async function getRiders(req, res) {
-  connectDB()
   try {
     // connect to the database
     // fetch the Riders
-    let riders = await Riders.find({ name: 'rider 1' }).toArray()
+    let { db, client } = await connectToDatabase()
+
+    let riders = await db
+      .collection('riders')
+      .find({ name: 'rider 1' })
+      .toArray()
     // return the Riders
+    client.close()
     return res.json({
       message: riders,
       success: true,
@@ -147,7 +148,6 @@ async function getRiders(req, res) {
 }
 
 async function updateRider(req, res) {
-  connectDB()
   try {
     const delivery = JSON.parse(req.body)
 
@@ -181,15 +181,15 @@ async function updateRider(req, res) {
 }
 
 async function deleteRider(req, res) {
-  connectDB()
   try {
     // Connecting to the database
-    let { db } = await connectToDatabase()
+    let { db,client } = await connectToDatabase()
 
     // Deleting the Rider
     await db.collection('riders').deleteOne({})
 
     // returning a message
+    client.close()
     return res.json({
       message: 'Rider deleted successfully',
       success: true,

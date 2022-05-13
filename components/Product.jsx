@@ -4,9 +4,9 @@ import { useStateValue } from '../React-Context-Api/context'
 import {
   addToBasket,
   removeFromBasket,
-} from '../React-Context-Api/basketActions'
+} from '../React-Context-Api/Actions/basketActions'
 import Link from 'next/link'
-import { updateQuantity } from '../React-Context-Api/productsActions'
+import { updateQuantity } from '../React-Context-Api/Actions/productsActions'
 
 function Product({ product }) {
   const { id, img, name, price, rating } = { ...product }
@@ -80,7 +80,7 @@ function Product({ product }) {
         {showQuantity && (
           <div className='mt-6 h-10 w-32'>
             <div className='relative mt-1 flex h-10 w-full flex-row rounded-lg bg-transparent'>
-              {/* DEcrease Button */}
+              {/* Decrease Button */}
               <button
                 className='h-full w-20 cursor-pointer rounded-l bg-gray-300 text-gray-600 outline-none hover:bg-amber-500 hover:text-gray-700'
                 onClick={decreaseQuantity}

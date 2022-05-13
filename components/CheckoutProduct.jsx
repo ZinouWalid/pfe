@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Rating from '@mui/material/Rating'
-import { removeFromBasket } from '../React-Context-Api/basketActions'
+import { removeFromBasket } from '../React-Context-Api/Actions/basketActions'
 import { useStateValue } from '../React-Context-Api/context'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 

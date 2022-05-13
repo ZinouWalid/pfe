@@ -25,13 +25,14 @@ export default async function handler(req, res) {
 async function addOrder(req, res) {
   try {
     // connect to the database
-    let { db } = await connectToDatabase()
+    let { db,client } = await connectToDatabase()
     // add the Order
     //state : 1 => ready , 2 => in progress , 3 => delivered
     await db
       .collection('orders')
       .insertOne({ id: v4().toString(), ...JSON.parse(req.body), state: 1 })
     // return a message
+    client.close()
     return res.json({
       message: 'Order added successfully',
       success: true,
@@ -48,7 +49,7 @@ async function addOrder(req, res) {
 async function getOrders(req, res) {
   try {
     // connect to the database
-    let { db } = await connectToDatabase()
+    let { db,client } = await connectToDatabase()
     // fetch the Orders
     let Orders = await db
       .collection('orders')
@@ -56,6 +57,7 @@ async function getOrders(req, res) {
       .sort({ published: -1 })
       .toArray()
     // return the Orders
+    client.close()
     return res.json({
       message: JSON.parse(JSON.stringify(Orders)),
       success: true,
@@ -74,7 +76,7 @@ async function updateOrder(req, res) {
     const { id, clientId, riderId, riderName } = JSON.parse(req.body)
 
     // connect to the database
-    let { db } = await connectToDatabase()
+    let { db,client } = await connectToDatabase()
 
     // update the state of the Order
     //state : 1 => ready , 2 => in progress , 3 => delivered
@@ -94,7 +96,9 @@ async function updateOrder(req, res) {
       message: 'Votre commande a été acceptée par ' + riderName,
       date: new Date(),
     })
+
     // return a message
+    client.close()
     console.log('Order updated successfully : ', id)
     return res.json({
       message: 'Order updated successfully',
@@ -114,7 +118,7 @@ async function deleteOrder(req, res) {
     const { id } = JSON.parse(req.body)
 
     // Connecting to the database
-    let { db } = await connectToDatabase()
+    let { db,client } = await connectToDatabase()
 
     // Deleting the Order
     await db.collection('orders').deleteOne({
@@ -122,6 +126,7 @@ async function deleteOrder(req, res) {
     })
 
     // returning a message
+    client.close()
     return res.json({
       message: 'Order deleted successfully',
       success: true,

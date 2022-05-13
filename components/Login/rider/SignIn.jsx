@@ -1,12 +1,14 @@
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Header from '../../Header'
+import { useStateValue } from '../../../React-Context-Api/context'
+import { setRiderSession } from '../../../React-Context-Api/Actions/riderActions'
 
 export default function SignIn({ csrfToken }) {
   const router = useRouter()
   const { data: session, status } = useSession()
+  const [{}, dispatch] = useStateValue()
   const [values, setValues] = useState({
     user: {
       email: '',
@@ -35,38 +37,41 @@ export default function SignIn({ csrfToken }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    //Kill the client session if he is already logged in
+
     //Sign in the rider
     const result = await signIn('rider-provider', {
       redirect: false,
       email: values.user.email,
       password: values.user.password,
+    }).then((result) => {
+      if (result.error) {
+        console.log('Errrror : ', result.error)
+
+        setErr(result.error)
+        setValues({
+          user: {
+            email: '',
+            password: '',
+          },
+        })
+      } else {
+        // set some auth state
+        console.log('Redirecting rider to /rider')
+
+        dispatch(setRiderSession(session?.user))
+        router.push(`/rider`)
+      }
     })
 
     console.log('Rider signed in : ', result, session)
 
-    if (!result.error) {
-      // set some auth state
-      console.log('Redirecting rider to /rider/id')
-      router.push(`/rider/${session?.user.id}`)
-    } else {
-      console.log('Errrror : ', result.error)
-      setErr(result.error)
-      setValues({
-        user: {
-          email: '',
-          password: '',
-        },
-      })
-    }
-    //signOut('client-provider')
   }
 
   return (
     <div className='flex mt-16'>
       <Header hideSearch={true} hideBasket={true} hideOptions={true} />
 
-      <div className='mt-16 border-2 border-slate-700 shadow-lg mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
+      <div className='mt-16 border-slate-700 shadow-lg mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
         <div className='text-primary m-6'>
           <div className='mt-3 flex flex-col items-center justify-center'>
             {err && (
@@ -122,13 +127,6 @@ export default function SignIn({ csrfToken }) {
               </button>
             </div>
           </form>
-          <div className='mt-3 flex items-center justify-center'>
-            <Link href='/rider/auth/signup' passHref>
-              <a className='justify-center text-amber-500 hover:underline'>
-                Besoin de vous inscrire? Inscription gratuite
-              </a>
-            </Link>
-          </div>
         </div>
       </div>
     </div>

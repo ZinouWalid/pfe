@@ -1,20 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import { removeFromBasket } from '../React-Context-Api/basketActions'
+import { removeFromBasket } from '../React-Context-Api/Actions/basketActions'
 import { useStateValue } from '../React-Context-Api/context'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { getCookie } from '../lib/useCookie'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const OrderCard = () => {
   const [{ basket }, dispatch] = useStateValue()
   const [myOrder, setMyOrder] = useState([])
-
+  const router = useRouter()
+  
   useEffect(() => {
     function updateBasket() {
       setMyOrder(getCookie('basket'))
     }
     updateBasket()
   }, [basket])
+
+  //handle deleting a product from the basket
+  const handleDelete = (id) => {
+    dispatch(removeFromBasket(id))
+    //only one product left in the basket
+    if (basket.length === 1) {
+      router.push('/client')
+    }
+  }
 
   return (
     <div className='flex flex-col items-center mx-auto max-h-96 h-fit bg-white border rounded py-5'>
@@ -42,7 +53,7 @@ const OrderCard = () => {
                     <p className='font-semibold text-xs'>Qté : {quantity}</p>
                     <button
                       className='rounded text-red-600 text-sm hover:border-red-700 hover:bg-gray-200 hover:rounded-full'
-                      onClick={() => dispatch(removeFromBasket(id))}
+                      onClick={() => handleDelete(id)}
                     >
                       <DeleteOutlineIcon />
                     </button>

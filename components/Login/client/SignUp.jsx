@@ -25,7 +25,7 @@ export default function Register() {
     }).then((response) => {
       console.log('response returned : ', response.json())
       if (response.status === 200) {
-        //return to page 01'
+        //return to auth page'
         router.push('/client/auth/signin')
       } else {
         alert("error : nom d'utilisateur ou l'email existe déjà")
@@ -44,7 +44,7 @@ export default function Register() {
   return (
     <div className='flex mt-16'>
       <Header hideSearch={true} hideBasket={true} hideOptions={true} />
-      <div className='mt-16 border-2 border-slate-700 m-auto w-full max-w-md rounded-lg border bg-white px-1'>
+      <div className='mt-16 border-slate-700 m-auto w-full max-w-md rounded-lg border bg-white px-1'>
         <div className='text-primary m-6'>
           <div className='mt-3 flex items-center justify-center'>
             <h1 className='text-primary mt-4 mb-2 text-2xl font-medium'>

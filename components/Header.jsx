@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
@@ -7,20 +7,23 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import LogoutIcon from '@mui/icons-material/Logout'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import { filterProducts } from '../React-Context-Api/productsActions'
+import { filterProducts } from '../React-Context-Api/Actions/productsActions'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-import { getCookie } from '../lib/useCookie'
+import { getCookie, removeCookie } from '../lib/useCookie'
 import Sidebar from './Sidebar'
 import * as Realm from 'realm-web'
 import { useStateValue } from '../React-Context-Api/context'
 import { useSession, signOut } from 'next-auth/react'
+import Image from 'next/image'
 
 function Header({ hideSearch, hideBasket, hideOptions }) {
-  const { data: session, status } = useSession('client-provider')
+  const { data: session, status } = useSession()
   const [suggestions, setSuggestions] = useState([])
   const [products, setProducts] = useState([])
-  const [{ basket }, dispatch] = useStateValue()
+  const [{ basket, client }, dispatch] = useStateValue()
   const [searchTerm, setSearchTerm] = useState('')
+  //logged user session
+  const [user, setUser] = useState({})
   const [localBasket, setLocalBasket] = useState([])
   const [showSidebar, setShowSidebar] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
@@ -30,11 +33,12 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
 
   //Get the updated Basket
   useEffect(() => {
-    function updateBasket() {
+    function updateBasketAndClient() {
       setLocalBasket(getCookie('basket'))
+      setUser(getCookie('clientSession'))
     }
-    updateBasket()
-  }, [basket])
+    updateBasketAndClient()
+  }, [basket,client])
 
   //fetching the products to use them in filtering the user search
   useEffect(() => {
@@ -100,20 +104,21 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     setSearchTerm(e.target.value.toLowerCase())
     console.log('CHANGEEE !!', searchTerm)
+    searchTerm.length > 2 ? await fetchSuggestions() : setSuggestions([])
   }
-
-  useEffect(() => {
-    const trackSuggestions = async () => {
-      searchTerm.length > 2 ? await fetchSuggestions() : setSuggestions([])
-    }
-    trackSuggestions()
-  }, [searchTerm])
 
   const truncate = (str, n) => {
     return str?.length > n ? str.substr(0, n - 1) + '...' : str
+  }
+
+  const handleSignOut = () => {
+    //deleting the rider session cookie
+    removeCookie('clientSession')
+
+    signOut({ callbackUrl: 'http://localhost:3000' })
   }
 
   return (
@@ -134,14 +139,18 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       )}
       {/* Logo and title */}
       <Link href={'/'} passHref>
-        <a className='flex items-center p-1'>
-          <img
-            src='https://e7.pngegg.com/pngimages/644/743/png-clipart-a-o-t-wings-of-freedom-eren-yeager-bertholdt-hoover-attack-on-titan-logo-others-angle-emblem.png'
+        <a className='flex items-center p-1 mr-auto'>
+          <Image
+            src='https://w7.pngwing.com/pngs/49/257/png-transparent-grocery-store-shopping-bags-trolleys-supermarket-grocery-miscellaneous-food-photography.png'
             alt=''
-            className='mx-2 h-6 rounded-full md:h-12 hover:bg-gray-800'
+            width='45'
+            height='45'
+            priority
+            objectFit='cover'
+            className='rounded-full'
           />
-          <h2 className='flex font-bold mr-2 hover:bg-gray-800 rounded-full p-1 '>
-            AOT <span className='ml-1 hidden md:block'>Commerce</span>
+          <h2 className='flex font-semibold mr-2 hover:bg-gray-800 rounded-full p-1 uppercase text-xl'>
+            9odyani
           </h2>
         </a>
       </Link>
@@ -157,6 +166,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
             type='text'
             className='w-5/6 rounded-l border-none px-2 outline-none h-6 md:h-10'
             placeholder='Cherchez un produit, une marque ou une catégorie'
+            value={searchTerm}
             onChange={handleChange}
           />
 
@@ -174,13 +184,13 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
         }`}
       >
         {suggestions.length > 2 && (
-          <ul className='flex overflow-scroll flex-col rounded decoration-'>
+          <ul className='flex overflow-hidden flex-col rounded border border-slate-700'>
             {suggestions.map(({ id, name, img }) => (
               <li key={id}>
                 <Link href={`/client/products/${id}`} passHref>
                   <a className='flex justify-between items-center px-2 py-1 hover:bg-gray-100 cursor-pointer bg-white'>
                     <p className='text-gray-600'>{truncate(name, 100)}</p>
-                    <img src={img} alt='' className='h-12 object-contain' />
+                    <Image src={img} alt={name} height={40} width={35} />
                   </a>
                 </Link>
               </li>
@@ -193,10 +203,10 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       {!hideOptions && (
         <div className='relative ml-auto'>
           <div className='flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg group hover:text-amber-500 '>
-            {session?.user ? (
+            {user ? (
               <p className='text-white'>
                 Bonjour,
-                <span className='font-semibold'> {session.user.name}</span>
+                <span className='font-semibold'> {user.name}</span>
               </p>
             ) : (
               <div>
@@ -228,11 +238,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
             <ul className='fixed bg-white text-slate-700 rounded top-12 w-fit border border-slate-600'>
               <li className='flex justify-between items-center hover:bg-gray-100 '>
                 <Link
-                  href={
-                    session?.user
-                      ? '/client/notifications'
-                      : '/client/auth/signin'
-                  }
+                  href={user ? '/client/notifications' : '/client/auth/signin'}
                   passHref
                 >
                   <a className='capitalize text-sm p-3'>
@@ -247,9 +253,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
               {/* Orders */}
               <li className='flex justify-between items-center hover:bg-gray-100 '>
                 <Link
-                  href={
-                    session?.user ? '/client/orders' : '/client/auth/signin'
-                  }
+                  href={user ? '/client/orders' : '/client/auth/signin'}
                   passHref
                 >
                   <a className='capitalize text-sm p-3'>
@@ -262,7 +266,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
 
                 {/* Deconnécte */}
               </li>
-              {session?.user && (
+              {user && (
                 <li
                   className='flex justify-between items-center hover:bg-gray-100 
                 '
@@ -270,9 +274,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
                   <Link href='' passHref>
                     <button
                       className='capitalize text-sm p-3'
-                      onClick={() =>
-                        signOut({ callbackUrl: 'http://localhost:3000' })
-                      }
+                      onClick={() => handleSignOut()}
                     >
                       <span className='mr-2'>
                         <LogoutIcon />

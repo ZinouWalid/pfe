@@ -7,9 +7,12 @@ import { confirmAlert } from 'react-confirm-alert' // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import Link from 'next/link'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useRouter } from 'next/router'
 
 const OrdersPage = ({ orders }) => {
   const [myOrders, setMyOrders] = useState(orders)
+  const router = useRouter()
 
   //show order products
   useEffect(() => {
@@ -58,6 +61,13 @@ const OrdersPage = ({ orders }) => {
 
   return (
     <div className='p-1 bg-gray-100 mt-16'>
+      <button
+        className='text-xl font-semibold md:text-3xl mr-2 px-2 hover:bg-gray-200 rounded-full fixed top-20'
+        onClick={() => router.back()}
+      >
+        <ArrowBackIcon />
+      </button>
+      <h1 className='font-semibold text-3xl mt-14 mb-2 ml-4'>Commandes :</h1>
       {myOrders.length == 0 ? (
         <div className='bg-white flex flex-col items-center text-amber-500'>
           <h1 className='uppercase text-3xl font-bold'>pas de commandes</h1>
@@ -67,8 +77,8 @@ const OrdersPage = ({ orders }) => {
           />
           <Link href='/client/pages/page_1' passHref>
             <a className=' text-base hover:underline'>
-              Faire une commande <AddShoppingCartIcon/>
-        </a>
+              Faire une commande <AddShoppingCartIcon />
+            </a>
           </Link>
         </div>
       ) : (
@@ -121,7 +131,7 @@ const OrdersPage = ({ orders }) => {
                       </div>
                     )}
                     decimalScale={2}
-                    value={order?.totalAmount - 20 || 0} // Part of the homework
+                    value={order?.totalAmount - 20 || 0}
                     displayType={'text'}
                     thousandSeparator={true}
                   />
@@ -129,7 +139,7 @@ const OrdersPage = ({ orders }) => {
 
                 {/* -----------Votre paiment----------- */}
                 <p className='mb-1 text-sm font-normal text-green-600'>
-                  Coûts de livraison : 20 DA
+                  Coûts de livraison : {order?.coast || 20} DA
                 </p>
 
                 {/* -----------Produits----------- */}
@@ -190,7 +200,7 @@ const OrdersPage = ({ orders }) => {
                                       value={
                                         parseInt(quantity) * parseInt(price) ||
                                         0
-                                      } // Part of the homework
+                                      }
                                       displayType={'text'}
                                       thousandSeparator={true}
                                     />

@@ -4,8 +4,8 @@ import Rating from '@mui/material/Rating'
 import {
   removeFromBasket,
   addToBasket,
-} from '../React-Context-Api/basketActions'
-import { updateQuantity } from '../React-Context-Api/productsActions'
+} from '../React-Context-Api/Actions/basketActions'
+import { updateQuantity } from '../React-Context-Api/Actions/productsActions'
 
 const ProductInfo = ({ product }) => {
   const [{}, dispatch] = useStateValue()

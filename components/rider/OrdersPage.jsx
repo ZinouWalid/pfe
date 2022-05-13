@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle'
 import CurrencyFormat from 'react-currency-format'
-import CloseIcon from '@mui/icons-material/Close'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import Link from 'next/link'
 
 const OrdersPage = ({ rider, orders }) => {
   const [myOrders, setMyOrders] = useState(orders)
@@ -31,29 +29,6 @@ const OrdersPage = ({ rider, orders }) => {
       ...myOrders.slice(index + 1),
     ])
   }
-
-  //const updateOrder = async (order) => {
-  //  console.log('Updating The Order State : ', order.id)
-  //  await fetch('/api/orders', {
-  //    method: 'PATCH',
-  //    body: JSON.stringify({
-  //      id: order.id,
-  //      clientId: order.clientId,
-  //      riderId: rider.id,
-  //      riderName: rider.name,
-  //    }),
-  //  })
-  //
-  //  console.log('Updated The Rider Orders Array : ', order.id)
-  //  await fetch('/api/riders', {
-  //    method: 'PATCH',
-  //    body: JSON.stringify({
-  //      riderId: rider.id,
-  //      ...order,
-  //      date: new Date(),
-  //    }),
-  //  })
-  //}
 
   const updateOrder = (order) => {
     confirmAlert({
@@ -137,7 +112,7 @@ const OrdersPage = ({ rider, orders }) => {
                 </p>
 
                 {/* -----------Montant----------- */}
-                <p className='mb-1 text-sm font-normal'>
+                <div className='mb-1 text-sm font-normal'>
                   <CurrencyFormat
                     renderText={(value) => (
                       <div className=' flex flex-col'>
@@ -147,15 +122,15 @@ const OrdersPage = ({ rider, orders }) => {
                       </div>
                     )}
                     decimalScale={2}
-                    value={order?.totalAmount - 20 || 0} // Part of the homework
+                    value={order?.totalAmount - 20 || 0}
                     displayType={'text'}
                     thousandSeparator={true}
                   />
-                </p>
+                </div>
 
                 {/* -----------Votre paiment----------- */}
                 <p className='mb-1 text-sm font-normal text-green-600'>
-                  Coûts de livraison : 20 DA
+                  Coûts de livraison : {order?.coast || 20} DA
                 </p>
 
                 {/* -----------Produits----------- */}
@@ -216,7 +191,7 @@ const OrdersPage = ({ rider, orders }) => {
                                       value={
                                         parseInt(quantity) * parseInt(price) ||
                                         0
-                                      } // Part of the homework
+                                      }
                                       displayType={'text'}
                                       thousandSeparator={true}
                                     />
@@ -232,7 +207,6 @@ const OrdersPage = ({ rider, orders }) => {
                 )}
                 <button
                   className='mt-4 py-1.5 text-base bg-green-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '
-                  //onClick={() => updateOrder(order)}
                   onClick={() => order?.state == 1 && updateOrder(order)}
                 >
                   {buttonMsg}

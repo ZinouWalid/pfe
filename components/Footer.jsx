@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -8,97 +9,137 @@ const Footer = () => {
         <div className='container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0'>
           <div className='lg:w-1/3'>
             <Link href={'/'} passHref>
-              <a
-                className='flex justify-center space-x-3 lg:justify-start'
-              >
+              <a className='flex justify-center space-x-3 lg:justify-start'>
                 <div className='flex items-center justify-center w-12 h-12 rounded-full dark:bg-violet-400'>
-                  <img
-                    src='https://e7.pngegg.com/pngimages/644/743/png-clipart-a-o-t-wings-of-freedom-eren-yeager-bertholdt-hoover-attack-on-titan-logo-others-angle-emblem.png'
+                  <Image
+                    src='https://w7.pngwing.com/pngs/49/257/png-transparent-grocery-store-shopping-bags-trolleys-supermarket-grocery-miscellaneous-food-photography.png'
                     alt=''
-                    className='mx-2 h-6 rounded-full md:h-12'
+                    width='60'
+                    height='60'
+                    objectFit='cover'
+                    className='rounded-full'
+                    priority
                   />
                 </div>
-                <span className='self-center text-2xl font-semibold'>
-                  AOT Commerce
+                <span className='self-center text-2xl font-semibold uppercase hover:text-cyan-300'>
+                  9odyani
                 </span>
               </a>
             </Link>
           </div>
           <div className='grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4'>
-            <div className='space-y-3'>
-              <h3 className='tracking-wide uppercase dark:text-coolGray-50'>
-                Product
+            <div className='space-y-3 '>
+              <h3 className='tracking-wide uppercase dark:text-coolGray-50 hover:text-cyan-300 hover:cursor-pointer'>
+                Produits
               </h3>
               <ul className='space-y-1'>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
-                    Features
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
+                    Fonctionnalités
                   </a>
                 </li>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
                     Integrations
                   </a>
                 </li>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
-                    Pricing
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
+                    Tarification
                   </a>
                 </li>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
                     FAQ
                   </a>
                 </li>
               </ul>
             </div>
             <div className='space-y-3'>
-              <h3 className='tracking-wide uppercase dark:text-coolGray-50'>
-                Company
+              <h3 className='tracking-wide uppercase dark:text-coolGray-50 hover:text-cyan-300 hover:cursor-pointer'>
+                Société
               </h3>
               <ul className='space-y-1'>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
-                    Privacy
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
+                    Confidentialité
                   </a>
                 </li>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
-                    Terms of Service
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
+                    Conditions d&apos;utilisation
                   </a>
                 </li>
               </ul>
             </div>
             <div className='space-y-3'>
-              <h3 className='uppercase dark:text-coolGray-50'>Developers</h3>
+              <h3 className='uppercase dark:text-coolGray-50 hover:text-cyan-300 hover:cursor-pointer'>
+                Developers
+              </h3>
               <ul className='space-y-1'>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
-                    Public API
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
+                    API Public
                   </a>
                 </li>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a rel='noopener noreferrer' href='#'>
+                  <a
+                    rel='noopener noreferrer'
+                    href='#'
+                    className='hover:underline'
+                  >
                     Guides
                   </a>
                 </li>
               </ul>
             </div>
             <div className='space-y-3'>
-              <div className='uppercase dark:text-coolGray-50'>
-                Social media
+              <div className='uppercase dark:text-coolGray-50 hover:text-cyan-300 hover:cursor-pointer'>
+                Réseaux sociaux
               </div>
               <div className='flex justify-start space-x-3'>
                 <a
                   rel='noopener noreferrer'
                   href='#'
                   title='Facebook'
-                  className='flex items-center p-1'
+                  className='flex items-center p-1 hover:text-cyan-300'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -113,7 +154,7 @@ const Footer = () => {
                   rel='noopener noreferrer'
                   href='#'
                   title='Twitter'
-                  className='flex items-center p-1'
+                  className='flex items-center p-1 hover:text-cyan-300'
                 >
                   <svg
                     viewBox='0 0 24 24'
@@ -127,7 +168,7 @@ const Footer = () => {
                   rel='noopener noreferrer'
                   href='#'
                   title='Instagram'
-                  className='flex items-center p-1'
+                  className='flex items-center p-1 hover:text-cyan-300'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -142,8 +183,10 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className='py-6 text-sm text-center dark:text-coolGray-400'>
-          © 2022 Company Co. All rights reserved.
+        <div className='py-6 text-sm text-center dark:text-coolGray-400  '>
+          <p className='hover:text-cyan-300 hover:cursor-pointer'>
+            © 2022 Company <b>9odyani</b>. Tous droits réservés.
+          </p>
         </div>
       </footer>
     </div>

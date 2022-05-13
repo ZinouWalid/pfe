@@ -3,10 +3,18 @@ import LocationOnIcon from '@mui/icons-material/LocationOn'
 import EmailIcon from '@mui/icons-material/Email'
 import PhoneIcon from '@mui/icons-material/Phone'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import Link from 'next/link'
 import { signOut } from 'next-auth/react'
+import { removeCookie } from '../../lib/useCookie'
 
 const ProfilePage = ({ rider }) => {
+  
+  const handleSignOut = () => {
+    //deleting the rider session cookie
+    removeCookie('riderSession')
+    
+    signOut({ callbackUrl: '/rider/auth/signin' })
+  }
+
   return (
     <section className='pt-12 600'>
       <h1 className='text-4xl font-semibold leading-normal mb-2 capitalize text-left'>
@@ -25,7 +33,7 @@ const ProfilePage = ({ rider }) => {
                 <div className='flex justify-center py-4 lg:pt-4 pt-8'>
                   <div className='lg:mr-4 p-3 text-center'>
                     <span className='text-xl font-bold block tracking-wide '>
-                      {rider.orders?.length || 0}
+                      {rider?.orders?.length || 0}
                     </span>
                     <span className='text-sm'>Commandes</span>
                   </div>
@@ -64,7 +72,7 @@ const ProfilePage = ({ rider }) => {
             </div>
             <button
               className='flex mx-auto mb-4 bg-red-200 text-red-500 p-2 rounded hover:bg-red-300 hover:border border-red-900 box-border uppercase'
-              onClick={() => signOut({ callbackUrl: '/rider/auth/signin' })}
+              onClick={() => handleSignOut()}
             >
               déconnecter
             </button>

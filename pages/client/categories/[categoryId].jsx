@@ -8,8 +8,8 @@ import * as Realm from 'realm-web'
 const CategoryId = ({ products }) => {
   return (
     <div className='min-h-screen bg-gray-200 p-1'>
-      <Header />
-      <CategoriesFilter/>
+      <Header  />
+      <CategoriesFilter />
       <Body products={products} />
       <Footer />
     </div>
@@ -41,25 +41,19 @@ export async function getStaticProps(context) {
   //getting URL params
   const { params } = context
 
-  //fetching products by category
-  //const response = await fetch(
-  //  `https://zino-products-api.herokuapp.com/products?category=${params.categoryId}`
-  //)
-  //const products = await response.json()
-  
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
   const app = new Realm.App({ id: REALM_APP_ID })
   const credentials = Realm.Credentials.anonymous()
   let products = []
+
   try {
     const user = await app.logIn(credentials)
     products = await user.functions.getProductsByCategory(params.categoryId)
   } catch (error) {
     console.error(error)
   }
-  
- 
+
   return {
-    props: { products},
+    props: { products },
   }
 }

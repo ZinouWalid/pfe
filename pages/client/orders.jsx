@@ -6,15 +6,20 @@ import Link from 'next/link'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import OrdersPage from '../../components/client/OrdersPage'
-import SignIn from '../../components/Login/client/SignIn'
+import { getCookie } from '../../lib/useCookie'
+import { useStateValue } from '../../React-Context-Api/context'
 
 const Orders = () => {
   const { data: session, status } = useSession()
-  const [user, setUser] = useState(session?.user)
   const router = useRouter()
   const [orders, setOrders] = useState([])
+  const [user, setUser] = useState({})
+  const [{ client }, dispatch] = useStateValue()
 
-  useEffect(() => {}, [status, session])
+  useEffect(() => {
+    console.log('-------- client orders page --------')
+    setUser(getCookie('clientSession'))
+  }, [client])
 
   //fetches the realm object from the server for the client orders
   useEffect(() => {
@@ -25,7 +30,7 @@ const Orders = () => {
       let ords = []
       try {
         const user = await app.logIn(credentials)
-        
+
         //You can pass the user id here instead of the session.user.email
         ords = await user.functions.getClientOrders(session?.user.id)
         setOrders(ords)
@@ -39,7 +44,7 @@ const Orders = () => {
 
   console.log('orders : ', orders)
 
-  if (status === 'authenticated') {
+  if (status === 'authenticated' && user.provider == 'client-provider') {
     return (
       <div>
         <Header hideSearch={true} />
@@ -65,12 +70,3 @@ const Orders = () => {
 }
 
 export default Orders
-//
-//export async function getServerSideProps(context) {
-//  return {
-//    props: {
-//      session: await getSession(context),
-//    },
-//  }
-//}
-//

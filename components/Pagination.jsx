@@ -11,7 +11,6 @@ function Pagination({
   currentPage = 1,
   numberOfPages,
 }) {
-  //const [currentPage, setCurrentPage] = useState(1)
 
   function goToPreviousPage() {
     if (currentPage > 1) {
@@ -31,7 +30,6 @@ function Pagination({
 
   const getPaginationGroup = () => {
     let start = Math.floor((currentPage - 1) / pageLimit) * pageLimit
-    //return new Array(pageLimit).fill().map((_, idx) => start + idx + 1)
     return pages.slice(start, start + pageLimit + 1)
   }
 

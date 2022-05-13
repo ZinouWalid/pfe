@@ -4,10 +4,14 @@ import React, { useEffect, useState } from 'react'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import ProductsCategories from '../../components/ProductsCategories'
+import { getCookie } from '../../lib/useCookie'
+import { useStateValue } from '../../React-Context-Api/context'
 
 export default function Home({}) {
-  const { date: session, status } = useSession()
+  //const { data: session, status } = useSession()
   const [categories, setCategories] = useState([])
+  //const [{ client }, dispatch] = useStateValue()
+  //const [user, setUser] = useState(getCookie('clientSession') || {})
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -20,33 +24,34 @@ export default function Home({}) {
     fetchCategories()
   }, [])
 
-  useEffect(() => {
-    console.log('-------- Client page --------')
-    console.log('Session.user : ', session?.user)
-    console.log('Status : ', status)
-  }, [status, session])
+  //useEffect(() => {
+  //  console.log('-------- Client page --------')
+  //  setUser(getCookie('clientSession'))
+  //  console.log('Session.client : ', user)
+  //  console.log('Status : ', status)
+  //}, [client])
 
-  if (status === 'authenticated') {
-    return (
-      <div className='relative flex min-h-screen flex-col bg-gray-200'>
-        <Header hideSearch={true} />
-        <ProductsCategories categories={categories} />
-        <Footer />
-      </div>
-    )
-  } else {
-    return (
-      <div className='flex flex-col justify-between p-8 items-center h-screen'>
-        <p className='text-4xl mb-2'>Loading...</p>
-        <Link href='/client/auth/signin' passHref>
-          <p>
-            Vous devrez peut-être vous connecter à votre compte,
-            <a className='text-amber-500 hover:underline hover:cursor-pointer'>
-              S&apos;identifier?
-            </a>
-          </p>
-        </Link>
-      </div>
-    )
-  }
+  //if (status === 'authenticated' && user.provider == 'client-provider') {
+  return (
+    <div className='relative flex min-h-screen flex-col bg-gray-200'>
+      <Header hideSearch={true} />
+      <ProductsCategories categories={categories} />
+      <Footer />
+    </div>
+  )
+  //} else {
+  //  return (
+  //    <div className='flex flex-col justify-between p-8 items-center h-screen'>
+  //      <p className='text-4xl mb-2'>Loading...</p>
+  //      <Link href='/client/auth/signin' passHref>
+  //        <p>
+  //          Vous devrez peut-être vous connecter à votre compte,
+  //          <a className='text-amber-500 hover:underline hover:cursor-pointer'>
+  //            S&apos;identifier?
+  //          </a>
+  //        </p>
+  //      </Link>
+  //    </div>
+  //  )
+  //}
 }

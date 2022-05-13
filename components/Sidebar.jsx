@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import HomeIcon from '@mui/icons-material/Home'
-import StarIcon from '@mui/icons-material/Star'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import HelpIcon from '@mui/icons-material/Help'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'

@@ -18,10 +18,6 @@ export default productId
 
 export async function getStaticProps(context) {
   const { params } = context
-  // const response = await fetch(
-  //   `https://zino-products-api.herokuapp.com/products/${params.productId}`
-  // )
-  // const data = await response.json()
 
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
   const app = new Realm.App({ id: REALM_APP_ID })
@@ -51,10 +47,6 @@ export async function getStaticPaths() {
    console.error(error)
  }
 
-  //const response = await fetch(
-  //  `https://zino-products-api.herokuapp.com/products`
-  //)
-  //const data = await response.json()
   
   const paths = products.map((product) => {
     return {

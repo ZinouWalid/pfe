@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../Header'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
@@ -6,17 +6,46 @@ import InventoryIcon from '@mui/icons-material/Inventory'
 import OrdersPage from './OrdersPage'
 import ProfilePage from './ProfilePage'
 import DeliveriesPage from './DeliveriesPage'
+import * as Realm from 'realm-web'
+import { getCookie } from '../../lib/useCookie'
 
-const Rider = ({ rider, orders }) => {
+const Rider = () => {
   const [showNotifications, setShowNotifications] = useState(false)
   const [showDeliveries, setShowDeliveries] = useState(false)
   const [showProfile, setShowProfile] = useState(true)
+  const [rider, setRider] = useState(getCookie('riderSession'))
+  const [orders, setOrders] = useState([])
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
+      const app = new Realm.App({ id: REALM_APP_ID })
+      const credentials = Realm.Credentials.anonymous()
+
+      try {
+        const user = await app.logIn(credentials)
+
+        //fetching the myRider informations
+        await user.functions.getSingleRider(rider.id).then(async (rider) => {
+          setRider(rider)
+        })
+
+        //fetching the orders that coresponds to the myRider
+        await user.functions.getAllOrders(rider?.region).then((orders) => {
+          setOrders(orders)
+        })
+      } catch (error) {
+        console.warn(error)
+      }
+    }
+    fetchOrders()
+  }, [])
 
   return (
     <div className='w-screen p-2 overflow-x-hidden'>
-      <Header hideSearch={true} hideBasket={true} />
+      <Header hideSearch={true} hideBasket={true} hideOptions={true} />
+
       <nav className='bg-white '>
-        {/* <Navbar orders={orders} /> */}
         <div className='flex justify-around items-center h-20 rounded bg-gray-200 mb-4 transition duration-300 ease-in-out mt-14 lg:mt-16'>
           {/* -------------Notifications----------- */}
           <button
@@ -83,9 +112,7 @@ const Rider = ({ rider, orders }) => {
       </nav>
       {showNotifications && <OrdersPage rider={rider} orders={orders} />}
       {showProfile && <ProfilePage rider={rider} />}
-      {showDeliveries && (
-        <DeliveriesPage ider={rider} deliveries={rider?.orders} />
-      )}
+      {showDeliveries && <DeliveriesPage deliveries={rider?.orders} />}
     </div>
   )
 }

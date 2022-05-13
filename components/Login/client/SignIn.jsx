@@ -3,11 +3,14 @@ import React, { useState } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Header from '../../Header'
+import { useStateValue } from '../../../React-Context-Api/context'
+import { setClientSession } from '../../../React-Context-Api/Actions/clientActions'
 
 export default function Login({ csrfToken }) {
   const router = useRouter()
   const { data: session, status } = useSession()
-  console.log('Session : ', session, status)
+  const [{}, dispatch] = useStateValue()
+
   const [values, setValues] = useState({
     user: {
       email: '',
@@ -20,7 +23,7 @@ export default function Login({ csrfToken }) {
   const handleChange = (e) => {
     //Reset the err message to empty message
     setErr('')
-    
+
     const { name, value } = e.target
     setValues({
       user: {
@@ -33,9 +36,6 @@ export default function Login({ csrfToken }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    //Kill the client session if he is already logged in
-    //signOut('rider-provider')
-
     //Sign in the client
     const result = await signIn('client-provider', {
       redirect: false,
@@ -44,7 +44,6 @@ export default function Login({ csrfToken }) {
     })
 
     if (result.error) {
-    
       setErr(result.error)
       setValues({
         user: {
@@ -53,6 +52,8 @@ export default function Login({ csrfToken }) {
         },
       })
     } else {
+      dispatch(setClientSession(session?.user))
+      //router.back()
       router.push('/client')
     }
   }
@@ -61,7 +62,7 @@ export default function Login({ csrfToken }) {
     <div className='flex mt-16'>
       <Header hideSearch={true} hideBasket={true} hideOptions={true} />
 
-      <div className='mt-16 border-2 border-slate-700 shadow-lg mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
+      <div className='mt-16 border-slate-700 shadow-lg mx-auto my-auto w-full max-w-md rounded-lg border bg-white py-10 px-1 '>
         <div className='text-primary m-6'>
           <div className=' flex flex-col items-center justify-center mb-4'>
             {err && (

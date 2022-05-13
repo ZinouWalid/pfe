@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle'
 import CurrencyFormat from 'react-currency-format'
-import CloseIcon from '@mui/icons-material/Close'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 
-const OrdersPage = ({ rider, deliveries }) => {
+const OrdersPage = ({ deliveries }) => {
   const [myDeliveries, setMyDeliveries] = useState(deliveries)
 
   //show delivery products
@@ -62,7 +61,7 @@ const OrdersPage = ({ rider, deliveries }) => {
                 </p>
 
                 {/* -----------Montant----------- */}
-                <p className='mb-1 text-sm font-normal'>
+                <div className='mb-1 text-sm font-normal'>
                   <CurrencyFormat
                     renderText={(value) => (
                       <div className=' flex flex-col'>
@@ -72,15 +71,15 @@ const OrdersPage = ({ rider, deliveries }) => {
                       </div>
                     )}
                     decimalScale={2}
-                    value={delivery?.totalAmount - 20 || 0} // Part of the homework
+                    value={delivery?.totalAmount - 20 || 0}
                     displayType={'text'}
                     thousandSeparator={true}
                   />
-                </p>
+                </div>
 
                 {/* -----------Votre paiment----------- */}
                 <p className='mb-1 text-sm font-normal text-green-600'>
-                  Coûts de livraison : 20 DA
+                  Coûts de livraison : {delivery?.coast || 20} DA
                 </p>
 
                 {/* -----------Produits----------- */}

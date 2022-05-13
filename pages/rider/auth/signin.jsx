@@ -6,7 +6,6 @@ import Header from '../../../components/Header'
 const signin = ({ csrfToken }) => {
   return (
     <div className='py-2 bg-gray-100 min-h-screen min-w-screen bg-register-background  bg-no-repeat bg-cover'>
-      {/* <Header hideSearch={true} hideBasket={true} hideOptions={true} /> */}
       <SignIn csrfToken={csrfToken} />
     </div>
   )

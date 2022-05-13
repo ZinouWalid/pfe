@@ -2,14 +2,6 @@ import { verifyPassword } from '../../../lib/passwordHandler'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { connectToDatabase } from '../../../lib/mongodb'
-import connectDB from '../../../lib/connectDB'
-import Riders from '../../../models/riderModel'
-import Clients from '../../../models/clientModel'
-import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
-
-connectDB()
-
-//const { clientPromise } = connectToDatabase()
 
 export default NextAuth({
   //adapter: MongoDBAdapter(clientPromise),
@@ -31,10 +23,9 @@ export default NextAuth({
     jwt: async ({ user, token, account }) => {
       if (user) {
         //console.log('Token : ', token)
-        //console.log('User : ', user)
+
         token.user = user
         token.provider = account.provider
-        //console.log('Token after change : ', token)
       }
       return token
     },
@@ -66,7 +57,7 @@ export default NextAuth({
         //Not found - send error res
         if (!result) {
           console.log('User not found !!!!!!!!!!')
-          throw new Error('No rider found with the email')
+          throw new Error("Aucun livreur trouvé avec l'e-mail")
         }
         //Check hashed password with DB password
         const checkPassword = await verifyPassword(
@@ -76,7 +67,7 @@ export default NextAuth({
         //Incorrect password - send response
         if (!checkPassword) {
           console.log("Password doesn't match")
-          throw new Error('Password or email does not match')
+          throw new Error("Le mot de passe ou l'e-mail ne correspond pas")
         }
         //Else send success response
         client.close()
@@ -97,6 +88,7 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
+
         console.log('Credentials : ', credentials)
 
         //Connect to DB
@@ -109,7 +101,7 @@ export default NextAuth({
         //Not found - send error res
         if (!result) {
           console.log('Client not found !!!!!!!!!!')
-          throw new Error('No client found with this email')
+          throw new Error("Aucun client trouvé avec l'e-mail")
         }
         //Check hased password with DB password
         const checkPassword = await verifyPassword(
@@ -119,10 +111,11 @@ export default NextAuth({
         //Incorrect password - send response
         if (!checkPassword) {
           console.log('Password doesnt match')
-          throw new Error('Password or email does not match')
+          throw new Error("Le mot de passe ou l'e-mail ne correspond pas")
         }
         //Else send success response
         client.close()
+
         return {
           id: result.id,
           name: result.email.split('@')[0],

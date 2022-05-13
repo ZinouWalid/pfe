@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle'
-import CurrencyFormat from 'react-currency-format'
-import CloseIcon from '@mui/icons-material/Close'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useRouter } from 'next/router'
 
 const NotificationsPage = ({ notifications }) => {
   const [myNotifications, setMyNotifications] = useState(notifications)
+  const router = useRouter()
 
   useEffect(() => {
     console.log('Notifications : ', notifications)
@@ -34,14 +32,24 @@ const NotificationsPage = ({ notifications }) => {
     delta -= minutes * 60
 
     // what's left is seconds
-    const seconds = delta % 60
-
+    const seconds = Math.floor(delta % 60)
+    if (days) return 'il ya ' + days + ' jours'
+    if (hours) return 'il ya ' + hours + ' heures'
+    if (minutes) return 'il ya ' + minutes + ' minutes'
     return days + '-' + hours + '-' + minutes + '-' + seconds
   }
 
   return (
     <div className='bg-gray-100 p-1 min-h-screen mt-16'>
-      <h1 className='font-semibold text-3xl'>Notifications :</h1>
+      <button
+        className='text-xl font-semibold md:text-3xl mr-2 px-2 hover:bg-gray-200 rounded-full fixed top-20'
+        onClick={() => router.back()}
+      >
+        <ArrowBackIcon />
+      </button>
+      <h1 className='font-semibold text-3xl mt-14 mb-2 ml-4'>
+        Notifications :
+      </h1>
       {myNotifications.map((notification, idx) => (
         <div
           key={notification.id || idx}
@@ -58,18 +66,9 @@ const NotificationsPage = ({ notifications }) => {
               <p className='text-sm'>
                 {notification?.riderName} a accepté de livrer votre commande
               </p>
-              <p className='text-sm text-blue-600 font-semibold'>
-                {/* {new Date(notification?.date)} */}
+              <p className='text-xs text-gray-500'>
+                {timeDiff(notification.date)}
               </p>
-            </div>
-            <div className='text-blue-600'>
-              <svg
-                viewBox='0 0 8 8'
-                fill='currentColor'
-                className='h-4 w-4 text-blue'
-              >
-                <circle cx='4' cy='4' r='3'></circle>
-              </svg>
             </div>
           </div>
         </div>
