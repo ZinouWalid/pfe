@@ -90,7 +90,7 @@ export default function Login({ csrfToken }) {
               type='email'
               value={values.user.email}
               onChange={handleChange}
-              placeholder='mot de passe'
+              placeholder='email'
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }

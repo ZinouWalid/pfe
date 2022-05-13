@@ -68,7 +68,7 @@ const OrdersPage = ({ orders }) => {
         <ArrowBackIcon />
       </button>
       <h1 className='font-semibold text-3xl mt-14 mb-2 ml-4'>Commandes :</h1>
-      {myOrders.length == 0 ? (
+      {myOrders?.length == 0 ? (
         <div className='bg-white flex flex-col items-center text-amber-500'>
           <h1 className='uppercase text-3xl font-bold'>pas de commandes</h1>
           <img

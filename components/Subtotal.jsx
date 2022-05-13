@@ -36,7 +36,7 @@ function Subtotal() {
       <Link href='/checkout/delivery' passHref>
         <a>
           <button
-            disabled={myBasket.length == 0}
+            disabled={myBasket?.length == 0}
             className='h-8 w-full rounded-sm border border-amber-500 bg-amber-400 hover:bg-amber-500'
           >
             Procéder au Paiement

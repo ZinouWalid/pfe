@@ -70,7 +70,7 @@ async function addRider(req, res) {
       })
       .toArray()
 
-    if (checkExistingMail.length) {
+    if (checkExistingMail?.length) {
       console.log('Email already exists : ', checkExistingMail[0].email)
       res.status(422).send({
         message: "E-mail de l'utilisateur existe déjà",
@@ -79,7 +79,7 @@ async function addRider(req, res) {
       client.close()
       return
     }
-    if (checkExistingPhoneNumber.length) {
+    if (checkExistingPhoneNumber?.length) {
       console.log(
         'Phone number already exists : ',
         checkExistingPhoneNumber[0].phoneNumber

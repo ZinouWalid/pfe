@@ -4,16 +4,19 @@ import Footer from '../../components/Footer'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { getCookie } from '../../lib/useCookie'
+import { useStateValue } from '../../React-Context-Api/context'
 
 const RiderId = ({}) => {
   const { data: session, status } = useSession()
   const [riderSession, setRiderSession] = useState({})
+  //getting the rider session from redux
+  const [{ rider }, dispatch] = useStateValue()
 
   useEffect(() => {
     console.log('-------- / page --------')
     setRiderSession(getCookie('riderSession'))
     console.log('Rider Session : ', riderSession)
-  }, [status, session])
+  }, [rider])
 
   if (riderSession?.provider === 'rider-provider') {
     return (

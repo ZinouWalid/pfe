@@ -72,7 +72,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       })
     })
     //Check if we found any matches
-    filteredProducts.length > 0
+    filteredProducts?.length > 0
       ? dispatch(filterProducts(filteredProducts))
       : dispatch(
           filterProducts([
@@ -107,7 +107,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
   const handleChange = async (e) => {
     setSearchTerm(e.target.value.toLowerCase())
     console.log('CHANGEEE !!', searchTerm)
-    searchTerm.length > 2 ? await fetchSuggestions() : setSuggestions([])
+    searchTerm?.length > 2 ? await fetchSuggestions() : setSuggestions([])
   }
 
   const truncate = (str, n) => {
@@ -183,7 +183,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
           !suggestions && 'hidden'
         }`}
       >
-        {suggestions.length > 2 && (
+        {suggestions?.length > 2 && (
           <ul className='flex overflow-hidden flex-col rounded border border-slate-700'>
             {suggestions.map(({ id, name, img }) => (
               <li key={id}>
@@ -296,7 +296,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
             <a className='hover:cursor-pointer'>
               <ShoppingCartIcon className='h-5 text-3xl md:h-12 hover:bg-slate-800 hover:text-amber-400 rounded-full p-1' />
               <span className='text-amber-600 ml-0 mr-1 font-bold md:ml-2 md:mr-3'>
-                {localBasket.length || 0}
+                {localBasket?.length || 0}
               </span>
             </a>
           </Link>

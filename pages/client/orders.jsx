@@ -10,7 +10,6 @@ import { getCookie } from '../../lib/useCookie'
 import { useStateValue } from '../../React-Context-Api/context'
 
 const Orders = () => {
-  const { data: session, status } = useSession()
   const router = useRouter()
   const [orders, setOrders] = useState([])
   const [user, setUser] = useState({})
@@ -20,7 +19,9 @@ const Orders = () => {
     console.log('-------- client orders page --------')
     setUser(getCookie('clientSession'))
   }, [client])
-
+  
+  console.log('client orders  : ', user)
+  
   //fetches the realm object from the server for the client orders
   useEffect(() => {
     const fetchOrders = async () => {
@@ -29,22 +30,22 @@ const Orders = () => {
       const credentials = Realm.Credentials.anonymous()
       let ords = []
       try {
-        const user = await app.logIn(credentials)
+        const realm = await app.logIn(credentials)
 
         //You can pass the user id here instead of the session.user.email
-        ords = await user.functions.getClientOrders(session?.user.id)
+        ords = await realm.functions.getClientOrders(user.id)
         setOrders(ords)
       } catch (error) {
         console.error(error)
       }
     }
     fetchOrders()
-    console.log(session?.user.name + ' orders : ' + orders)
-  }, [status])
+    console.log(user.name + ' orders : ' + orders)
+  }, [user])
 
   console.log('orders : ', orders)
 
-  if (status === 'authenticated' && user.provider == 'client-provider') {
+  if (user.provider == 'client-provider') {
     return (
       <div>
         <Header hideSearch={true} />

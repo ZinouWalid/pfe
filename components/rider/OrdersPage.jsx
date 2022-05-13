@@ -70,7 +70,7 @@ const OrdersPage = ({ rider, orders }) => {
   }
   return (
     <div>
-      {myOrders.length == 0 ? (
+      {myOrders?.length == 0 ? (
         <div className='bg-white flex flex-col items-center text-amber-500'>
           <h1 className='uppercase text-3xl font-bold'>pas de commandes</h1>
 

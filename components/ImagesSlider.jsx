@@ -24,7 +24,7 @@ function ImagesSlider({ category, products }) {
 
 
   return (
-    <div className='mt-12 lg:mt-24 flex h-3/6 w-full items-center justify-center rounded bg-white shadow-lg'>
+    <div className='mt-12 lg:mt-24 flex h-5/6 w-full items-center justify-center rounded bg-white shadow-lg'>
       {/*Images Slider*/}
 
       <Slider {...settings} className='w-5/6 overflow-x-visible'>

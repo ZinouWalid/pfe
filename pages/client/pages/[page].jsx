@@ -21,7 +21,7 @@ const Page = ({ products, currentPage }) => {
         products = await user.functions.getAllProducts().then((data) => {
           for (
             let index = 0;
-            index < Math.floor(data.length / 30) + 1;
+            index < Math.floor(data?.length / 30) + 1;
             index++
           ) {
             setPages((pages) => [
@@ -50,7 +50,7 @@ const Page = ({ products, currentPage }) => {
       <Pagination
         pages={pages}
         currentPage={currentPage}
-        numberOfPages={pages.length}
+        numberOfPages={pages?.length}
       />
       <Footer />
     </div>
@@ -94,7 +94,7 @@ export async function getStaticPaths() {
   }
  
 
-  for (let index = 0; index < Math.floor(products.length / 30) + 1; index++) {
+  for (let index = 0; index < Math.floor(products?.length / 30) + 1; index++) {
     paths.push({ params: { page: 'page_' + (index + 1) } })
   }
 

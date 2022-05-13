@@ -46,7 +46,7 @@ async function addClient(req, res) {
       .find({ email: email })
       .toArray()
 
-    if (checkExistingMail.length) {
+    if (checkExistingMail?.length) {
       console.log('Email already exists : ', checkExistingMail[0].email)
       res.status(422).send({
         message: "E-mail de l'utilisateur existe déjà",
@@ -62,7 +62,7 @@ async function addClient(req, res) {
       .find({ username: username })
       .toArray()
 
-    if (checkExistingUsername.length) {
+    if (checkExistingUsername?.length) {
       console.log(
         'Username already exists : ',
         checkExistingUsername[0].username

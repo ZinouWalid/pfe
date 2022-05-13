@@ -5,37 +5,41 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import NotificationsPage from '../../components/client/NotificationsPage'
 import Header from '../../components/Header'
+import { useStateValue } from '../../React-Context-Api/context'
+import { getCookie } from '../../lib/useCookie'
 
 const Notifications = () => {
-  const { data: session, status } = useSession()
-  const isUser = session?.user
+  const [user, setUser] = useState({})
+  const [{ client }, dispatch] = useStateValue()
+
   const router = useRouter()
   const [notifications, setNotifications] = useState([])
-
-  useEffect(() => {}, [status, session])
-
-  //fetches the realm object from the server for the client notifications
   useEffect(() => {
+    console.log('-------- client notifications page --------')
+    setUser(getCookie('clientSession'))
+  }, [client])
+  //getting the user notifications
+
+  useEffect(() => {
+    //fetches the realm object from the server for the client notifications
     const fetchNotifications = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
       const credentials = Realm.Credentials.anonymous()
       let notifs = []
       try {
-        const user = await app.logIn(credentials)
-        notifs = await user.functions.getClientNotifications(session?.user.id)
-
+        const realm = await app.logIn(credentials)
+        notifs = await realm.functions.getClientNotifications(user?.id)
         setNotifications(notifs)
       } catch (error) {
         console.error(error)
       }
     }
     fetchNotifications()
-  }, [status])
+  }, [user])
 
-  console.log(session?.user.id, ' notifications : ', notifications)
 
-  if (status === 'authenticated') {
+  if (user.provider == 'client-provider') {
     return (
       <div>
         <Header hideSearch={true} />

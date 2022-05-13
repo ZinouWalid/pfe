@@ -13,7 +13,7 @@ function Body({ products }) {
 
       {/* Products */}
       <div className='mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5'>
-        {filteredProducts.length > 0
+        {filteredProducts?.length > 0
           ? filteredProducts.map((product) => (
               <Product key={product.id} product={product} />
             ))

@@ -22,7 +22,7 @@ const OrderCard = () => {
   const handleDelete = (id) => {
     dispatch(removeFromBasket(id))
     //only one product left in the basket
-    if (basket.length === 1) {
+    if (basket?.length === 1) {
       router.push('/client')
     }
   }
@@ -30,7 +30,7 @@ const OrderCard = () => {
   return (
     <div className='flex flex-col items-center mx-auto max-h-96 h-fit bg-white border rounded py-5'>
       <h3 className='p-1 text-md'>
-        <span className='uppercase'>votre commande</span> ({myOrder.length}{' '}
+        <span className='uppercase'>votre commande</span> ({myOrder?.length}
         articles)
       </h3>
       <div className='mx-auto w-full border-gray-300 border'></div>
