@@ -59,7 +59,7 @@ function Product({ product }) {
         <p>{name}</p>
         <Rating
           name='read-only'
-          value={rating?.split(' ')[0] || 2.5}
+          value={parseInt(rating?.split(' ')[0]) || 2.5}
           precision={0.1}
           readOnly
         />

@@ -9,7 +9,7 @@ import { updateQuantity } from '../React-Context-Api/Actions/productsActions'
 
 const ProductInfo = ({ product }) => {
   const [{}, dispatch] = useStateValue()
-  const { id, img, name, price, rating,productQuantity } = { ...product }
+  const { id, img, name, price, rating, productQuantity } = { ...product }
   const [showButton, setShowButton] = useState(true)
   const [showQuantity, setShowQuantity] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -57,7 +57,7 @@ const ProductInfo = ({ product }) => {
               <span className='flex items-center'>
                 <Rating
                   name='read-only'
-                  value={rating?.split(' ')[0] || 2.5}
+                  value={parseInt(rating?.split(' ')[0]) || 2.5}
                   precision={0.5}
                   readOnly
                 />

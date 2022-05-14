@@ -17,9 +17,7 @@ import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 
 function Header({ hideSearch, hideBasket, hideOptions }) {
-  const { data: session, status } = useSession()
   const [suggestions, setSuggestions] = useState([])
-  const [products, setProducts] = useState([])
   const [{ basket, client }, dispatch] = useStateValue()
   const [searchTerm, setSearchTerm] = useState('')
   //logged user session
@@ -29,7 +27,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
   const [showOptions, setShowOptions] = useState(false)
 
   //filter products after we search
-  let filteredProducts = []
+  const [filteredProducts, setFilteredProducts] = useState([])
 
   //Get the updated Basket
   useEffect(() => {
@@ -38,51 +36,34 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       setUser(getCookie('clientSession'))
     }
     updateBasketAndClient()
-  }, [basket,client])
+  }, [basket, client])
 
-  //fetching the products to use them in filtering the user search
-  useEffect(() => {
-    console.log('Session.user : ', session?.user, ' status : ', status)
-    const fetchProducts = async () => {
-      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log('Submit Search Form')
+
+    if (searchTerm.length > 0) {
+      const REALM_APP_ID = 'pfe-etnhz'
       const app = new Realm.App({ id: REALM_APP_ID })
       const credentials = Realm.Credentials.anonymous()
-      let dbProducts = {}
+      let searchedProducts = []
       try {
+        console.log('Searching products')
         const user = await app.logIn(credentials)
-        dbProducts = await user.functions.getAllProducts()
+        searchedProducts = await user.functions
+          .searchProducts(searchTerm)
+          .then((searchedProducts) => {
+            console.log('SEARCHED PRODUCTS  : ', searchedProducts)
+            setFilteredProducts(searchedProducts)
+            dispatch(filterProducts(searchedProducts))
+          })
       } catch (error) {
         console.error(error)
       }
 
-      setProducts(dbProducts)
+      setSearchTerm('')
+      setSuggestions([]) //hide the suggestions bar
     }
-    fetchProducts()
-  }, [])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setSuggestions([]) //hide the suggestions bar
-    console.log('Submit Search Form')
-    products.map((product) => {
-      searchTerm.split(' ').map((word) => {
-        if (product.tags.join('').includes(word)) {
-          filteredProducts.push(product)
-        }
-      })
-    })
-    //Check if we found any matches
-    filteredProducts?.length > 0
-      ? dispatch(filterProducts(filteredProducts))
-      : dispatch(
-          filterProducts([
-            {
-              id: '1000',
-              img: 'https://cdn.dribbble.com/users/1554526/screenshots/3399669/media/51c98501bc68499ed0220e1ba286eeaf.png?compress=1&resize=400x300',
-            },
-          ])
-        )
-    setSearchTerm('')
   }
 
   const fetchSuggestions = async () => {
@@ -107,7 +88,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
   const handleChange = async (e) => {
     setSearchTerm(e.target.value.toLowerCase())
     console.log('CHANGEEE !!', searchTerm)
-    searchTerm?.length > 2 ? await fetchSuggestions() : setSuggestions([])
+    searchTerm?.length >= 2 ? await fetchSuggestions() : setSuggestions([])
   }
 
   const truncate = (str, n) => {
@@ -179,17 +160,18 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
         </form>
       )}
       <div
-        className={`fixed z-40 top-14 left-60 right-60 ${
+        className={`fixed z-40 top-14 left-60 right-100 ${
           !suggestions && 'hidden'
         }`}
       >
-        {suggestions?.length > 2 && (
+        {suggestions?.length >= 2 && (
           <ul className='flex overflow-hidden flex-col rounded border border-slate-700'>
             {suggestions.map(({ id, name, img }) => (
               <li key={id}>
                 <Link href={`/client/products/${id}`} passHref>
                   <a className='flex justify-between items-center px-2 py-1 hover:bg-gray-100 cursor-pointer bg-white'>
-                    <p className='text-gray-600'>{truncate(name, 100)}</p>
+                    {/* Avoid long products name by truncating them to max length = 100 */}
+                    <p className='text-gray-600 mr-4'>{truncate(name, 70)}</p>
                     <Image src={img} alt={name} height={40} width={35} />
                   </a>
                 </Link>
