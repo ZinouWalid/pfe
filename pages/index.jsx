@@ -53,7 +53,7 @@ function Welcome() {
               </span>
             </a>
           </Link>
-          <Link href={riderSession ? 'rider' : '/rider/auth/signin'} passHref>
+          <Link href={riderSession ? '/rider' : '/rider/auth/signin'} passHref>
             <a className='Delivery_manMobile'>
               Livreur
               <span className='mx-4'>
@@ -64,10 +64,10 @@ function Welcome() {
         </div>
 
         <footer className='footerMobile'>
-          <a href=''>Services</a>
-          <a href=''>À propos de nous</a>
-          <a href=''>Contact</a>
-          <a href=''>Aide</a>
+          <a href='#'>Services</a>
+          <a href='#'>À propos de nous</a>
+          <a href='#'>Contact</a>
+          <a href='#'>Aide</a>
           <div className='ContactMobile'>
             <img src='https://img.icons8.com/ios-glyphs/30/000000/facebook.png' />
             <img src='https://img.icons8.com/ios-glyphs/30/000000/google-logo--v1.png' />
@@ -95,7 +95,7 @@ function Welcome() {
                 l&apos;aide de l&apos;outil gamme de couleurs.
               </p>
               <div className='ButtonsDiv'>
-                <Link href='client' passHref>
+                <Link href='/client' passHref>
                   <a className='Customer'>
                     Client
                     <span className='mx-4'>
@@ -104,7 +104,7 @@ function Welcome() {
                   </a>
                 </Link>
                 <Link
-                  href={riderSession ? 'rider' : '/rider/auth/signin'}
+                  href={riderSession ? '/rider' : '/rider/auth/signin'}
                   passHref
                 >
                   <a className='Delivery_man'>

@@ -9,7 +9,9 @@ import { updateQuantity } from '../React-Context-Api/Actions/productsActions'
 
 const ProductInfo = ({ product }) => {
   const [{}, dispatch] = useStateValue()
-  const { id, img, name, price, rating, productQuantity } = { ...product }
+  const { id, img, name, price, rating, productQuantity, promotion } = {
+    ...product,
+  }
   const [showButton, setShowButton] = useState(true)
   const [showQuantity, setShowQuantity] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -112,9 +114,27 @@ const ProductInfo = ({ product }) => {
             </p>
             <div className='mt-6 mb-5 border-b-2 border-gray-200'></div>
             <div className='flex justify-between items-center'>
-              <span className='title-font text-2xl font-medium text-gray-900'>
-                {price}
-              </span>
+              {promotion.split('%')[0] <= 0 ? (
+                <span className='title-font text-2xl font-medium text-gray-900 '>
+                  {price}
+                </span>
+              ) : (
+                <div className='flex flex-col '>
+                  <span className='title-font text-2xl font-medium text-gray-900 '>
+                    {parseInt(price) -
+                      (parseInt(price) *
+                        parseInt(promotion.split('%')[0] + 10)) /
+                        100}{' '}
+                    DA
+                  </span>
+                  <span className='flex items-center font-medium text-xs mt-2'>
+                    <p className='text-gray-500 line-through  '>{price}</p>
+                    <p className='bg-amber-300 rounded font-bold ml-2 py-[2px] px-[3px] text-amber-700'>
+                      - {promotion}
+                    </p>
+                  </span>
+                </div>
+              )}
 
               {/* Add to basket button */}
               {showButton && (
@@ -129,7 +149,6 @@ const ProductInfo = ({ product }) => {
                   Ajouter au panier
                 </button>
               )}
-
               {/* Quantity */}
               {showQuantity && (
                 <div className='mt-6 h-10 w-32'>
@@ -145,6 +164,7 @@ const ProductInfo = ({ product }) => {
                       type='number'
                       className='text-md flex w-full items-center bg-gray-300 p-2 text-center font-semibold text-gray-700 outline-none hover:text-black focus:text-black  focus:outline-none'
                       value={productQuantity || quantity}
+                      readOnly
                     ></input>
                     {/* Increase Button */}
                     <button

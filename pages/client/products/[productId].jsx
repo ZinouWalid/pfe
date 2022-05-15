@@ -3,18 +3,28 @@ import ProductInfo from '../../../components/ProductInfo'
 import Header from '../../../components/Header'
 import * as Realm from 'realm-web'
 import Footer from '../../../components/Footer'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useRouter } from 'next/router'
 
-const productId = ({ product }) => {
+const ProductId = ({ product }) => {
+  const router = useRouter()
+
   return (
     <div className='relative flex min-h-screen flex-col '>
       <Header hideSearch={true} />
+      <button
+        className='text-xl font-semibold md:text-3xl mr-2 px-2 hover:bg-gray-200 rounded-full fixed top-20'
+        onClick={() => router.back()}
+      >
+        <ArrowBackIcon />
+      </button>
       <ProductInfo key={product.id} product={product} />
       <Footer />
     </div>
   )
 }
 
-export default productId
+export default ProductId
 
 export async function getStaticProps(context) {
   const { params } = context
