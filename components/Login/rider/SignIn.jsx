@@ -8,6 +8,8 @@ import { setRiderSession } from '../../../React-Context-Api/Actions/riderActions
 export default function SignIn({ csrfToken }) {
   const router = useRouter()
   const { data: session, status } = useSession()
+  //tracking changes on session
+  const [mySession, setMySession] = useState(session)
   const [{}, dispatch] = useStateValue()
   const [values, setValues] = useState({
     user: {
@@ -17,7 +19,9 @@ export default function SignIn({ csrfToken }) {
   })
 
   //track the session when it changes
-  useEffect(() => {}, [session, status])
+  useEffect(() => {
+    setMySession(session)
+  }, [session, status])
 
   //Error message when the client sign in
   const [err, setErr] = useState('')
@@ -58,13 +62,12 @@ export default function SignIn({ csrfToken }) {
         // set some auth state
         console.log('Redirecting rider to /rider')
 
-        dispatch(setRiderSession(session?.user))
+        dispatch(setRiderSession(mySession?.user))
         router.push(`/rider`)
       }
     })
 
-    console.log('Rider signed in : ', result, session)
-
+    console.log('Rider signed in : ', result, mySession)
   }
 
   return (

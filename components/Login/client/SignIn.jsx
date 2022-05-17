@@ -9,6 +9,8 @@ import { setClientSession } from '../../../React-Context-Api/Actions/clientActio
 export default function Login({ csrfToken }) {
   const router = useRouter()
   const { data: session, status } = useSession()
+  const [mySession, setMySession] = useState(session)
+
   const [{}, dispatch] = useStateValue()
 
   const [values, setValues] = useState({
@@ -19,6 +21,11 @@ export default function Login({ csrfToken }) {
   })
   //Error message when the client sign in
   const [err, setErr] = useState('')
+
+  //track the session when it changes
+  useEffect(() => {
+    setMySession(session)
+  }, [session, status])
 
   const handleChange = (e) => {
     //Reset the err message to empty message
@@ -52,7 +59,7 @@ export default function Login({ csrfToken }) {
         },
       })
     } else {
-      dispatch(setClientSession(session?.user))
+      dispatch(setClientSession(mySession?.user))
       //router.back()
       router.push('/client')
     }

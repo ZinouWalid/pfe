@@ -30,11 +30,13 @@ const RiderId = ({}) => {
   } else {
     return (
       <div className='flex flex-col justify-between p-8 items-center h-screen'>
-        <p className='text-4xl mb-2'>Loading...</p>
+        <p className='text-4xl mb-2'>
+          Vous n&apos;êtes pas authentifié avec succès.
+        </p>
         <Link href='/rider/auth/signin' passHref>
           <p>
-            Vous devrez peut-être vous connecter à votre compte,
-            <a className='text-amber-500 hover:underline hover:cursor-pointer'>
+            Veuillez vous authentifier à nouveau, 
+            <a className='text-amber-500 hover:underline hover:cursor-pointer ml-[4px]'>
               S&apos;identifier?
             </a>
           </p>

@@ -70,7 +70,7 @@ export default NextAuth({
           throw new Error("Le mot de passe ou l'e-mail ne correspond pas")
         }
         //Else send success response
-        client.close()
+        //client.close()
         return {
           id: result.id,
           name: result.email.split('@')[0],
@@ -114,7 +114,7 @@ export default NextAuth({
           throw new Error("Le mot de passe ou l'e-mail ne correspond pas")
         }
         //Else send success response
-        client.close()
+        //client.close()
 
         return {
           id: result.id,

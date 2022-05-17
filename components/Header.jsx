@@ -34,6 +34,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
     function updateBasketAndClient() {
       setLocalBasket(getCookie('basket'))
       setUser(getCookie('clientSession'))
+      console.log('user : ', user)
     }
     updateBasketAndClient()
   }, [basket, client])

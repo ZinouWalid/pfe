@@ -7,6 +7,7 @@ import {
 } from '../React-Context-Api/Actions/basketActions'
 import Link from 'next/link'
 import { updateQuantity } from '../React-Context-Api/Actions/productsActions'
+import CurrencyFormat from 'react-currency-format'
 
 function Product({ product }) {
   const { id, img, name, price, rating, promotion } = { ...product }
@@ -55,7 +56,7 @@ function Product({ product }) {
           />
         </a>
       </Link>
-      <div>
+      <div className='flex flex-col'>
         <p>{name}</p>
         <Rating
           name='read-only'
@@ -65,15 +66,33 @@ function Product({ product }) {
         />
         {/* <p className='text-gray-700'>{price}</p> */}
         {promotion.split('%')[0] <= 0 ? (
-          <span className='text-gray-700 '>{price}</span>
+          <CurrencyFormat
+            renderText={(value) => (
+              <span className='text-gray-700 mt-2'>{value + ' '}DA</span>
+            )}
+            decimalScale={2}
+            value={price}
+            displayType={'text'}
+            thousandSeparator={true}
+          />
         ) : (
+          // <span className='text-gray-700 mt-2'>{price}</span>
           <div className='flex flex-col '>
-            <span className='font-medium text-gray-900 '>
-              {parseInt(price) -
-                (parseInt(price) * parseInt(promotion.split('%')[0])) /
-                  100}
-              DA
-            </span>
+            <CurrencyFormat
+              renderText={(value) => (
+                <span className='font-medium text-gray-900 '>
+                  {value + ' '}DA
+                </span>
+              )}
+              decimalScale={2}
+              value={
+                parseInt(price) -
+                (parseInt(price) * parseInt(promotion.split('%')[0])) / 100
+              }
+              displayType={'text'}
+              thousandSeparator={true}
+            />
+
             <span className='flex items-center font-medium text-xs mt-2'>
               <p className='text-gray-500 line-through  '>{price}</p>
               <p className='bg-amber-300 rounded font-bold ml-2 py-[2px] px-[3px] text-amber-700'>
