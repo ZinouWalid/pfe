@@ -10,18 +10,17 @@ import { clearBasket } from '../../React-Context-Api/Actions/basketActions'
 
 export default function PayementForm() {
   const { data: session } = useSession()
-  const [{ basket }, dispatch] = useStateValue()
+  const [{ basket, client }, dispatch] = useStateValue()
   const router = useRouter()
-  const [user, setUser] = useState(session?.user)
+  const [user, setUser] = useState({})
   const [deliveryCoast, setDeliveryCoast] = useState(0)
-
+  
   //we use an object that contains all variables as a global state instead of declaring each variable individualy which a better approach
   const initialValues = {
-    clientId: user?.id,
-    name: user?.name,
-    //lastName: '',
+    clientId: '',
+    name: '',
     phoneNumber: '',
-    email: user?.email,
+    email: '',
     address: '',
     region: { name: '', lat: 0, lon: 0 },
     city: { name: '', lat: 0, lon: 0 },
@@ -30,12 +29,21 @@ export default function PayementForm() {
 
   const [myOrder, setMyOrder] = useState([])
 
+  //Get the updated Basket and Client
   useEffect(() => {
-    function updateBasket() {
+    console.log(user, values)
+    function updateBasketAndClient() {
       setMyOrder(getCookie('basket'))
+      setUser(getCookie('clientSession'))
+      setValues({
+        ...values,
+        clientId: user?.id,
+        name: user?.name,
+        email: user?.email,
+      })
     }
-    updateBasket()
-  }, [basket])
+    updateBasketAndClient()
+  }, [basket, client])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -131,12 +139,13 @@ export default function PayementForm() {
             <label className='text-left'>
               Quel est votre nom? <i className='text-red-500'>*</i>
             </label>
+
             <input
               type='text'
               id='name'
               name='name'
               placeholder='nom'
-              value={values.name}
+              value={user.name}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
@@ -178,9 +187,9 @@ export default function PayementForm() {
               //onChange={e=>handleInputChange(e)}
               type='email'
               id='email'
-              placeholder='E-mail'
+              placeholder='e-mail'
               name='email'
-              value={values.email}
+              value={user.email}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
               }
@@ -321,7 +330,7 @@ export default function PayementForm() {
                               decimalScale={2}
                               value={parseInt(
                                 getBasketTotal(myOrder) + deliveryCoast
-                              )} // Part of the homework
+                              )}
                               displayType={'text'}
                               thousandSeparator={true}
                             />
@@ -330,7 +339,7 @@ export default function PayementForm() {
                       </div>
                     )}
                     decimalScale={2}
-                    value={getBasketTotal(myOrder) || 0} // Part of the homework
+                    value={getBasketTotal(myOrder) || 0}
                     displayType={'text'}
                     thousandSeparator={true}
                   />

@@ -22,7 +22,7 @@ const Delivery = () => {
     console.log('Status : ', status)
   }, [client])
 
-  if (status === 'authenticated' && user.provider == 'client-provider') {
+  if (user.provider == 'client-provider') {
     return (
       <div className=' bg-gray-100 relative p-2 overflow-x-scroll'>
         <Header hideSearch={true} />

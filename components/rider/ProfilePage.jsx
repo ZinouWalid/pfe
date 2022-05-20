@@ -16,20 +16,20 @@ const ProfilePage = ({ rider }) => {
   }
 
   return (
-    <section className='pt-12 600'>
-      <h1 className='text-4xl font-semibold leading-normal mb-2 capitalize text-left'>
+    <section className='pt-10'>
+      <h1 className='text-4xl font-semibold leading-normal mb-2 capitalize text-left ml-4'>
         Mon Profile :
       </h1>
       <div className='w-full lg:w-4/12 px-4 mx-auto '>
-        <div className='border relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-12'>
+        <div className='border relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-10'>
           <div className='px-6'>
             <div className='flex flex-wrap justify-center'>
               <div className='w-full px-4 flex justify-center'>
-                <div className=''>
-                  <AccountCircleIcon className='text-9xl text-gray-500' />
+                <div className='text-7xl'>
+                  <AccountCircleIcon className=' text-gray-500' />
                 </div>
               </div>
-              <div className='w-full px-4 text-center mt-12'>
+              <div className='w-full px-4 text-center mt-4'>
                 <div className='flex justify-center py-4 lg:pt-4 pt-8'>
                   <div className='lg:mr-4 p-3 text-center'>
                     <span className='text-xl font-bold block tracking-wide '>
@@ -41,7 +41,7 @@ const ProfilePage = ({ rider }) => {
               </div>
             </div>
             <div className='text-center mt-8'>
-              <h3 className='text-xl font-semibold leading-normal mb-2 text-blueGray-700 capitalize'>
+              <h3 className='text-xl font-semibold leading-normal mb-2 capitalize'>
                 {rider?.name}
               </h3>
               <div className='text-sm leading-normal mt-0 mb-2  font-bold uppercase'>
@@ -58,7 +58,7 @@ const ProfilePage = ({ rider }) => {
                     contacts :
                   </h3>
                   <div className='text-sm leading-normal mt-0 mb-2 flex items-center'>
-                    <EmailIcon className='text-gray-500' />{' '}
+                    <EmailIcon className='text-gray-500' />
                     <i className='text-gray-500 mx-2 font-bold'> : </i>
                     {rider?.email}
                   </div>

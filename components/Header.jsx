@@ -29,7 +29,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
   //filter products after we search
   const [filteredProducts, setFilteredProducts] = useState([])
 
-  //Get the updated Basket
+  //Get the updated Basket and Client
   useEffect(() => {
     function updateBasketAndClient() {
       setLocalBasket(getCookie('basket'))
@@ -120,7 +120,11 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
         <Sidebar showSidebar={showSidebar} hideFilters={hideSearch} />
       )}
       {/* Logo and title */}
-      <Link href={'/'} passHref>
+      {/* check if the window url contains "client" */}
+      <Link
+        href={'/'}
+        passHref
+      >
         <a className='flex items-center p-1 mr-auto'>
           <Image
             src='https://w7.pngwing.com/pngs/49/257/png-transparent-grocery-store-shopping-bags-trolleys-supermarket-grocery-miscellaneous-food-photography.png'
@@ -161,7 +165,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
         </form>
       )}
       <div
-        className={`fixed z-40 top-14 left-60 right-100 ${
+        className={`fixed z-40 top-14 left-60 right-80 ${
           !suggestions && 'hidden'
         }`}
       >

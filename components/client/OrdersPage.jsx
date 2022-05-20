@@ -9,6 +9,8 @@ import Link from 'next/link'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useRouter } from 'next/router'
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
 
 const OrdersPage = ({ orders }) => {
   const [myOrders, setMyOrders] = useState(orders)
@@ -110,7 +112,7 @@ const OrdersPage = ({ orders }) => {
                   Numéro de téléphone : {'0' + order?.phoneNumber}
                 </p>
 
-                {/* -----------Num telephone----------- */}
+                {/* -----------Etat----------- */}
                 <p className='mb-1 text-sm font-normal'>
                   État :{' '}
                   {order?.state == 1
@@ -125,21 +127,27 @@ const OrdersPage = ({ orders }) => {
                   <CurrencyFormat
                     renderText={(value) => (
                       <div className=' flex flex-col'>
-                        <p className='mb-1 text-sm font-normal text-red-600'>
-                          Montant : {value} DA
+                        <p className='mb-1 text-sm font-normal '>
+                          Montant (avec frais de livraison) :
+                          <span className='text-red-600 font-semibold'>
+                            {' ' + value} DA
+                          </span>
                         </p>
                       </div>
                     )}
                     decimalScale={2}
-                    value={order?.totalAmount - 20 || 0}
+                    value={order?.totalAmount || 0}
                     displayType={'text'}
                     thousandSeparator={true}
                   />
                 </div>
 
                 {/* -----------Votre paiment----------- */}
-                <p className='mb-1 text-sm font-normal text-green-600'>
-                  Coûts de livraison : {order?.coast || 20} DA
+                <p className='mb-1 text-sm font-normal '>
+                  Coûts de livraison :
+                  <span className='text-green-600 font-semibold'>
+                    {' ' + order?.coast || 20} DA
+                  </span>
                 </p>
 
                 {/* -----------Produits----------- */}
@@ -215,8 +223,9 @@ const OrdersPage = ({ orders }) => {
                     </div>
                   </div>
                 )}
+
                 <button
-                  className={`mt-4 py-1.5 text-base p-2 rounded-lg font-normal text-center text-gray-900 uppercase ${
+                  className={`mt-4 py-1.5 text-base p-2 rounded-lg font-normal text-center text-gray-900 uppercase px-4 ${
                     order?.state == 1
                       ? 'bg-red-400 hover:bg-red-500'
                       : order?.state == 2
@@ -225,11 +234,21 @@ const OrdersPage = ({ orders }) => {
                   }`}
                   onClick={() => order?.state == 1 && cancelOrder(order?.id)}
                 >
-                  {order?.state == 1
-                    ? 'annuler la commande '
-                    : order?.state == 2
-                    ? 'En cours de livraison ...'
-                    : 'Livré'}
+                  {/* display the message based on the order state */}
+                  <p>
+                    {order?.state == 1 ? (
+                      <div className='w-full flex justify-between '>
+                        annuler la commande <CloseIcon className='ml-2' />
+                      </div>
+                    ) : order?.state == 2 ? (
+                      'En cours de livraison ...'
+                    ) : (
+                      <div className=''>
+                        Livré
+                        <CheckIcon className='ml-2' />
+                      </div>
+                    )}
+                  </p>
                 </button>
               </div>
             </div>

@@ -6,9 +6,11 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
+// --- THE ORDERS AVAILABLE FOR THE RIDER ---
+
 const OrdersPage = ({ rider, orders }) => {
   const [myOrders, setMyOrders] = useState(orders)
-  const [buttonMsg, setButtonMsg] = useState('accepter la commande')
+  const [buttonMsg, setButtonMsg] = useState('')
 
   //show order products
   useEffect(() => {
@@ -38,8 +40,7 @@ const OrdersPage = ({ rider, orders }) => {
         {
           label: 'Oui',
           onClick: async () => {
-            console.log('Updating The Order State : ', order.id)
-
+            //Updating The Order State
             await fetch('/api/orders', {
               method: 'PATCH',
               body: JSON.stringify({
@@ -47,16 +48,18 @@ const OrdersPage = ({ rider, orders }) => {
                 clientId: order.clientId,
                 riderId: rider.id,
                 riderName: rider.name,
+                orderState: 2,
+                products: order.products,
               }),
             })
 
-            console.log('Update The Rider Orders Array : ', order.id)
-
+            //Update The Rider Orders Array
             await fetch('/api/riders', {
               method: 'PATCH',
               body: JSON.stringify({
                 riderId: rider.id,
                 ...order,
+                message: 'UPDATE ORDERS',
                 date: new Date(),
               }),
             })
@@ -68,6 +71,7 @@ const OrdersPage = ({ rider, orders }) => {
       ],
     })
   }
+
   return (
     <div>
       {myOrders?.length == 0 ? (
@@ -206,10 +210,10 @@ const OrdersPage = ({ rider, orders }) => {
                   </div>
                 )}
                 <button
-                  className='mt-4 py-1.5 text-base bg-green-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '
+                  className='mt-4 px-4 py-1.5 text-sm bg-green-400 p-2 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '
                   onClick={() => order?.state == 1 && updateOrder(order)}
                 >
-                  {buttonMsg}
+                  accepter la commande
                 </button>
               </div>
             </div>

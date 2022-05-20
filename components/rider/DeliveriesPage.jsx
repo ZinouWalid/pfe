@@ -3,8 +3,14 @@ import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle'
 import CurrencyFormat from 'react-currency-format'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
-const OrdersPage = ({ deliveries }) => {
+// --- THE ORDERS DELIVERED BY THE RIDER ---
+
+const OrdersPage = ({ rider, deliveries }) => {
   const [myDeliveries, setMyDeliveries] = useState(deliveries)
 
   //show delivery products
@@ -25,6 +31,88 @@ const OrdersPage = ({ deliveries }) => {
       updatedOrder,
       ...myDeliveries.slice(index + 1),
     ])
+  }
+
+  //In case the client accepted the order
+  const updateOrder = (order) => {
+    console.log('Order ', order.id, ' Delivered By : ', rider.name)
+
+    confirmAlert({
+      title: 'Commande livrée',
+      message: `Êtes-vous sûr que cette commande est livrée a ${order.name} ?`,
+      buttons: [
+        {
+          label: 'Oui',
+          onClick: async () => {
+            //Updating The Order State
+
+            await fetch('/api/orders', {
+              method: 'PATCH',
+              body: JSON.stringify({
+                id: order.id,
+                clientId: order.clientId,
+                riderId: rider?.id,
+                riderName: rider?.name,
+                orderState: 3,
+              }),
+            })
+
+            //Update The Rider Orders Array => change the order state from the array
+            await fetch('/api/riders', {
+              method: 'PATCH',
+              body: JSON.stringify({
+                riderId: rider.id,
+                orderId: order?.id,
+                date: new Date(),
+                message: 'UPDATE STATE',
+                orderState: 3,
+              }),
+            })
+          },
+        },
+        {
+          label: 'Non',
+        },
+      ],
+    })
+  }
+
+  //In case the client canceled the order
+  const refuseOrder = (order) => {
+    console.log('Refusing the Order : ', order.id)
+    confirmAlert({
+      title: 'Commande refusée',
+      message: `Êtes-vous sûr que cette commande est refusée par ${order.name} ?`,
+      buttons: [
+        {
+          label: 'Oui',
+          onClick: async () => {
+            //Delete the order from the database
+            console.log('Deleting The Order : ', order.id)
+            await fetch('/api/orders', {
+              method: 'DELETE',
+              body: JSON.stringify({
+                id: order.id,
+              }),
+            })
+
+            //Update The Rider Orders Array => delete the order from the array
+            await fetch('/api/riders', {
+              method: 'PATCH',
+              body: JSON.stringify({
+                riderId: rider.id,
+                orderId: order?.id,
+                date: new Date(),
+                message: 'DELETE ORDER',
+              }),
+            })
+          },
+        },
+        {
+          label: 'Non',
+        },
+      ],
+    })
   }
 
   return (
@@ -152,6 +240,28 @@ const OrdersPage = ({ deliveries }) => {
                         }
                       )}
                     </div>
+                  </div>
+                )}
+                {delivery?.state != 3 && (
+                  <div>
+                    <button
+                      className='mr-4 mt-4 py-1.5 px-4 text-sm bg-green-400 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-green-500 '
+                      onClick={() => updateOrder(delivery)}
+                    >
+                      Livré
+                      <span className='ml-2'>
+                        <CheckIcon />
+                      </span>
+                    </button>
+                    <button
+                      className='ml-4 mt-4 py-1.5 px-4 text-sm bg-red-400 rounded-lg font-normal text-center text-gray-900 uppercase hover:bg-red-500 '
+                      onClick={() => refuseOrder(delivery)}
+                    >
+                      Refusé
+                      <span className='ml-2'>
+                        <CloseIcon />
+                      </span>
+                    </button>
                   </div>
                 )}
               </div>

@@ -30,7 +30,7 @@ const Rider = () => {
           setRider(rider)
         })
 
-        //fetching the orders that coresponds to the myRider
+        //fetching the orders that coresponds to the rider region
         await user.functions.getAllOrders(rider?.region).then((orders) => {
           setOrders(orders)
         })
@@ -112,7 +112,9 @@ const Rider = () => {
       </nav>
       {showNotifications && <OrdersPage rider={rider} orders={orders} />}
       {showProfile && <ProfilePage rider={rider} />}
-      {showDeliveries && <DeliveriesPage deliveries={rider?.orders} />}
+      {showDeliveries && (
+        <DeliveriesPage rider={rider} deliveries={rider?.orders} />
+      )}
     </div>
   )
 }

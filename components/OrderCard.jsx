@@ -10,7 +10,7 @@ const OrderCard = () => {
   const [{ basket }, dispatch] = useStateValue()
   const [myOrder, setMyOrder] = useState([])
   const router = useRouter()
-  
+
   useEffect(() => {
     function updateBasket() {
       setMyOrder(getCookie('basket'))
@@ -30,13 +30,14 @@ const OrderCard = () => {
   return (
     <div className='flex flex-col items-center mx-auto max-h-96 h-fit bg-white border rounded py-5'>
       <h3 className='p-1 text-md'>
-        <span className='uppercase'>votre commande</span> ({myOrder?.length}
+        <span className='uppercase'>votre commande</span> (
+        {myOrder?.length + ' '}
         articles)
       </h3>
       <div className='mx-auto w-full border-gray-300 border'></div>
 
       <div className='flex flex-col overflow-y-scroll p-2'>
-        {myOrder.map(({ id, name, price, img, quantity }) => {
+        {myOrder?.map(({ id, name, price, img, quantity }) => {
           return (
             <div className='flex flex-col items-start my-2' key={id}>
               {/* Image and Title + Name */}

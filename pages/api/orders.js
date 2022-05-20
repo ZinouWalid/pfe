@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 async function addOrder(req, res) {
   try {
     // connect to the database
-    let { db,client } = await connectToDatabase()
+    let { db, client } = await connectToDatabase()
     // add the Order
     //state : 1 => ready , 2 => in progress , 3 => delivered
     await db
@@ -49,7 +49,7 @@ async function addOrder(req, res) {
 async function getOrders(req, res) {
   try {
     // connect to the database
-    let { db,client } = await connectToDatabase()
+    let { db, client } = await connectToDatabase()
     // fetch the Orders
     let Orders = await db
       .collection('orders')
@@ -73,10 +73,11 @@ async function getOrders(req, res) {
 
 async function updateOrder(req, res) {
   try {
-    const { id, clientId, riderId, riderName } = JSON.parse(req.body)
+    const { id, clientId, riderId, riderName, orderState, products } =
+      JSON.parse(req.body)
 
     // connect to the database
-    let { db,client } = await connectToDatabase()
+    let { db, client } = await connectToDatabase()
 
     // update the state of the Order
     //state : 1 => ready , 2 => in progress , 3 => delivered
@@ -84,18 +85,37 @@ async function updateOrder(req, res) {
       {
         id: id,
       },
-      { $set: { state: 2 } }
+      { $set: { state: orderState } }
     )
 
-    //notify the client
-    await db.collection('notifications').insertOne({
-      id: v4().toString(),
-      clientId: clientId,
-      riderId: riderId,
-      riderName: riderName,
-      message: 'Votre commande a été acceptée par ' + riderName,
-      date: new Date(),
-    })
+    //notify the client (switch case)
+    switch (orderState) {
+      //2nd case : the order is accepted(state : 2)
+      case 2: {
+        await db.collection('notifications').insertOne({
+          id: v4().toString(),
+          clientId: clientId,
+          riderId: riderId,
+          riderName: riderName,
+          message: 'Votre commande a été acceptée par ' + riderName,
+          date: new Date(),
+          products: products,
+        })
+      }
+
+      //3rd case : the order is delivered(state : 3)
+      case 3: {
+        await db.collection('notifications').insertOne({
+          id: v4().toString(),
+          clientId: clientId,
+          riderId: riderId,
+          riderName: riderName,
+          message: 'Votre commande a été livrée par ' + riderName,
+          date: new Date(),
+          products: products,
+        })
+      }
+    }
 
     // return a message
     client.close()
@@ -118,7 +138,7 @@ async function deleteOrder(req, res) {
     const { id } = JSON.parse(req.body)
 
     // Connecting to the database
-    let { db,client } = await connectToDatabase()
+    let { db, client } = await connectToDatabase()
 
     // Deleting the Order
     await db.collection('orders').deleteOne({

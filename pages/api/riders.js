@@ -161,13 +161,40 @@ async function updateRider(req, res) {
       { _id: false }
     )
     console.log('My Orders : ', rider.orders)
-    // update the Orders with the new Order
-    await db.collection('riders').updateOne(
-      {
-        id: delivery.riderId,
-      },
-      { $addToSet: { orders: { ...delivery } } }
-    )
+
+    if (delivery.message == 'UPDATE ORDERS') {
+      console.log('UPDATE ORDERS : ', delivery)
+
+      //Add to the orders array
+      // update the Orders with the new Order
+      await db.collection('riders').updateOne(
+        {
+          id: delivery.riderId,
+        },
+        { $addToSet: { orders: { ...delivery } } }
+      )
+    } else if (delivery.message == 'DELETE ORDER') {
+      console.log('DELETE ORDER : ', delivery)
+
+      //Delete from the orders array
+      await db.collection('riders').updateOne(
+        {
+          id: delivery.riderId,
+        },
+        { $pull: { orders: { id: delivery?.orderId } } }
+      )
+    } else if (delivery.message == 'UPDATE STATE') {
+      console.log('UPDATE STATE : ', delivery)
+
+      //Delete from the orders array
+      await db.collection('riders').updateOne(
+        {
+          id: delivery.riderId,
+          'orders.id': delivery.orderId,
+        },
+        { $set: { 'orders.$.state': delivery?.orderState } }
+      )
+    }
 
     client.close()
     res.status(200).json({ message: 'Rider Orders updated!' })
@@ -183,7 +210,7 @@ async function updateRider(req, res) {
 async function deleteRider(req, res) {
   try {
     // Connecting to the database
-    let { db,client } = await connectToDatabase()
+    let { db, client } = await connectToDatabase()
 
     // Deleting the Rider
     await db.collection('riders').deleteOne({})
