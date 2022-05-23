@@ -65,7 +65,7 @@ function Product({ product }) {
           readOnly
         />
         {/* <p className='text-gray-700'>{price}</p> */}
-        {promotion.split('%')[0] <= 0 ? (
+        {promotion?.split('%')[0] <= 0 ? (
           <CurrencyFormat
             renderText={(value) => (
               <span className='text-gray-700 mt-2'>{value + ' '}DA</span>
@@ -87,7 +87,7 @@ function Product({ product }) {
               decimalScale={2}
               value={
                 parseInt(price) -
-                (parseInt(price) * parseInt(promotion.split('%')[0])) / 100
+                (parseInt(price) * parseInt(promotion?.split('%')[0])) / 100
               }
               displayType={'text'}
               thousandSeparator={true}
