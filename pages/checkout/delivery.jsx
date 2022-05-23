@@ -22,7 +22,7 @@ const Delivery = () => {
     console.log('Status : ', status)
   }, [client])
 
-  if (user.provider == 'client-provider') {
+  if (user?.provider == 'client-provider') {
     return (
       <div className=' bg-gray-100 relative p-2 overflow-x-scroll'>
         <Header hideSearch={true} />
@@ -44,7 +44,7 @@ const Delivery = () => {
         <p className='text-4xl mb-2'>
           Vous n&apos;êtes pas authentifié avec succès.
         </p>
-        <Link href='/rider/auth/signin' passHref>
+        <Link href='/client/auth/signin' passHref>
           <p>
             Veuillez vous authentifier à nouveau,
             <a className='text-amber-500 hover:underline hover:cursor-pointer ml-[4px]'>

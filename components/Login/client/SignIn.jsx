@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import React, { useState, useEffect } from 'react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Header from '../../Header'
 import { useStateValue } from '../../../React-Context-Api/context'
@@ -9,7 +9,6 @@ import { setClientSession } from '../../../React-Context-Api/Actions/clientActio
 export default function Login({ csrfToken }) {
   const router = useRouter()
   const { data: session, status } = useSession()
-  const [mySession, setMySession] = useState(session)
 
   const [{}, dispatch] = useStateValue()
 
@@ -24,8 +23,8 @@ export default function Login({ csrfToken }) {
 
   //track the session when it changes
   useEffect(() => {
-    setMySession(session)
-  }, [session, status])
+    session?.user && dispatch(setClientSession(session?.user))
+  }, [session])
 
   const handleChange = (e) => {
     //Reset the err message to empty message
@@ -48,21 +47,20 @@ export default function Login({ csrfToken }) {
       redirect: false,
       email: values.user.email,
       password: values.user.password,
+    }).then((result) => {
+      if (result.error) {
+        setErr(result.error)
+        setValues({
+          user: {
+            email: '',
+            password: '',
+          },
+        })
+      } else {
+        //router.back()
+        router.push('/client')
+      }
     })
-
-    if (result.error) {
-      setErr(result.error)
-      setValues({
-        user: {
-          email: '',
-          password: '',
-        },
-      })
-    } else {
-      dispatch(setClientSession(mySession?.user))
-      //router.back()
-      router.push('/client')
-    }
   }
 
   return (

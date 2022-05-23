@@ -9,7 +9,6 @@ export default function SignIn({ csrfToken }) {
   const router = useRouter()
   const { data: session, status } = useSession()
   //tracking changes on session
-  const [mySession, setMySession] = useState(session)
   const [{}, dispatch] = useStateValue()
   const [values, setValues] = useState({
     user: {
@@ -20,8 +19,8 @@ export default function SignIn({ csrfToken }) {
 
   //track the session when it changes
   useEffect(() => {
-    setMySession(session)
-  }, [session, status])
+    session?.user && dispatch(setRiderSession(session?.user))
+  }, [session])
 
   //Error message when the client sign in
   const [err, setErr] = useState('')
@@ -61,13 +60,11 @@ export default function SignIn({ csrfToken }) {
       } else {
         // set some auth state
         console.log('Redirecting rider to /rider')
-
-        dispatch(setRiderSession(mySession?.user))
         router.push(`/rider`)
       }
     })
 
-    console.log('Rider signed in : ', result, mySession)
+    console.log('Rider signed in : ', result)
   }
 
   return (
