@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CategoriesFilter from '../../../components/CategoriesFilter'
 import Header from '../../../components/Header'
 import Body from '../../../components/HomeBody'
 import Footer from '../../../components/Footer'
 import * as Realm from 'realm-web'
+import { motion } from 'framer-motion'
 
 const CategoryId = ({ products }) => {
   return (
-    <div className='min-h-screen bg-gray-200 p-1'>
-      <Header  />
-      <CategoriesFilter />
-      <Body products={products} />
-      <Footer />
-    </div>
+    <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
+      <div className='min-h-screen bg-gray-200 p-1'>
+        <Header />
+        <CategoriesFilter />
+        <Body products={products} />
+        <Footer />
+      </div>
+    </motion.div>
   )
 }
 

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
-import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining'
-
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import Header from '../components/Header'
 import { useSession } from 'next-auth/react'
@@ -19,14 +17,12 @@ function Welcome() {
 
   useEffect(() => {
     console.log('-------- / page --------')
-    //setClientSession(getCookie('clientSession'))
     setRiderSession(getCookie('riderSession'))
-    //console.log('Client Session : ', clientSession)
     console.log('Rider Session : ', riderSession)
   }, [status, session])
 
   return (
-    <div className='Body'>
+    <div className='Body '>
       <Header hideSearch={true} hideBasket={true} hideOptions={true} />
       <div className='mobile'>
         <nav className='navMobile'>

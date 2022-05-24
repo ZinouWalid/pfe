@@ -6,6 +6,7 @@ import Header from '../../components/Header'
 import { useStateValue } from '../../React-Context-Api/context'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {useRouter} from 'next/router'
+import {motion} from 'framer-motion'
 
 const Checkout = () => {
   const [myBasket, setMyBasket] = useState([])
@@ -18,7 +19,12 @@ const Checkout = () => {
   }, [basket])
 
   return (
-    <div className='flex flex-col'>
+    <motion.div
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className='flex flex-col'
+    >
       <Header hideSearch={true} />
       <button
         className='text-xl font-semibold md:text-3xl mr-2 px-2 hover:bg-gray-200 rounded-full fixed top-20'
@@ -37,7 +43,7 @@ const Checkout = () => {
       {myBasket?.map((product) => (
         <CheckoutProduct key={product.id} product={product} />
       ))}
-    </div>
+    </motion.div>
   )
 }
 

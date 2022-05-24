@@ -3,6 +3,7 @@ import Rating from '@mui/material/Rating'
 import { removeFromBasket } from '../React-Context-Api/Actions/basketActions'
 import { useStateValue } from '../React-Context-Api/context'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import { motion } from 'framer-motion'
 
 function CheckoutProduct({ product }) {
   const { id, img, name, price, rating, quantity } = { ...product }
@@ -10,10 +11,17 @@ function CheckoutProduct({ product }) {
   const [{}, dispatch] = useStateValue()
 
   return (
-    <div>
+    <motion.div
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
       {quantity && (
         <div className='flex w-screen rounded bg-white p-5'>
-          <img
+          <motion.img
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
             src={img}
             alt=''
             className='h-40 object-contain hover:cursor-pointer sm:h-60'
@@ -37,7 +45,7 @@ function CheckoutProduct({ product }) {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
 

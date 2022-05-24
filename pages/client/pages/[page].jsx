@@ -5,6 +5,7 @@ import Header from '../../../components/Header'
 import CategoriesFilter from '../../../components/CategoriesFilter'
 import Pagination from '../../../components/Pagination'
 import * as Realm from 'realm-web'
+import { motion } from 'framer-motion'
 
 const Page = ({ products, currentPage, pages }) => {
   //const [pages, setPages] = useState([])
@@ -42,7 +43,7 @@ const Page = ({ products, currentPage, pages }) => {
   //}, [])
 
   return (
-    <div className='relative flex min-h-screen flex-col bg-gray-200'>
+    <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate' className='relative flex min-h-screen flex-col bg-gray-200'>
       <Header />
       <CategoriesFilter />
       <Body products={products} />
@@ -52,7 +53,7 @@ const Page = ({ products, currentPage, pages }) => {
         numberOfPages={pages?.length}
       />
       <Footer />
-    </div>
+    </motion.div>
   )
 }
 
@@ -86,9 +87,6 @@ export async function getStaticProps(context) {
         ]
       }
     })
-
-    console.log('Top 5 products : ', products?.slice(0, 5))
-    console.log('Top 5 pages : ', pages?.slice(0, 5))
   } catch (error) {
     console.error(error)
   }

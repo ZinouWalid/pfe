@@ -11,7 +11,7 @@ const CategoriesFilter = ({}) => {
         'https://zino-products-api.herokuapp.com/categories'
       )
       const data = await response.json()
-      setCategories(data)
+      setCategories(data.map((cat) => ({ ...cat, selected: false })))
     }
     fetchCategories()
   }, [])
@@ -21,7 +21,7 @@ const CategoriesFilter = ({}) => {
       <div className='fixed top-16 z-10 flex h-10 w-full items-center justify-around bg-gray-200 text-sm shadow-xl '>
         {categories.map((cat, index) =>
           cat.key == 'all' ? (
-            <div key={index}>
+            <div key={index} >
               <Link href={`/client/pages/page_1`} passHref>
                 <a className='flex '>
                   <p className='hover:cursor-pointer hover:underline'>
@@ -31,7 +31,7 @@ const CategoriesFilter = ({}) => {
               </Link>
             </div>
           ) : (
-            <div key={index}>
+            <div key={index} className={`${cat.selected && 'border'}`}  >
               <Link href={`/client/categories/${cat.key}`} passHref>
                 <a className='flex '>
                   <p className='hover:cursor-pointer hover:underline'>

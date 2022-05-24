@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { getCookie } from '../../lib/useCookie'
 import { useStateValue } from '../../React-Context-Api/context'
+import { motion } from 'framer-motion'
 
 const RiderId = ({}) => {
   const { data: session, status } = useSession()
@@ -20,12 +21,17 @@ const RiderId = ({}) => {
 
   if (riderSession?.provider === 'rider-provider') {
     return (
-      <div className='overflow-x-hidden'>
+      <motion.div
+        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className='overflow-x-hidden '
+      >
         <div>
           <Rider />
           <Footer />
         </div>
-      </div>
+      </motion.div>
     )
   } else {
     return (
@@ -35,7 +41,7 @@ const RiderId = ({}) => {
         </p>
         <Link href='/rider/auth/signin' passHref>
           <p>
-            Veuillez vous authentifier à nouveau, 
+            Veuillez vous authentifier à nouveau,
             <a className='text-amber-500 hover:underline hover:cursor-pointer ml-[4px]'>
               S&apos;identifier?
             </a>
