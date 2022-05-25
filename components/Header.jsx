@@ -98,6 +98,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
   }
 
   const handleSignOut = () => {
+    
     //deleting the rider session cookie
     removeCookie('clientSession')
 
