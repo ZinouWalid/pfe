@@ -7,6 +7,7 @@ import {
 } from '../React-Context-Api/Actions/basketActions'
 import { updateQuantity } from '../React-Context-Api/Actions/productsActions'
 import { motion } from 'framer-motion'
+import { getCookie } from '../lib/useCookie'
 
 const ProductInfo = ({ product }) => {
   const [{}, dispatch] = useStateValue()
@@ -15,7 +16,20 @@ const ProductInfo = ({ product }) => {
   }
   const [showButton, setShowButton] = useState(true)
   const [showQuantity, setShowQuantity] = useState(false)
+  //get the products quantity from basket
   const [quantity, setQuantity] = useState(1)
+
+  useEffect(() => {
+    const basket = getCookie('basket')
+    if (basket) {
+      const basketItem = basket.find((item) => item.id === id)
+      if (basketItem) {
+        setQuantity(basketItem.quantity)
+        setShowButton(false)
+        setShowQuantity(true)
+      }
+    }
+  }, [])
 
   //increase quantity function
   function increaseQuantity() {
@@ -63,6 +77,8 @@ const ProductInfo = ({ product }) => {
     },
   }
 
+  //change the product quantity if it's already in the basket
+
   return (
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       <motion.div
@@ -99,7 +115,9 @@ const ProductInfo = ({ product }) => {
                       precision={0.5}
                       readOnly
                     />
-                    <span className='ml-3 text-gray-600'>{rating}</span>
+                    <span className='ml-3 text-gray-600'>
+                      {rating?.split(' ')[0]}
+                    </span>
                   </span>
                   <span className='ml-3 flex border-l-2 border-gray-200 py-2 pl-3'>
                     <a
@@ -184,7 +202,7 @@ const ProductInfo = ({ product }) => {
                     onClick={() => {
                       setShowQuantity(true)
                       setShowButton(false)
-                      dispatch(addToBasket(product))
+                      dispatch(addToBasket({ ...product, tags: [], quantity }))
                     }}
                   >
                     Ajouter au panier

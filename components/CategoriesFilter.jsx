@@ -27,6 +27,7 @@ const CategoriesFilter = ({}) => {
       )
     }
     fetchCategories()
+    console.log('category : ', window.location.href.split('/')[5])
   }, [])
 
   const truncate = (str, n) => {

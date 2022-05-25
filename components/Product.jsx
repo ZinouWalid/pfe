@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { updateQuantity } from '../React-Context-Api/Actions/productsActions'
 import CurrencyFormat from 'react-currency-format'
 import { motion } from 'framer-motion'
+import { getCookie } from '../lib/useCookie'
 
 function Product({ product }) {
   const { id, img, name, price, rating, promotion } = { ...product }
@@ -16,6 +17,18 @@ function Product({ product }) {
   const [showButton, setShowButton] = useState(false)
   const [showQuantity, setShowQuantity] = useState(false)
   const [quantity, setQuantity] = useState(1)
+
+useEffect(() => {
+  const basket = getCookie('basket')
+  if (basket) {
+    const basketItem = basket.find((item) => item.id === id)
+    if (basketItem) {
+      setQuantity(basketItem.quantity)
+      setShowButton(false)
+      setShowQuantity(true)
+    }
+  }
+}, [])
 
   //increase quantity function
   function increaseQuantity() {

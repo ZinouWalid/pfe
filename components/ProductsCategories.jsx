@@ -29,11 +29,15 @@ const ProductsCategories = ({ categories }) => {
   return (
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       <motion.div
-        variants={stagger} className='mt-24 grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-4'>
+        variants={stagger}
+        className='mt-24 grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-4'
+      >
         {categories.map((cat) => (
           <motion.div
             variants={fadeInUP}
-            className='flex rounded bg-white p-5 shadow-xl transition duration-300 hover:scale-95 hover:bg-gray-100 md:flex-col md:justify-evenly'
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.5 }}
+            className='flex rounded bg-white p-5 shadow-xl transition duration-300 hover:scale-95 md:flex-col md:justify-evenly'
             key={cat.key}
           >
             {cat.key == 'all' ? (

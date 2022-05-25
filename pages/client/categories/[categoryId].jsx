@@ -7,12 +7,15 @@ import * as Realm from 'realm-web'
 import { motion } from 'framer-motion'
 
 const CategoryId = ({ products }) => {
+
+
   return (
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       <div className='min-h-screen bg-gray-200 p-1'>
         <Header />
         <CategoriesFilter />
         <Body products={products} />
+
         <Footer />
       </div>
     </motion.div>
@@ -40,8 +43,8 @@ export async function getStaticPaths() {
   }
 }
 
+//getting URL params
 export async function getStaticProps(context) {
-  //getting URL params
   const { params } = context
 
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
@@ -51,7 +54,10 @@ export async function getStaticProps(context) {
 
   try {
     const user = await app.logIn(credentials)
-    products = await user.functions.getProductsByCategory(params.categoryId)
+    products = await user.functions.getProductsByCategory({
+      category: params.categoryId,
+      page: 1,
+    })
   } catch (error) {
     console.error(error)
   }
