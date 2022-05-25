@@ -65,11 +65,11 @@ const reducer = (state = initialState, action) => {
         (basketItem) => basketItem.id === action.id
       )
 
-      let newBasket = [...state.basket]
+      let newBasket1 = [...state.basket]
       if (index >= 0) {
         //we found it, and remove it
 
-        newBasket.splice(index, 1)
+        newBasket1.splice(index, 1)
       } else {
         console.warn(
           `Can't remove the product (id: ${action.id}) as it's not in your basket.`
@@ -78,15 +78,15 @@ const reducer = (state = initialState, action) => {
 
       //remove old basket and add the new one to the cookie
       removeCookie('basket')
-      setCookie('basket', newBasket)
+      setCookie('basket', newBasket1)
 
-      console.log('Reducer Basket : ', JSON.stringify(newBasket))
-      return { ...state, basket: newBasket }
+      console.log('Reducer Basket : ', JSON.stringify(newBasket1))
+      return { ...state, basket: newBasket1 }
 
     case UPDATE_QUANTITY:
-      console.log('UPDATE_QUANTITY : ', basket)
+      console.log('UPDATE_QUANTITY : ', state.basket)
 
-      const basket = state.basket.map((product) =>
+      const newBasket2 = state.basket.map((product) =>
         product.id === action.payload.id && product.name === action.payload.name
           ? action.payload
           : product
@@ -94,10 +94,10 @@ const reducer = (state = initialState, action) => {
 
       //remove old basket and add the new one to the cookie
       removeCookie('basket')
-      setCookie('basket', basket)
+      setCookie('basket', newBasket2)
       return {
         ...state,
-        basket: basket,
+        basket: newBasket2,
       }
 
     case CLEAR_BASKET:

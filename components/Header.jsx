@@ -15,6 +15,7 @@ import * as Realm from 'realm-web'
 import { useStateValue } from '../React-Context-Api/context'
 import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
+import Logo from '../public/images/Logo.jpg'
 
 function Header({ hideSearch, hideBasket, hideOptions }) {
   const [suggestions, setSuggestions] = useState([])
@@ -100,12 +101,12 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
     //deleting the rider session cookie
     removeCookie('clientSession')
 
-    signOut({ callbackUrl: 'http://localhost:3000' })
+    signOut({ callbackUrl: 'http://localhost:3000/client' })
   }
 
   return (
     <nav
-      className='fixed top-0 left-0 right-0 flex justify-between h-14 w-full items-center bg-slate-900 text-white lg:h-16 z-30'
+      className='fixed top-0 left-0 right-0 flex justify-between h-14 w-full items-center bg-slate-900 text-white lg:h-16 z-30 shadow-md shadow-amber-400'
       onClick={() => setSuggestions([])}
     >
       <button
@@ -121,21 +122,18 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       )}
       {/* Logo and title */}
       {/* check if the window url contains "client" */}
-      <Link
-        href={'/'}
-        passHref
-      >
-        <a className='flex items-center p-1 mr-auto'>
+      <Link href={'/'} passHref>
+        <a className='flex items-center p-4 mr-auto'>
           <Image
-            src='https://w7.pngwing.com/pngs/49/257/png-transparent-grocery-store-shopping-bags-trolleys-supermarket-grocery-miscellaneous-food-photography.png'
+            src={Logo}
             alt=''
             width='45'
             height='45'
             priority
             objectFit='cover'
-            className='rounded-full'
+            className='rounded'
           />
-          <h2 className='flex font-semibold mr-2 hover:bg-gray-800 rounded-full p-1 uppercase text-xl'>
+          <h2 className='flex font-semibold mx-2 hover:bg-gray-800 rounded-full p-1 uppercase text-xl'>
             9odyani
           </h2>
         </a>

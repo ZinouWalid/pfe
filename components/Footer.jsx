@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import Logo from '../public/images/Logo.jpg'
 
 const Footer = () => {
   return (
@@ -12,12 +13,12 @@ const Footer = () => {
               <a className='flex justify-center space-x-3 lg:justify-start'>
                 <div className='flex items-center justify-center w-12 h-12 rounded-full dark:bg-violet-400'>
                   <Image
-                    src='https://w7.pngwing.com/pngs/49/257/png-transparent-grocery-store-shopping-bags-trolleys-supermarket-grocery-miscellaneous-food-photography.png'
+                    src={Logo}
                     alt=''
-                    width='60'
-                    height='60'
+                    width='80'
+                    height='80'
                     objectFit='cover'
-                    className='rounded-full'
+                    className='rounded'
                     priority
                   />
                 </div>

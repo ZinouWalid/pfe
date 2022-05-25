@@ -130,7 +130,7 @@ const OrdersPage = ({ rider, deliveries }) => {
                 {/* -----------Nom et Prénom----------- */}
                 <span className='text-sm font-semibold text-gray-900 dark:text-gray-800'>
                   <p className='capitalize mb-2'>
-                    {delivery?.name || delivery?.email.split('@')[0]}
+                    {delivery?.name || delivery?.email?.split('@')[0]}
                   </p>
                 </span>
                 {/* -----------Adresse----------- */}

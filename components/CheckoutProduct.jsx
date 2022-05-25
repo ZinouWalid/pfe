@@ -17,7 +17,7 @@ function CheckoutProduct({ product }) {
       animate={{ opacity: 1 }}
     >
       {quantity && (
-        <div className='flex w-screen rounded bg-white p-5'>
+        <div className='flex w-screen rounded p-5'>
           <motion.img
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
