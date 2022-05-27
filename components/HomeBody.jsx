@@ -25,7 +25,6 @@ function Body({ products }) {
     const credentials = Realm.Credentials.anonymous()
     let newProducts = []
 
-    
     try {
       const user = await app.logIn(credentials)
       newProducts = await user.functions.getProductsByCategory({
@@ -34,6 +33,7 @@ function Body({ products }) {
       })
       setMyProducts([...myProducts, ...newProducts])
       setPage(page + 1)
+      newProducts.length < 20 && setHasMore(false)
     } catch (error) {
       console.error(error)
     }
@@ -72,12 +72,14 @@ function Body({ products }) {
         next={getMoreProducts}
         hasMore={hasMore}
         loader={
-          <h3 className='text-amber-500 flex justify-center items-center mt-3'>
-            Loading...
-          </h3>
+          hasMore && (
+            <h3 className='text-amber-500 flex justify-center items-center mt-3'>
+              Loading...
+            </h3>
+          )
         }
         endMessage={
-          <div className='mx-auto my-2 w-full border border-amber-500'></div>
+          <div className='mx-auto my-2 w-3/6 border border-amber-500'></div>
         }
       >
         <motion.div
