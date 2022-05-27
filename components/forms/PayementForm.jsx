@@ -41,7 +41,7 @@ export default function PayementForm() {
     }
     updateBasketAndClient()
   }, [basket, client])
-  console.log('user : ', user)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     await fetch('/api/orders', {
