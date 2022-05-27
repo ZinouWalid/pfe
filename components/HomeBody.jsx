@@ -1,12 +1,43 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Product from './Product'
 import ImagesSlider from './ImagesSlider'
 import { useStateValue } from '../React-Context-Api/context'
 import { motion } from 'framer-motion'
+import * as Realm from 'realm-web'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 function Body({ products }) {
   const [{ filteredProducts }, dispatch] = useStateValue()
-  
+
+  //implement infinite scroll
+  const [myProducts, setMyProducts] = useState(products)
+  const [hasMore, setHasMore] = useState(true)
+  const [page, setPage] = useState(1)
+
+  //track changes on products
+  useEffect(() => {
+    setMyProducts(products)
+  }, [products])
+
+  const getMoreProducts = async () => {
+    const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
+    const app = new Realm.App({ id: REALM_APP_ID })
+    const credentials = Realm.Credentials.anonymous()
+    let newProducts = []
+
+    
+    try {
+      const user = await app.logIn(credentials)
+      newProducts = await user.functions.getProductsByCategory({
+        category: products[0].category,
+        page: page + 1,
+      })
+      setMyProducts([...myProducts, ...newProducts])
+      setPage(page + 1)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const easing = [0.6, -0.05, 0.01, 1]
   const fadeInUP = {
     initial: {
@@ -36,22 +67,30 @@ function Body({ products }) {
       <ImagesSlider products={products.slice(0, 5)} />
 
       {/* Products */}
-      <motion.div
-        variants={stagger}
-        className='mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5 transition ease-in-out duration-500'
+      <InfiniteScroll
+        dataLength={myProducts.length}
+        next={getMoreProducts}
+        hasMore={hasMore}
+        loader={<h3> Loading...</h3>}
+        endMessage={<h4>Nothing more to show</h4>}
       >
-        {filteredProducts?.length > 0
-          ? filteredProducts.map((product) => (
-              <motion.div key={product.id} variants={fadeInUP}>
-                <Product key={product.id} product={product} />
-              </motion.div>
-            ))
-          : products.map((product) => (
-              <motion.div key={product.id} variants={fadeInUP}>
-                <Product key={product.id} product={product} />
-              </motion.div>
-            ))}
-      </motion.div>
+        <motion.div
+          variants={stagger}
+          className='mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5 transition ease-in-out duration-500'
+        >
+          {filteredProducts?.length > 0
+            ? filteredProducts.map((product) => (
+                <motion.div key={product.id} variants={fadeInUP}>
+                  <Product key={product.id} product={product} />
+                </motion.div>
+              ))
+            : myProducts.map((product) => (
+                <motion.div key={product.id} variants={fadeInUP}>
+                  <Product key={product.id} product={product} />
+                </motion.div>
+              ))}
+        </motion.div>
+      </InfiniteScroll>
     </motion.div>
   )
 }
