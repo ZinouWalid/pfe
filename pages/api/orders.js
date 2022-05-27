@@ -46,6 +46,7 @@ async function addOrder(req, res) {
   }
 }
 
+
 async function getOrders(req, res) {
   try {
     // connect to the database
