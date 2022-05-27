@@ -48,6 +48,7 @@ export default function PayementForm() {
       method: 'POST',
       body: JSON.stringify({
         date: new Date(),
+        clientId: user.id,
         ...values,
         region: values.region.name,
         products: myOrder,
