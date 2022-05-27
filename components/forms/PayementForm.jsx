@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useStateValue } from '../../React-Context-Api/context'
-import { City, State } from 'country-state-city'
 import CurrencyFormat from 'react-currency-format'
 import { getBasketTotal } from '../../React-Context-Api/reducer'
 import { getCookie } from '../../lib/useCookie'
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { clearBasket } from '../../React-Context-Api/Actions/basketActions'
+import * as Realm from 'realm-web'
 
 export default function PayementForm() {
-  const { data: session } = useSession()
   const [{ basket, client }, dispatch] = useStateValue()
   const router = useRouter()
   const [user, setUser] = useState({})
-  const [deliveryCoast, setDeliveryCoast] = useState(0)
-  
+
   //we use an object that contains all variables as a global state instead of declaring each variable individualy which a better approach
   const initialValues = {
     clientId: '',
@@ -22,8 +19,8 @@ export default function PayementForm() {
     phoneNumber: '',
     email: '',
     address: '',
-    region: { name: '', lat: 0, lon: 0 },
-    city: { name: '', lat: 0, lon: 0 },
+    region: '',
+    city: { name: '', price: 0 },
   }
   const [values, setValues] = useState(initialValues)
 
@@ -44,7 +41,7 @@ export default function PayementForm() {
     }
     updateBasketAndClient()
   }, [basket, client])
-
+  console.log('user : ', user)
   const handleSubmit = async (e) => {
     e.preventDefault()
     await fetch('/api/orders', {
@@ -52,9 +49,10 @@ export default function PayementForm() {
       body: JSON.stringify({
         date: new Date(),
         ...values,
+        region: values.region.name,
         products: myOrder,
-        coast: deliveryCoast,
-        totalAmount: parseInt(getBasketTotal(myOrder) || 0) + deliveryCoast,
+        coast: values.city.price,
+        totalAmount: parseInt(getBasketTotal(myOrder) || 0) + values.city.price,
       }),
     })
     //clear the basket after validating the Order
@@ -66,15 +64,12 @@ export default function PayementForm() {
   }
 
   const handleInputChange = (e) => {
+    console.log('values : ', values)
     const { name, value } = e.target
     if (name === 'city') {
       setValues({
         ...values,
-        city: {
-          name: JSON.parse(value).name,
-          lat: JSON.parse(value).latitude,
-          lon: JSON.parse(value).longitude,
-        },
+        city: { name: JSON.parse(value).name, price: JSON.parse(value).price },
       })
     } else if (name === 'region') {
       console.log('region : ', JSON.parse(value))
@@ -82,9 +77,8 @@ export default function PayementForm() {
         ...values,
         region: {
           name: JSON.parse(value).name,
-          isoCode: JSON.parse(value).isoCode,
-          lat: JSON.parse(value).latitude,
-          lon: JSON.parse(value).longitude,
+          isoCode: JSON.parse(value).id,
+          cities: JSON.parse(value).cities,
         },
       })
     } else {
@@ -95,30 +89,26 @@ export default function PayementForm() {
     }
   }
 
-  //calculer la distance entre le centre et la distination
-  function distance(lat, lon) {
-    const lat1 = values.region.lat
-    const lon1 = values.region.lon
-    const p = 0.017453292519943295 // Math.PI / 180
-    const c = Math.cos
-    const a =
-      0.5 -
-      c((lat - lat1) * p) / 2 +
-      (c(lat1 * p) * c(lat * p) * (1 - c((lon - lon1) * p))) / 2
-
-    return 12742 * Math.asin(Math.sqrt(a)) // 2 * R; R = 6371 km
-  }
-
-  //calculer le montant de la livraison
-  const deliveryPrice = (distance) => {
-    return distance > 0 ? Math.round(Math.floor(distance * 10) / 10) * 10 : 200
-  }
+  const [regions, setRegions] = useState([])
 
   useEffect(() => {
-    const { lat, lon } = values.city
-    if (lat != 0 && lon != 0)
-      setDeliveryCoast(deliveryPrice(distance(lat, lon)))
-  }, [values.city])
+    const fetchRegions = async () => {
+      //setSliderProducts(products?.map((product) => product.img))
+      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
+      const app = new Realm.App({ id: REALM_APP_ID })
+      const credentials = Realm.Credentials.anonymous()
+      let newRegions = []
+
+      try {
+        const user = await app.logIn(credentials)
+        newRegions = await user.functions.getAllRegions()
+        setRegions(newRegions)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchRegions()
+  }, [])
 
   return (
     <div className='flex bg-gray-100 m-auto min-w-3/5 mb-4'>
@@ -221,7 +211,7 @@ export default function PayementForm() {
             </label>
             <select
               name='region'
-              value={values.region?.name}
+              value={values.region}
               onChange={(e) => handleInputChange(e)}
               className={
                 'text-primary mb-4 w-full rounded-md border p-2 text-sm outline-none transition duration-150 ease-in-out'
@@ -233,12 +223,12 @@ export default function PayementForm() {
                   ? values.region.isoCode + ' - ' + values.region?.name
                   : 'Sélectionner'}
               </option>
-              {State.getStatesOfCountry('DZ').map((state) => (
+              {regions.map((state) => (
                 <option
                   value={JSON.stringify(state)}
                   key={state.id || Math.random() * 1000}
                 >
-                  {state.isoCode + ' - ' + state.name}
+                  {state.id + ' - ' + state.name}
                 </option>
               ))}
             </select>
@@ -259,16 +249,14 @@ export default function PayementForm() {
               <option value={null}>
                 {values.city?.name ? values.city?.name : 'Sélectionner'}
               </option>
-              {City.getCitiesOfState('DZ', values.region?.isoCode).map(
-                (city) => (
-                  <option
-                    value={JSON.stringify(city)}
-                    key={city.id || Math.random() * 1000}
-                  >
-                    {city.name}
-                  </option>
-                )
-              )}
+              {values?.region.cities?.map((city) => (
+                <option
+                  value={JSON.stringify(city)}
+                  key={city.id || Math.random() * 1000}
+                >
+                  {city.name}
+                </option>
+              ))}
             </select>
 
             {/* --------------PAYEMENT-------------- */}
@@ -313,7 +301,7 @@ export default function PayementForm() {
                         </div>
                         <p className='flex justify-between'>
                           Montant de la livraison
-                          <strong>{deliveryCoast} DA</strong>
+                          <strong>{values.city.price} DA</strong>
                         </p>
                         <div className='mx-auto my-2 w-full border border-gray-500'></div>
                         <div className='flex justify-between'>
@@ -329,7 +317,7 @@ export default function PayementForm() {
                               )}
                               decimalScale={2}
                               value={parseInt(
-                                getBasketTotal(myOrder) + deliveryCoast
+                                getBasketTotal(myOrder) + values?.city.price
                               )}
                               displayType={'text'}
                               thousandSeparator={true}

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Slider from 'react-slick'
+import * as Realm from 'realm-web'
+import Link from 'next/link'
 
 function ImagesSlider({ products }) {
   const [sliderProducts, setSliderProducts] = useState([])
@@ -13,30 +15,43 @@ function ImagesSlider({ products }) {
     slidesToScroll: 1,
     autoplay: true,
   }
-  /*     products?.map((product) => product.img) || [
-      'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/40/8972/2.jpg?4674',
-      'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/26/1943/1.jpg?3356',
-      'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/11/0482/1.jpg?9952',
-      'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/89/9702/1.jpg?0766',
-      'https://dz.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/62/9903/1.jpg?8975',
-    ]
-*/
 
   useEffect(() => {
-    setSliderProducts(products?.map((product) => product.img))
-  }, [products])
+    const fetchAds = async () => {
+      //setSliderProducts(products?.map((product) => product.img))
+      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
+      const app = new Realm.App({ id: REALM_APP_ID })
+      const credentials = Realm.Credentials.anonymous()
+      let ads = []
+
+      try {
+        const user = await app.logIn(credentials)
+        ads = await user.functions.getAllActiveAds()
+        setSliderProducts(ads)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchAds()
+  }, [])
 
   return (
-    <div className='mt-12 lg:mt-24 flex h-5/6 w-full items-center justify-center rounded bg-white shadow-lg'>
+    <div className='overflow-hidden mt-12 lg:mt-24 flex h-[80vh] w-full items-center justify-center rounded bg-gradient-to-b from-white to-gray-200 '>
       {/*Images Slider*/}
 
-      <Slider {...settings} className='w-5/6 overflow-x-visible'>
+      <Slider {...settings} className=' w-5/6 overflow-hidden'>
         {sliderProducts?.map((product, index) => (
-          <div key={index} className='flex'>
-            <img src={product} className='h-full rounded ' />
-          </div>
+          <Link key={index} href={product?.adLink} passHref>
+            <a className='flex hover:cursor-pointer '>
+              <img
+                src={product?.img}
+                className='h-[80vh] mb-8 mt-6 rounded object-contain w-full '
+              />
+            </a>
+          </Link>
         ))}
       </Slider>
+      <div className='h-14 bg-gradient-to-b from-cyan-500 to-blue-500'></div>
     </div>
   )
 }

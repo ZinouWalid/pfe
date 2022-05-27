@@ -19,7 +19,7 @@ const CategoriesFilter = ({}) => {
               cat.key == window.location.href.split('/')[5] //If the category is selected
                 ? true
                 : cat.key == 'all' &&
-                  window.location.href.split('/')[5].includes('page_')
+                  window?.location.href?.split('/')[5].includes('page_')
                 ? true
                 : false,
           }

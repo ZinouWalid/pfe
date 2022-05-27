@@ -71,12 +71,18 @@ function Body({ products }) {
         dataLength={myProducts.length}
         next={getMoreProducts}
         hasMore={hasMore}
-        loader={<h3> Loading...</h3>}
-        endMessage={<h4>Nothing more to show</h4>}
+        loader={
+          <h3 className='text-amber-500 flex justify-center items-center mt-3'>
+            Loading...
+          </h3>
+        }
+        endMessage={
+          <div className='mx-auto my-2 w-full border border-amber-500'></div>
+        }
       >
         <motion.div
           variants={stagger}
-          className='mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5 transition ease-in-out duration-500'
+          className='mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5 transition ease-in-out duration-500'
         >
           {filteredProducts?.length > 0
             ? filteredProducts.map((product) => (

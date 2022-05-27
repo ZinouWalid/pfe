@@ -42,7 +42,7 @@ const Delivery = () => {
     return (
       <div className='flex flex-col justify-between p-8 items-center h-screen'>
         <p className='text-4xl mb-2'>
-          Vous n&apos;êtes pas authentifié avec succès.
+          Vous n&apos;êtes pas authentifié.
         </p>
         <Link href='/client/auth/signin' passHref>
           <p>
