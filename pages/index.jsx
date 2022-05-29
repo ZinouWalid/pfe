@@ -10,6 +10,7 @@ export default function Home() {
     <>
       <Head>
         <title>9odyani</title>
+        <link rel='shortcut icon' href='/images/Logo.jpg' />
       </Head>
       <Layout>
         <Hero />
