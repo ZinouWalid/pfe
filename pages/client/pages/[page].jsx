@@ -42,6 +42,19 @@ const Page = ({ products, currentPage, pages }) => {
   //  fetchPages()
   //}, [])
 
+const [categories, setCategories] = useState([])
+
+useEffect(() => {
+  const fetchCategories = async () => {
+    const response = await fetch(
+      'http://zino-products-api.herokuapp.com/categories'
+    )
+    const data = await response.json()
+    setCategories(data)
+  }
+  fetchCategories()
+}, [])
+
   return (
     <motion.div
       exit={{ opacity: 0 }}
@@ -50,7 +63,7 @@ const Page = ({ products, currentPage, pages }) => {
       className='relative flex min-h-screen flex-col bg-gray-200'
     >
       <Header />
-      <CategoriesFilter />
+      <CategoriesFilter categories={categories}/>
       <Body products={products} />
       <Pagination
         pages={pages}

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 const CategoriesFilter = ({ categories }) => {
-  const [myCategories, setMyCategories] = useState([])
+  const [myCategories, setMyCategories] = useState(categories)
   useEffect(() => {
-  setMyCategories(categories)
+    setMyCategories(categories)
   }, [categories])
-  
+
   //
   // //Fetch the categories
   // useEffect(() => {
@@ -41,7 +41,7 @@ const CategoriesFilter = ({ categories }) => {
   return (
     <div className='hidden lg:block mb-12'>
       <div className='transition duration-500 fixed top-16 z-10 flex h-10 w-full items-center justify-around bg-gray-200 text-sm shadow-xl '>
-        {myCategories.map((cat, index) =>
+        {myCategories?.map((cat, index) =>
           cat.key == 'all' ? (
             <div
               key={index}

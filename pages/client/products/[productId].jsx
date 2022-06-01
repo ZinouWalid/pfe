@@ -17,7 +17,7 @@ const ProductId = ({ product }) => {
       animate={{ opacity: 1 }}
     >
       <div className='relative flex min-h-screen flex-col bg-gray-100 '>
-        <Header hideSearch={true} />
+        <Header />
         <button
           className='text-xl font-semibold md:text-3xl mr-2 px-2 hover:bg-gray-200 rounded-full fixed top-20'
           onClick={() => router.back()}
