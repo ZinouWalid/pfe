@@ -46,7 +46,6 @@ async function addOrder(req, res) {
   }
 }
 
-
 async function getOrders(req, res) {
   try {
     // connect to the database
@@ -102,6 +101,7 @@ async function updateOrder(req, res) {
           date: new Date(),
           products: products,
         })
+        break
       }
 
       //3rd case : the order is delivered(state : 3)
@@ -115,6 +115,7 @@ async function updateOrder(req, res) {
           date: new Date(),
           products: products,
         })
+        break
       }
     }
 

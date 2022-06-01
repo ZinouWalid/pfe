@@ -35,7 +35,7 @@ const ProfilePage = ({ rider }) => {
                     <span className='text-xl font-bold block tracking-wide '>
                       {rider?.orders?.length || 0}
                     </span>
-                    <span className='text-sm'>Commandes</span>
+                    <span className='text-sm'>Commandes livrées</span>
                   </div>
                 </div>
               </div>

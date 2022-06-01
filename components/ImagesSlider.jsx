@@ -36,7 +36,7 @@ function ImagesSlider({ products }) {
   }, [])
 
   return (
-    <div className='overflow-hidden mt-12 lg:mt-24 flex h-[80vh] w-full items-center justify-center rounded bg-gradient-to-b from-white to-gray-200 '>
+    <div className='overflow-hidden lg:mt-12 flex h-[80vh] w-full items-center justify-center rounded bg-gradient-to-b from-white to-gray-200 '>
       {/*Images Slider*/}
 
       <Slider {...settings} className=' w-5/6 overflow-hidden'>

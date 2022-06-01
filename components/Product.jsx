@@ -18,17 +18,17 @@ function Product({ product }) {
   const [showQuantity, setShowQuantity] = useState(false)
   const [quantity, setQuantity] = useState(1)
 
-useEffect(() => {
-  const basket = getCookie('basket')
-  if (basket) {
-    const basketItem = basket.find((item) => item.id === id)
-    if (basketItem) {
-      setQuantity(basketItem.quantity)
-      setShowButton(false)
-      setShowQuantity(true)
+  useEffect(() => {
+    const basket = getCookie('basket')
+    if (basket) {
+      const basketItem = basket.find((item) => item.id === id)
+      if (basketItem) {
+        setQuantity(basketItem.quantity)
+        setShowButton(false)
+        setShowQuantity(true)
+      }
     }
-  }
-}, [])
+  }, [])
 
   //increase quantity function
   function increaseQuantity() {
@@ -87,7 +87,7 @@ useEffect(() => {
           precision={0.1}
           readOnly
         />
-        {promotion?.split('%')[0] <= 0 ? (
+        {parseInt(promotion?.split('%')[0]) <= 0 ? (
           <CurrencyFormat
             renderText={(value) => (
               <span className='text-gray-700 mt-2'>{value + ' '}DA</span>
@@ -106,10 +106,12 @@ useEffect(() => {
                 </span>
               )}
               decimalScale={2}
-              value={
-                parseInt(price) -
-                (parseInt(price) * parseInt(promotion?.split('%')[0])) / 100
-              }
+              value={Math.floor(
+                parseInt(price?.split(' ')[0]) -
+                  (parseInt(price?.split(' ')[0]) *
+                    parseInt(promotion?.split('%')[0])) /
+                    100
+              )}
               displayType={'text'}
               thousandSeparator={true}
             />

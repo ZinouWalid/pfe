@@ -19,7 +19,7 @@ import Logo from '../public/images/Logo.jpg'
 
 function Header({ hideSearch, hideBasket, hideOptions }) {
   const [suggestions, setSuggestions] = useState([])
-  const [{ basket, client }, dispatch] = useStateValue()
+  const [{ basket, client }, dispatch] = [...useStateValue()] || []
   const [searchTerm, setSearchTerm] = useState('')
   //logged user session
   const [user, setUser] = useState({})
@@ -98,7 +98,6 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
   }
 
   const handleSignOut = () => {
-    
     //deleting the rider session cookie
     removeCookie('clientSession')
 
@@ -259,7 +258,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
                 >
                   <Link href='' passHref>
                     <button
-                      className='capitalize text-sm p-3'
+                      className='capitalize text-sm p-3 text-red-500'
                       onClick={() => handleSignOut()}
                     >
                       <span className='mr-2'>

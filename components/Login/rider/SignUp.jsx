@@ -53,7 +53,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className='flex mt-16'>
+    <div className='flex mt-10 bg-slate-900/20 h-screen'>
       <Header hideSearch={true} hideBasket={true} hideOptions={true} />
 
       <div className='mt-8 border-slate-700 m-auto w-full max-w-md rounded-lg border bg-white px-1'>

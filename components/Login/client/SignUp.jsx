@@ -12,6 +12,8 @@ export default function Register() {
   }
 
   const [values, setValues] = useState(initialValues)
+  //Error message when the client sign up
+  const [err, setErr] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -22,18 +24,21 @@ export default function Register() {
         date: new Date(),
         ...values,
       }),
-    }).then((response) => {
-      console.log('response returned : ', response.json())
-      if (response.status === 200) {
-        //return to auth page'
-        router.push('/client/auth/signin')
+    }).then((result) => {
+      if (result.error) {
+        setErr(result.error)
+        setValues(initialValues)
       } else {
-        alert("error : nom d'utilisateur ou l'email existe déjà")
+        //router.back()
+        router.push('/client/auth/signin')
       }
     })
   }
 
   const handleInputChange = (e) => {
+    //Reset the err message to empty message
+    setErr('')
+
     const { name, value } = e.target
     setValues({
       ...values,
@@ -42,11 +47,16 @@ export default function Register() {
   }
 
   return (
-    <div className='flex mt-16'>
+    <div className='flex mt-10 bg-slate-900/20 h-screen'>
       <Header hideSearch={true} hideBasket={true} hideOptions={true} />
       <div className='mt-16 border-slate-700 m-auto w-full max-w-md rounded-lg border bg-white px-1'>
         <div className='text-primary m-6'>
           <div className='mt-3 flex items-center justify-center'>
+            {err && (
+              <p className='text-red-500 font-medium text-sm bg-red-200 p-1 rounded'>
+                {err}
+              </p>
+            )}
             <h1 className='text-primary mt-4 mb-2 text-2xl font-medium'>
               Créez votre compte
             </h1>

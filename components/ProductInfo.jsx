@@ -14,6 +14,7 @@ const ProductInfo = ({ product }) => {
   const { id, img, name, price, rating, productQuantity, promotion } = {
     ...product,
   }
+
   const [showButton, setShowButton] = useState(true)
   const [showQuantity, setShowQuantity] = useState(false)
   //get the products quantity from basket
@@ -180,10 +181,12 @@ const ProductInfo = ({ product }) => {
                 ) : (
                   <div className='flex flex-col '>
                     <span className='title-font text-2xl font-medium text-gray-900 '>
-                      {parseInt(price) -
-                        (parseInt(price) *
-                          parseInt(promotion.split('%')[0] + 10)) /
-                          100}{' '}
+                      {Math.floor(
+                        parseInt(price?.split(' ')[0]) -
+                          (parseInt(price?.split(' ')[0]) *
+                            parseInt(promotion?.split('%')[0])) /
+                            100
+                      )}{' '}
                       DA
                     </span>
                     <span className='flex items-center font-medium text-xs mt-2'>

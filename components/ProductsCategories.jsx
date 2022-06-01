@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 const ProductsCategories = ({ categories }) => {
+  const [myCategories, setMyCategories] = useState(categories)
+
+  useEffect(() => {
+    setMyCategories(categories)
+  }, [categories])
+
   const easing = [0.6, -0.05, 0.01, 1]
   const fadeInUP = {
     initial: {
@@ -30,9 +36,9 @@ const ProductsCategories = ({ categories }) => {
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       <motion.div
         variants={stagger}
-        className='mt-24 grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-4'
+        className={`mt-2 grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-4`}
       >
-        {categories.map((cat) => (
+        {myCategories.map((cat) => (
           <motion.div
             variants={fadeInUP}
             whileHover={{ scale: 1.05 }}
@@ -40,35 +46,35 @@ const ProductsCategories = ({ categories }) => {
             className='flex rounded bg-white p-5 shadow-xl transition duration-300 hover:scale-95 md:flex-col md:justify-evenly'
             key={cat.key}
           >
-            {cat.key == 'all' ? (
+            <p className='font-medium text-nxl text-center'>{cat.value}</p>
+
+            {cat.category == 'all' ? (
               <Link href={`/client/pages/page_1`} passHref>
                 <a>
                   <motion.img
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    src={cat.imgs[0]}
+                    src={cat.img}
                     alt=''
-                    className='mr-2 h-80 object-contain hover:cursor-pointer'
+                    className='mr-2 max-h-80 object-contain hover:cursor-pointer'
                   />
                 </a>
               </Link>
             ) : (
-              <Link href={`/client/categories/${cat.key}`} passHref>
+              <Link href={`/client/categories${cat.url}`} passHref>
                 <a>
-                  <img
-                    //select a random image from the array
-                    src={cat.imgs[Math.floor(Math.random() * cat.imgs.length)]}
+                  <motion.img
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    src={cat.img}
                     alt=''
-                    className='mr-2 h-80 object-contain hover:cursor-pointer'
+                    className='mr-2 max-h-80 object-contain hover:cursor-pointer'
                   />
                 </a>
               </Link>
             )}
-
-            <div>
-              <p>{cat.value}</p>
-            </div>
           </motion.div>
         ))}
       </motion.div>

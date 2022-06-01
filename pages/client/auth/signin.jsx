@@ -12,7 +12,7 @@ const Signin = ({ csrfToken }) => {
       exit={{ opacity: 0 }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className='py-2 bg-gray-100 min-h-screen min-w-screen bg-register-background  bg-no-repeat bg-cover'
+      className='py-2  min-h-screen min-w-screen bg-register-background  bg-no-repeat bg-cover'
     >
       <button
         className='text-xl font-semibold md:text-3xl mr-2 px-2 hover:bg-gray-200 rounded-full fixed top-20'

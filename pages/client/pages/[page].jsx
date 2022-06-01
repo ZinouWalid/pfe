@@ -43,7 +43,12 @@ const Page = ({ products, currentPage, pages }) => {
   //}, [])
 
   return (
-    <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate' className='relative flex min-h-screen flex-col bg-gray-200'>
+    <motion.div
+      exit={{ opacity: 0 }}
+      initial='initial'
+      animate='animate'
+      className='relative flex min-h-screen flex-col bg-gray-200'
+    >
       <Header />
       <CategoriesFilter />
       <Body products={products} />
@@ -72,7 +77,7 @@ export async function getStaticProps(context) {
     const user = await app.logIn(credentials)
     products = await user.functions.getPageProducts({
       pageNumber: params.page.split('_')[1],
-      nPerPage: 30,
+      nPerPage: 10,
     })
 
     //Fetch the pages
@@ -90,6 +95,8 @@ export async function getStaticProps(context) {
   } catch (error) {
     console.error(error)
   }
+  //send first 10 products
+
   return {
     props: { products, currentPage: params.page.split('_')[1], pages },
   }

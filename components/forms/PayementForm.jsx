@@ -8,13 +8,13 @@ import { clearBasket } from '../../React-Context-Api/Actions/basketActions'
 import * as Realm from 'realm-web'
 
 export default function PayementForm() {
-  const [{ basket, client }, dispatch] = useStateValue()
+  const [{ basket, client }, dispatch] = [...useStateValue()] || []
   const router = useRouter()
   const [user, setUser] = useState({})
 
   //we use an object that contains all variables as a global state instead of declaring each variable individualy which a better approach
   const initialValues = {
-    clientId: '',
+    clientId: user?.id,
     name: '',
     phoneNumber: '',
     email: '',
@@ -28,7 +28,6 @@ export default function PayementForm() {
 
   //Get the updated Basket and Client
   useEffect(() => {
-    console.log(user, values)
     function updateBasketAndClient() {
       setMyOrder(getCookie('basket'))
       setUser(getCookie('clientSession'))
@@ -41,14 +40,17 @@ export default function PayementForm() {
     }
     updateBasketAndClient()
   }, [basket, client])
-
+  console.log('user : ', user)
+  console.log('values : ', values)
   const handleSubmit = async (e) => {
     e.preventDefault()
     await fetch('/api/orders', {
       method: 'POST',
       body: JSON.stringify({
         date: new Date(),
-        clientId: user.id,
+        clientId: user?.id,
+        email: user?.name,
+        email: user?.email,
         ...values,
         region: values.region.name,
         products: myOrder,
