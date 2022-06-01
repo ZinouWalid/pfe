@@ -63,15 +63,16 @@ const CategoryId = () => {
     console.log('categories : ', categories)
     fetchCategoriesAndProducts()
   }, [])
-  //console.log('products : ', products)
 
   return (
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       <div className='min-h-screen bg-gray-200 p-1'>
         <Header />
         <CategoriesFilter categories={categories} />
-        {!products && <ImagesSlider />}
-        {!products && <ProductsCategories categories={categories} />}
+        {products.length == 0 && <ImagesSlider />}
+        {categories.length > 1 && (
+          <ProductsCategories categories={categories} />
+        )}
         {products?.length > 0 && <Body products={products} />}
 
         <Footer />

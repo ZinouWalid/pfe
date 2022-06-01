@@ -14,7 +14,7 @@ export default function PayementForm() {
 
   //we use an object that contains all variables as a global state instead of declaring each variable individualy which a better approach
   const initialValues = {
-    clientId: user?.id,
+    clientId: '',
     name: '',
     phoneNumber: '',
     email: '',
@@ -31,17 +31,12 @@ export default function PayementForm() {
     function updateBasketAndClient() {
       setMyOrder(getCookie('basket'))
       setUser(getCookie('clientSession'))
-      setValues({
-        ...values,
-        clientId: user?.id,
-        name: user?.name,
-        email: user?.email,
-      })
     }
     updateBasketAndClient()
   }, [basket, client])
+
   console.log('user : ', user)
-  console.log('values : ', values)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     await fetch('/api/orders', {
@@ -49,7 +44,7 @@ export default function PayementForm() {
       body: JSON.stringify({
         date: new Date(),
         clientId: user?.id,
-        email: user?.name,
+        name: user?.name,
         email: user?.email,
         ...values,
         region: values.region.name,
@@ -83,6 +78,9 @@ export default function PayementForm() {
           isoCode: JSON.parse(value).id,
           cities: JSON.parse(value).cities,
         },
+        clientId: user?.id,
+        name: user?.name,
+        email: user?.email,
       })
     } else {
       setValues({

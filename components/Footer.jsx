@@ -10,8 +10,8 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 
 const Footer = () => {
   return (
-    <div className='bg-slate-900 h-96 mt-10'>
-      <footer className='px-4 divide-y dark:bg-coolGray-800 text-white'>
+    <div className='bg-slate-900 min-h-96 mt-10 min-w-screen'>
+      <footer className='px-4 divide-y dark:bg-coolGray-800 text-gray-200'>
         <div className='container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0'>
           <div className='lg:w-1/3'>
             <Link href={'/'} passHref>
@@ -33,68 +33,56 @@ const Footer = () => {
               </a>
             </Link>
           </div>
-          <div className='grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4'>
+          <div className='grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 md:grid-cols-4'>
             <div className='space-y-3 '>
-              <h3 className='tracking-wide uppercase dark:text-coolGray-50 hover:text-amber-300 hover:cursor-pointer'>
+              <h3 className='tracking-wide uppercase font-semibold '>
                 Produits
               </h3>
               <ul className='space-y-1'>
                 <li>
                   <Link
-                    rel='noopener noreferrer'
                     href='https://zino-products-api.herokuapp.com/products'
-                    className='hover:underline'
                     passHref
                   >
-                    <a className='hover:underline'>API Public</a>
+                    <a className='hover:text-amber-300'>API Public</a>
                   </Link>
                 </li>
                 <li>
                   <Link href='/client/pages/page_1' passHref>
-                    <a className='hover:underline'>Liste des produits</a>
+                    <a className='hover:text-amber-300'>Liste des produits</a>
                   </Link>
                 </li>
                 <li>
                   <Link href='/client' passHref>
-                    <a className='hover:underline'>Liste des catégories</a>
+                    <a className='hover:text-amber-300'>Liste des catégories</a>
                   </Link>
                 </li>
                 <li>
                   <Link href='/client/pages/page_1' passHref>
-                    <a className='hover:underline'>Chercher un produit</a>
+                    <a className='hover:text-amber-300'>Chercher un produit</a>
                   </Link>
                 </li>
               </ul>
             </div>
             <div className='space-y-3'>
-              <h3 className='tracking-wide uppercase dark:text-coolGray-50 hover:text-amber-300 hover:cursor-pointer'>
-                Société
-              </h3>
+              <h3 className='tracking-wide uppercase font-semibold'>Société</h3>
               <ul className='space-y-1'>
                 <li>
-                  <Link
-                    rel='noopener noreferrer'
-                    href='#'
-                    className='hover:underline'
-                  >
-                    Confidentialité
+                  <Link href='#' passHref>
+                    <a className='hover:text-amber-300'>Confidentialité</a>
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    rel='noopener noreferrer'
-                    href='#'
-                    className='hover:underline'
-                  >
-                    Conditions d&apos;utilisation
+                  <Link href='#' passHref>
+                    <a className='hover:text-amber-300'>
+                      Conditions d&apos;utilisation
+                    </a>
                   </Link>
                 </li>
               </ul>
             </div>
             <div className='space-y-3'>
-              <h3 className='uppercase dark:text-coolGray-50 hover:text-amber-300 hover:cursor-pointer'>
-                Développeurs
-              </h3>
+              <h3 className='uppercase font-semibold'>Développeurs</h3>
               <ul className='space-y-1'>
                 <li className='flex '>
                   <Link
@@ -149,9 +137,7 @@ const Footer = () => {
               </ul>
             </div>
             <div className='space-y-3'>
-              <div className='uppercase dark:text-coolGray-50 hover:text-amber-300 hover:cursor-pointer'>
-                Réseaux sociaux
-              </div>
+              <div className='uppercase font-semibold  '>Retrouve-nous sur</div>
               <div className='flex justify-start space-x-3'>
                 <Link href='#' title='Facebook' passHref>
                   <a className='flex items-center hover:text-amber-300'>
@@ -170,10 +156,53 @@ const Footer = () => {
                 </Link>
               </div>
             </div>
+            <div className='space-y-3'>
+              <h3 className='tracking-wide uppercase font-semibold'>
+                commandes
+              </h3>
+              <ul className='space-y-1'>
+                <li>
+                  <Link
+                    href='https://zino-products-api.herokuapp.com/categories'
+                    passHref
+                  >
+                    <a className='hover:text-amber-300'>API Public</a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href='/aide' passHref>
+                    <a className='hover:text-amber-300'>Annuler une commande</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className='space-y-3'>
+              <h3 className='tracking-wide uppercase font-semibold'>
+                mode de paiement
+              </h3>
+              <ul className='space-y-1'>
+                <li>
+                  <Link href='/aide' passHref>
+                    <a className='hover:text-amber-300 flex itemd-center'>
+                      <p className='mr-2'>Paiement à la livraison</p>
+                      <Image
+                        src='https://cdn2.iconfinder.com/data/icons/delivery-and-logistic/64/Cash_on_Delivery-send-delivery-give_money-4-512.png'
+                        alt=''
+                        width='20'
+                        height='20'
+                        objectFit='cover'
+                        className='rounded bg-white '
+                        priority
+                      />
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className='py-6  text-center '>
-          <p className='hover:text-amber-300 hover:cursor-pointer'>
+          <p className='hover:text-amber-300 hover:cursor-pointer py-4'>
             © 2022 Copyrights <b>9odyani</b>. Tous droits réservés.
           </p>
         </div>
