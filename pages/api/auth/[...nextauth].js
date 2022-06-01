@@ -12,11 +12,11 @@ export default NextAuth({
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
-        console.log('Session : ', session)
-        console.log('Token : ', token)
+        //   console.log('Session : ', session)
+        // console.log('Token : ', token)
         session.user = token.user
         session.user.provider = token.provider
-        console.log('Session after change: ', session)
+       // console.log('Session after change: ', session)
       }
       return session
     },
@@ -45,7 +45,7 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log('Credentials : ', credentials)
+        //console.log('Credentials : ', credentials)
 
         //Connect to DB
         let { db, client } = await connectToDatabase()
@@ -88,8 +88,7 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-
-        console.log('Credentials : ', credentials)
+        //console.log('Credentials : ', credentials)
 
         //Connect to DB
         let { db, client } = await connectToDatabase()

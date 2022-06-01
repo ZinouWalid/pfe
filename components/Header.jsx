@@ -9,6 +9,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { filterProducts } from '../React-Context-Api/Actions/productsActions'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import HelpIcon from '@mui/icons-material/Help'
 import { getCookie, removeCookie } from '../lib/useCookie'
 //import Sidebar from './Sidebar'
 import { App, Credentials } from 'realm-web'
@@ -234,7 +235,6 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
                   </a>
                 </Link>
               </li>
-
               {/* Orders */}
               <li className='flex justify-between items-center hover:bg-gray-100 '>
                 <Link
@@ -248,9 +248,22 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
                     mes commandes
                   </a>
                 </Link>
-
-                {/* Deconnécte */}
               </li>
+              {/* Aide */}
+              <li className='flex justify-between items-center hover:bg-gray-100 '>
+                <Link
+                  href={user ? '/client/orders' : '/client/auth/signin'}
+                  passHref
+                >
+                  <a className='capitalize text-sm p-3'>
+                    <span className='mr-2'>
+                      <HelpIcon />
+                    </span>
+                    aide
+                  </a>
+                </Link>
+              </li>
+              {/* Deconnécte */}
               {user && (
                 <li
                   className='flex justify-between items-center hover:bg-gray-100 
