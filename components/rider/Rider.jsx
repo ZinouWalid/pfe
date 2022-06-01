@@ -6,7 +6,7 @@ import InventoryIcon from '@mui/icons-material/Inventory'
 import OrdersPage from './OrdersPage'
 import ProfilePage from './ProfilePage'
 import DeliveriesPage from './DeliveriesPage'
-import * as Realm from 'realm-web'
+import { App, Credentials } from 'realm-web'
 import { getCookie } from '../../lib/useCookie'
 
 const Rider = () => {
@@ -19,8 +19,8 @@ const Rider = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new Realm.App({ id: REALM_APP_ID })
-      const credentials = Realm.Credentials.anonymous()
+      const app = new App({ id: REALM_APP_ID })
+      const credentials = Credentials.anonymous()
 
       try {
         const user = await app.logIn(credentials)

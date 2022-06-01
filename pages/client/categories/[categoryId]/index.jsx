@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import CategoriesFilter from '../../../../components/CategoriesFilter'
-import Header from '../../../../components/Header'
-import Body from '../../../../components/HomeBody'
-import Footer from '../../../../components/Footer'
-import * as Realm from 'realm-web'
+import React from 'react'
+const CategoriesFilter = dynamic(() =>
+  import('../../../../components/CategoriesFilter')
+)
+const Header = dynamic(() => import('../../../../components/Header'))
+const Footer = dynamic(() => import('../../../../components/Footer'))
+const ProductsCategories = dynamic(() =>
+  import('../../../../components/ProductsCategories')
+)
+const ImagesSlider = dynamic(() =>
+  import('../../../../components/ImagesSlider')
+)
+import { App, Credentials } from 'realm-web'
 import { motion } from 'framer-motion'
-import ProductsCategories from '../../../../components/ProductsCategories'
-import ImagesSlider from '../../../../components/ImagesSlider'
+import dynamic from 'next/dynamic'
 
 const CategoryId = ({ products, categories }) => {
-  
   return (
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       <div className='min-h-screen bg-gray-200 p-1'>
@@ -78,8 +83,8 @@ export async function getStaticProps(context) {
 
   let category = {}
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new Realm.App({ id: REALM_APP_ID })
-  const credentials = Realm.Credentials.anonymous()
+  const app = new App({ id: REALM_APP_ID })
+  const credentials = Credentials.anonymous()
   try {
     const user = await app.logIn(credentials)
     category = await user.functions.getCategoryById(params.categoryId)

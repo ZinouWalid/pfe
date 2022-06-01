@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Subtotal from '../../components/Subtotal'
-import CheckoutProduct from '../../components/CheckoutProduct'
+const Header = dynamic(() => import('../../components/Header'))
+const Subtotal = dynamic(() => import('../../components/Subtotal'))
+const CheckoutProduct = dynamic(() => import('../../components/CheckoutProduct'))
 import { getCookie } from '../../lib/useCookie'
-import Header from '../../components/Header'
 import { useStateValue } from '../../React-Context-Api/context'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {useRouter} from 'next/router'
 import {motion} from 'framer-motion'
+import dynamic from 'next/dynamic'
 
 const Checkout = () => {
   const [myBasket, setMyBasket] = useState([])

@@ -1,11 +1,12 @@
 import React from 'react'
-import ProductInfo from '../../../components/ProductInfo'
-import Header from '../../../components/Header'
-import * as Realm from 'realm-web'
-import Footer from '../../../components/Footer'
+const ProductInfo = dynamic(() => import('../../../components/ProductInfo'))
+const Header = dynamic(() => import('../../../components/Header'))
+const Footer = dynamic(() => import('../../../components/Footer'))
+import { App, Credentials } from 'realm-web'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useRouter } from 'next/router'
 import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 
 const ProductId = ({ product }) => {
   const router = useRouter()
@@ -37,8 +38,8 @@ export async function getServerSideProps(context) {
   const { params } = context
 
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new Realm.App({ id: REALM_APP_ID })
-  const credentials = Realm.Credentials.anonymous()
+  const app = new App({ id: REALM_APP_ID })
+  const credentials = Credentials.anonymous()
   let product = {}
   try {
     const user = await app.logIn(credentials)
@@ -54,8 +55,8 @@ export async function getServerSideProps(context) {
 //
 //export async function getStaticPaths() {
 //  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-//  const app = new Realm.App({ id: REALM_APP_ID })
-//  const credentials = Realm.Credentials.anonymous()
+//  const app = new  App({ id: REALM_APP_ID })
+//  const credentials =  Credentials.anonymous()
 //  let products = []
 // try {
 //   const user = await app.logIn(credentials)

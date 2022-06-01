@@ -1,8 +1,11 @@
+import dynamic from 'next/dynamic'
 import React, { useEffect, useState } from 'react'
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
-import ProductsCategories from '../../components/ProductsCategories'
-import ImagesSlider from '../../components/ImagesSlider'
+const Footer = dynamic(() => import('../../components/Footer'))
+const Header = dynamic(() => import('../../components/Header'))
+const ProductsCategories = dynamic(() =>
+  import('../../components/ProductsCategories')
+)
+const ImagesSlider = dynamic(() => import('../../components/ImagesSlider'))
 
 export default function Home({}) {
   const [categories, setCategories] = useState([])

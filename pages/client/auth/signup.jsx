@@ -1,8 +1,9 @@
 import React from 'react'
-import SignUp from '../../../components/Login/client/SignUp'
+const SignUp = dynamic(() => import('../../../components/Login/client/SignUp'))
 import { motion } from 'framer-motion'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 
 const Signup = () => {
   const router = useRouter()

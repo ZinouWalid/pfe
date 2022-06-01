@@ -1,9 +1,7 @@
-import Head from 'next/head'
-
-import Hero from '../components/landingPage/Hero'
-
-//import Header from '../components/landingPage/Layout/Header'
-import Layout from '../components/landingPage/Layout/Layout'
+import dynamic from 'next/dynamic'
+const Head = dynamic(() => import('next/head'))
+const Hero = dynamic(() => import('../components/landingPage/Hero'))
+const Layout=dynamic(()=> import('../components/landingPage/Layout/Layout'))
 
 export default function Home() {
   return (

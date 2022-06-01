@@ -1,4 +1,4 @@
-import { City } from 'country-state-city'
+i//mport { City } from 'country-state-city'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
@@ -179,7 +179,7 @@ export default function SignUp() {
             </select>
 
             {/* ------------Region------------- */}
-            <label className='text-left'>
+            {/* <label className='text-left'>
               dans quelle région veux-tu travailler?{' '}
               <i className='text-red-500'>*</i>
             </label>
@@ -201,7 +201,7 @@ export default function SignUp() {
                   {region.stateCode + ' - ' + region.name}
                 </option>
               ))}
-            </select>
+            </select> */}
 
             {/* ----------------Date de debut------------- */}
             <label className='text-left'>

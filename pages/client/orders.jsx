@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import * as Realm from 'realm-web'
-import { useSession, getSession } from 'next-auth/react'
+import { App, Credentials } from 'realm-web'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
-import OrdersPage from '../../components/client/OrdersPage'
+const Footer = dynamic(() => import('../../components/Footer'))
+const Header = dynamic(() => import('../../components/Header'))
+const OrdersPage = dynamic(() => import('../../components/client/OrdersPage'))
 import { getCookie } from '../../lib/useCookie'
 import { useStateValue } from '../../React-Context-Api/context'
+import dynamic from 'next/dynamic'
 
 const Orders = () => {
   const router = useRouter()
@@ -19,15 +19,15 @@ const Orders = () => {
     console.log('-------- client orders page --------')
     setUser(getCookie('clientSession'))
   }, [client])
-  
+
   console.log('client orders  : ', user)
-  
+
   //fetches the realm object from the server for the client orders
   useEffect(() => {
     const fetchOrders = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new Realm.App({ id: REALM_APP_ID })
-      const credentials = Realm.Credentials.anonymous()
+      const app = new App({ id: REALM_APP_ID })
+      const credentials = Credentials.anonymous()
       let ords = []
       try {
         const realm = await app.logIn(credentials)

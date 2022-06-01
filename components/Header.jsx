@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import MenuIcon from '@mui/icons-material/Menu'
+//import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
 import InventoryIcon from '@mui/icons-material/Inventory'
 import NotificationsIcon from '@mui/icons-material/Notifications'
@@ -10,10 +10,10 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { filterProducts } from '../React-Context-Api/Actions/productsActions'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { getCookie, removeCookie } from '../lib/useCookie'
-import Sidebar from './Sidebar'
-import * as Realm from 'realm-web'
+//import Sidebar from './Sidebar'
+import { App, Credentials } from 'realm-web'
 import { useStateValue } from '../React-Context-Api/context'
-import { useSession, signOut } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Logo from '../public/images/Logo.jpg'
 
@@ -46,8 +46,8 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
 
     if (searchTerm.length > 0) {
       const REALM_APP_ID = 'pfe-etnhz'
-      const app = new Realm.App({ id: REALM_APP_ID })
-      const credentials = Realm.Credentials.anonymous()
+      const app = new App({ id: REALM_APP_ID })
+      const credentials = Credentials.anonymous()
       let searchedProducts = []
       try {
         console.log('Searching products')
@@ -70,8 +70,8 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
 
   const fetchSuggestions = async () => {
     const REALM_APP_ID = 'pfe-etnhz'
-    const app = new Realm.App({ id: REALM_APP_ID })
-    const credentials = Realm.Credentials.anonymous()
+    const app = new App({ id: REALM_APP_ID })
+    const credentials = Credentials.anonymous()
     let allSuggestions = []
     try {
       console.log('Fetching suggestions')
@@ -109,7 +109,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       className='fixed top-0 left-0 right-0 flex justify-between h-14 w-full items-center bg-slate-900 text-white lg:h-16 z-30 shadow-md shadow-amber-400'
       onClick={() => setSuggestions([])}
     >
-      <button
+      {/* <button
         onClick={() => setShowSidebar(!showSidebar)}
         className='lg:hidden ml-2 md:mx-4 text-amber-500 hover:bg-gray-800 hover:rounded-full p-1 md:scale-125 z-20 cursor-pointer '
       >
@@ -119,7 +119,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       </button>
       {showSidebar && (
         <Sidebar showSidebar={showSidebar} hideFilters={hideSearch} />
-      )}
+      )} */}
       {/* Logo and title */}
       {/* check if the window url contains "client" */}
       <Link href={'/'} passHref>

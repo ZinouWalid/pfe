@@ -3,7 +3,7 @@ import Product from './Product'
 import ImagesSlider from './ImagesSlider'
 import { useStateValue } from '../React-Context-Api/context'
 import { motion } from 'framer-motion'
-import * as Realm from 'realm-web'
+import {App,Credentials} from 'realm-web'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 function Body({ products }) {
@@ -21,8 +21,8 @@ function Body({ products }) {
 
   const getMoreProducts = async () => {
     const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-    const app = new Realm.App({ id: REALM_APP_ID })
-    const credentials = Realm.Credentials.anonymous()
+    const app = new App({ id: REALM_APP_ID })
+    const credentials = Credentials.anonymous()
     let newProducts = []
 
     try {

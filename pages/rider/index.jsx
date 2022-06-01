@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Rider from '../../components/rider/Rider'
-import Footer from '../../components/Footer'
+const Rider = dynamic(() => import('../../components/rider/Rider'))
+const Footer = dynamic(() => import('../../components/Footer'))
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { getCookie } from '../../lib/useCookie'

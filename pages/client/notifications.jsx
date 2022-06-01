@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import * as Realm from 'realm-web'
-import { useSession } from 'next-auth/react'
+import { App, Credentials } from 'realm-web'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import NotificationsPage from '../../components/client/NotificationsPage'
-import Header from '../../components/Header'
+const NotificationsPage = dynamic(() =>
+  import('../../components/client/NotificationsPage')
+)
+const Header = dynamic(() => import('../../components/Header'))
 import { useStateValue } from '../../React-Context-Api/context'
 import { getCookie } from '../../lib/useCookie'
+import dynamic from 'next/dynamic'
 
 const Notifications = () => {
   const [user, setUser] = useState({})
@@ -24,8 +26,8 @@ const Notifications = () => {
     //fetches the realm object from the server for the client notifications
     const fetchNotifications = async () => {
       const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new Realm.App({ id: REALM_APP_ID })
-      const credentials = Realm.Credentials.anonymous()
+      const app = new App({ id: REALM_APP_ID })
+      const credentials = Credentials.anonymous()
       let notifs = []
       try {
         const realm = await app.logIn(credentials)
@@ -37,7 +39,6 @@ const Notifications = () => {
     }
     fetchNotifications()
   }, [user])
-
 
   if (user.provider == 'client-provider') {
     return (

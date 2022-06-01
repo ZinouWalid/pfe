@@ -1,9 +1,11 @@
 import React from 'react'
-import SignIn from '../../../components/Login/client/SignIn'
+const SignIn = dynamic(() => import('../../../components/Login/client/SignIn'))
+
 import { getCsrfToken } from 'next-auth/react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 
 const Signin = ({ csrfToken }) => {
   const router = useRouter()

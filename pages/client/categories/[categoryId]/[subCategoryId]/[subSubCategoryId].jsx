@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import CategoriesFilter from '../../../../../components/CategoriesFilter'
-import Header from '../../../../../components/Header'
-import Body from '../../../../../components/HomeBody'
-import Footer from '../../../../../components/Footer'
-import * as Realm from 'realm-web'
+import React from 'react'
+const Body = dynamic(() => import('../../../../../components/HomeBody'))
+const CategoriesFilter = dynamic(() =>
+  import('../../../../../components/CategoriesFilter')
+)
+const Header = dynamic(() => import('../../../../../components/Header'))
+const Footer = dynamic(() => import('../../../../../components/Footer'))
+const ProductsCategories = dynamic(() =>
+  import('../../../../../components/ProductsCategories')
+)
+import { App, Credentials } from 'realm-web'
 import { motion } from 'framer-motion'
-import ImagesSlider from '../../../../../components/ImagesSlider'
+import dynamic from 'next/dynamic'
 
 const CategoryId = ({ products, categories }) => {
   return (
@@ -13,7 +18,7 @@ const CategoryId = ({ products, categories }) => {
       <div className='min-h-screen bg-gray-200 p-1'>
         <Header />
         <CategoriesFilter categories={categories} />
-        {/* <ProductsCategories categories={categories} /> */}
+        <ProductsCategories categories={categories} />
         {products && <Body products={products} />}
         <Footer />
       </div>
@@ -77,8 +82,8 @@ export async function getServerSideProps(context) {
   let products = []
   let categories = []
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new Realm.App({ id: REALM_APP_ID })
-  const credentials = Realm.Credentials.anonymous()
+  const app = new App({ id: REALM_APP_ID })
+  const credentials = Credentials.anonymous()
   try {
     const user = await app.logIn(credentials)
     products = await user.functions.getProductsByCategory({

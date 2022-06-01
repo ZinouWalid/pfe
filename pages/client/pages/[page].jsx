@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Body from '../../../components/HomeBody'
-import Footer from '../../../components/Footer'
-import Header from '../../../components/Header'
-import CategoriesFilter from '../../../components/CategoriesFilter'
-import Pagination from '../../../components/Pagination'
-import * as Realm from 'realm-web'
+const Body = dynamic(() => import('../../../components/HomeBody'))
+const Header = dynamic(() => import('../../../components/Header'))
+const Footer = dynamic(() => import('../../../components/Footer'))
+const CategoriesFilter = dynamic(() => import('../../../components/CategoriesFilter'))
+const Pagination = dynamic(() => import('../../../components/Pagination'))
+import { App, Credentials } from 'realm-web'
 import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 
 const Page = ({ products, currentPage, pages }) => {
   //const [pages, setPages] = useState([])
@@ -14,8 +15,8 @@ const Page = ({ products, currentPage, pages }) => {
   //useEffect(() => {
   //  const fetchPages = async () => {
   //    const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  //    const app = new Realm.App({ id: REALM_APP_ID })
-  //    const credentials = Realm.Credentials.anonymous()
+  //    const app = new  App({ id: REALM_APP_ID })
+  //    const credentials =  Credentials.anonymous()
   //    let pages = {}
   //    try {
   //      const user = await app.logIn(credentials)
@@ -42,18 +43,18 @@ const Page = ({ products, currentPage, pages }) => {
   //  fetchPages()
   //}, [])
 
-const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([])
 
-useEffect(() => {
-  const fetchCategories = async () => {
-    const response = await fetch(
-      'http://zino-products-api.herokuapp.com/categories'
-    )
-    const data = await response.json()
-    setCategories(data)
-  }
-  fetchCategories()
-}, [])
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await fetch(
+        'http://zino-products-api.herokuapp.com/categories'
+      )
+      const data = await response.json()
+      setCategories(data)
+    }
+    fetchCategories()
+  }, [])
 
   return (
     <motion.div
@@ -63,7 +64,7 @@ useEffect(() => {
       className='relative flex min-h-screen flex-col bg-gray-200'
     >
       <Header />
-      <CategoriesFilter categories={categories}/>
+      <CategoriesFilter categories={categories} />
       <Body products={products} />
       <Pagination
         pages={pages}
@@ -81,8 +82,8 @@ export async function getStaticProps(context) {
   const { params } = context
 
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new Realm.App({ id: REALM_APP_ID })
-  const credentials = Realm.Credentials.anonymous()
+  const app = new App({ id: REALM_APP_ID })
+  const credentials = Credentials.anonymous()
   let products = {}
   let pages = []
   try {
@@ -118,8 +119,8 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const paths = []
   const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new Realm.App({ id: REALM_APP_ID })
-  const credentials = Realm.Credentials.anonymous()
+  const app = new App({ id: REALM_APP_ID })
+  const credentials = Credentials.anonymous()
   let products = []
   try {
     const user = await app.logIn(credentials)
