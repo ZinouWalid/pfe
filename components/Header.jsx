@@ -252,7 +252,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
               {/* Aide */}
               <li className='flex justify-between items-center hover:bg-gray-100 '>
                 <Link
-                  href={user ? '/client/orders' : '/client/auth/signin'}
+                  href='/aide'
                   passHref
                 >
                   <a className='capitalize text-sm p-3'>
