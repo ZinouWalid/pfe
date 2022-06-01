@@ -52,7 +52,7 @@ const CategoriesFilter = ({ categories }) => {
             >
               <Link href={`/client/pages/page_1`} passHref>
                 <a className={`flex  hover:cursor-pointer`}>
-                  <p className=' hover:underline'>{truncate(cat.value, 20)}</p>
+                  <p className=' hover:underline capitalize'>{truncate(cat.value, 20)}</p>
                 </a>
               </Link>
             </div>
@@ -65,7 +65,7 @@ const CategoriesFilter = ({ categories }) => {
             >
               <Link href={`/client/categories${cat.url}`} passHref>
                 <a className={`flex hover:cursor-pointer `}>
-                  <p className='hover:underline'>{truncate(cat.value, 20)}</p>
+                  <p className='hover:underline capitalize'>{truncate(cat.value, 20)}</p>
                 </a>
               </Link>
             </div>

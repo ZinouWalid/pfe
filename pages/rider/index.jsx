@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 const Rider = dynamic(() => import('../../components/rider/Rider'))
 const Footer = dynamic(() => import('../../components/Footer'))
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { getCookie } from '../../lib/useCookie'
 import { useStateValue } from '../../React-Context-Api/context'
 import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 
 const RiderId = ({}) => {
-  const { data: session, status } = useSession()
   const [riderSession, setRiderSession] = useState({})
   //getting the rider session from redux
   const [{ rider }, dispatch] = useStateValue()

@@ -12,7 +12,6 @@ import { useStateValue } from '../../React-Context-Api/context'
 import dynamic from 'next/dynamic'
 
 const Delivery = () => {
-  const { data: session, status } = useSession()
   const [user, setUser] = useState({})
   const router = useRouter()
   const [{ client }, dispatch] = useStateValue()
@@ -21,7 +20,6 @@ const Delivery = () => {
     console.log('-------- Delivery page --------')
     setUser(getCookie('clientSession'))
     console.log('Session.client : ', user)
-    console.log('Status : ', status)
   }, [client])
 
   if (user?.provider == 'client-provider') {

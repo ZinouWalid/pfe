@@ -46,7 +46,9 @@ const ProductsCategories = ({ categories }) => {
             className='flex rounded bg-white p-5 shadow-xl transition duration-300 hover:scale-95 md:flex-col md:justify-evenly'
             key={cat.key}
           >
-            <p className='font-medium text-nxl text-center'>{cat.value}</p>
+            <p className='font-medium text-nxl text-center capitalize'>
+              {cat.value}
+            </p>
 
             {cat.category == 'all' ? (
               <Link href={`/client/pages/page_1`} passHref>

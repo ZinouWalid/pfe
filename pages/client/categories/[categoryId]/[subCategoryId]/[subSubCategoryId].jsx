@@ -18,7 +18,6 @@ const CategoryId = ({ products, categories }) => {
       <div className='min-h-screen bg-gray-200 p-1'>
         <Header />
         <CategoriesFilter categories={categories} />
-        <ProductsCategories categories={categories} />
         {products && <Body products={products} />}
         <Footer />
       </div>
