@@ -70,8 +70,8 @@ const CategoryId = () => {
       <div className='min-h-screen bg-gray-200 p-1'>
         <Header />
         <CategoriesFilter categories={categories} />
-        <ImagesSlider />
-        <ProductsCategories categories={categories} />
+        {!products && <ImagesSlider />}
+        {!products && <ProductsCategories categories={categories} />}
         {products?.length > 0 && <Body products={products} />}
 
         <Footer />
