@@ -59,7 +59,7 @@ const Rider = () => {
               setShowNotifications(true)
             }}
           >
-            <NotificationsIcon className='text-gray-500 text-9xl hover:cursor-pointer hover:bg-slate-300 rounded-full p-1' />
+            <NotificationsIcon className='text-gray-500 text-4xl hover:cursor-pointer hover:bg-slate-300 rounded-full p-1' />
             {orders?.length > 0 && (
               <span className='absolute text-center inset-y-2 inset-x-3 object-right-top -mr-6 '>
                 <div className='items-center mx-auto px-1 py-0.5 border-2 border-white rounded-full text-xs font-semibold bg-red-500 text-white'>

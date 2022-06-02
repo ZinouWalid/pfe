@@ -208,7 +208,7 @@ const Footer = () => {
                         width='20'
                         height='20'
                         objectFit='cover'
-                        className='rounded bg-white '
+                        className='rounded bg-white hover:bg-amber-300'
                         priority
                       />
                     </a>
