@@ -5,6 +5,7 @@ import {
 } from './Actions/basketActions'
 import {
   FILTER_PRODUCTS,
+  UNFILTER_PRODUCTS,
   SEARCH_PRODUCTS,
   UPDATE_QUANTITY,
 } from './Actions/productsActions'
@@ -111,6 +112,9 @@ const reducer = (state = initialState, action) => {
 
     case FILTER_PRODUCTS:
       return { ...state, filteredProducts: action.payload }
+
+    case UNFILTER_PRODUCTS:
+      return { ...state, filteredProducts: [] }
 
     case SET_CLIENT_SESSION:
       console.log('SET_CLIENT_SESSION : ', action.payload)

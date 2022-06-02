@@ -251,10 +251,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
               </li>
               {/* Aide */}
               <li className='flex justify-between items-center hover:bg-gray-100 '>
-                <Link
-                  href='/aide'
-                  passHref
-                >
+                <Link href='/aide' passHref>
                   <a className='capitalize text-sm p-3'>
                     <span className='mr-2'>
                       <HelpIcon />

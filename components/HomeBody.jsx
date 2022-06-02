@@ -3,16 +3,21 @@ import Product from './Product'
 import ImagesSlider from './ImagesSlider'
 import { useStateValue } from '../React-Context-Api/context'
 import { motion } from 'framer-motion'
-import {App,Credentials} from 'realm-web'
+import { App, Credentials } from 'realm-web'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { unfilterProducts } from '../React-Context-Api/Actions/productsActions'
+import { useRouter } from 'next/router'
 
 function Body({ products }) {
   const [{ filteredProducts }, dispatch] = useStateValue()
-
+  const router = useRouter()
   //implement infinite scroll
   const [myProducts, setMyProducts] = useState(products)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
+
+  //track changes on page url to unfilter the searched products
+  
 
   //track changes on products
   useEffect(() => {

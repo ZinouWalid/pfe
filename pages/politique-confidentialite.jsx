@@ -1,8 +1,9 @@
 import React from 'react'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
+const Footer = dynamic(() => import('../components/Footer'))
+const Header = dynamic(() => import('../components/Header'))
 import { useRouter } from 'next/router'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import dynamic from 'next/dynamic'
 
 const PolitiqueConf = () => {
   const router = useRouter()
