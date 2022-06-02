@@ -10,7 +10,7 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 
 const Footer = () => {
   return (
-    <div className='bg-slate-900 min-h-96 mt-10 min-w-screen'>
+    <div className='bg-slate-900 min-h-96 mt-10 min-w-screen '>
       <footer className='px-4 divide-y dark:bg-coolGray-800 text-gray-200'>
         <div className='container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0'>
           <div className='lg:w-1/3'>
@@ -68,12 +68,12 @@ const Footer = () => {
               <h3 className='tracking-wide uppercase font-semibold'>Société</h3>
               <ul className='space-y-1'>
                 <li>
-                  <Link href='#' passHref>
+                  <Link href='/politique-confidentialite' passHref>
                     <a className='hover:text-amber-300'>Confidentialité</a>
                   </Link>
                 </li>
                 <li>
-                  <Link href='#' passHref>
+                  <Link href='/politique-confidentialite' passHref>
                     <a className='hover:text-amber-300'>
                       Conditions d&apos;utilisation
                     </a>
@@ -172,6 +172,23 @@ const Footer = () => {
                 <li>
                   <Link href='/aide' passHref>
                     <a className='hover:text-amber-300'>Annuler une commande</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className='space-y-3'>
+              <h3 className='tracking-wide uppercase font-semibold'>
+                livraison
+              </h3>
+              <ul className='space-y-1'>
+                <li>
+                  <Link href='aide' passHref>
+                    <a className='hover:text-amber-300'>Livrer une commande</a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href='aide' passHref>
+                    <a className='hover:text-amber-300'>Compte livreur</a>
                   </Link>
                 </li>
               </ul>
