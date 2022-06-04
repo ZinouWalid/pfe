@@ -1,4 +1,3 @@
-i//mport { City } from 'country-state-city'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'

@@ -5,7 +5,6 @@ import { getBasketTotal } from '../../React-Context-Api/reducer'
 import { getCookie } from '../../lib/useCookie'
 import { useRouter } from 'next/router'
 import { clearBasket } from '../../React-Context-Api/Actions/basketActions'
-import { App, Credentials } from 'realm-web'
 
 export default function PayementForm() {
   const [{ basket, client }, dispatch] = [...useStateValue()] || []
@@ -94,18 +93,14 @@ export default function PayementForm() {
 
   useEffect(() => {
     const fetchRegions = async () => {
-      //setSliderProducts(products?.map((product) => product.img))
-      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new App({ id: REALM_APP_ID })
-      const credentials = Credentials.anonymous()
-      let newRegions = []
-
       try {
-        const user = await app.logIn(credentials)
-        newRegions = await user.functions.getAllRegions()
-        setRegions(newRegions)
-      } catch (error) {
-        console.error(error)
+        //fetch the regions(willayas)
+        const response = await fetch(`/api/regions/allRegions`)
+        await response.json().then((data) => {
+          setRegions(data)
+        })
+      } catch (err) {
+        alert(err)
       }
     }
     fetchRegions()

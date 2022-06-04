@@ -12,8 +12,8 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 const Hero = () => {
   const { data: session, status } = useSession()
   const router = useRouter()
-  //getting the client and rider session from cookies if they exists
-  //const [clientSession, setClientSession] = useState({})
+
+  //getting the rider session from cookies if they exists
   const [riderSession, setRiderSession] = useState({})
 
   useEffect(() => {
@@ -48,6 +48,8 @@ const Hero = () => {
                 </span>
               </motion.a>
             </Link>
+
+            {/* we check if the rider is authenticated to see if we send him to the authentication page or directly to his profile */}
             <Link
               href={riderSession ? '/rider' : '/rider/auth/signin'}
               passHref

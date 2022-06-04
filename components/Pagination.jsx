@@ -12,6 +12,7 @@ function Pagination({
   numberOfPages,
 }) {
 
+  
   function goToPreviousPage() {
     if (currentPage > 1) {
       return `/client/pages/page_${parseInt(currentPage) - 1}`

@@ -12,7 +12,6 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import HelpIcon from '@mui/icons-material/Help'
 import { getCookie, removeCookie } from '../lib/useCookie'
 //import Sidebar from './Sidebar'
-import { App, Credentials } from 'realm-web'
 import { useStateValue } from '../React-Context-Api/context'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
@@ -36,7 +35,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
     function updateBasketAndClient() {
       setLocalBasket(getCookie('basket'))
       setUser(getCookie('clientSession'))
-      console.log('user : ', user)
+      //console.log('user : ', user)
     }
     updateBasketAndClient()
   }, [basket, client])
@@ -46,22 +45,20 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
     console.log('Submit Search Form')
 
     if (searchTerm.length > 0) {
-      const REALM_APP_ID = 'pfe-etnhz'
-      const app = new App({ id: REALM_APP_ID })
-      const credentials = Credentials.anonymous()
-      let searchedProducts = []
       try {
-        console.log('Searching products')
-        const user = await app.logIn(credentials)
-        searchedProducts = await user.functions
-          .searchProducts(searchTerm)
-          .then((searchedProducts) => {
-            console.log('SEARCHED PRODUCTS  : ', searchedProducts)
-            setFilteredProducts(searchedProducts)
-            dispatch(filterProducts(searchedProducts))
-          })
-      } catch (error) {
-        console.error(error)
+        const response = await fetch(`/api/products/searchProducts`, {
+          method: 'POST',
+          body: JSON.stringify({
+            query: searchTerm,
+          }),
+        })
+        await response.json().then((data) => {
+          console.log('SEARCHED PRODUCTS  : ', data)
+          setFilteredProducts(data)
+          dispatch(filterProducts(data))
+        })
+      } catch (err) {
+        alert(err)
       }
 
       setSearchTerm('')
@@ -70,21 +67,19 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
   }
 
   const fetchSuggestions = async () => {
-    const REALM_APP_ID = 'pfe-etnhz'
-    const app = new App({ id: REALM_APP_ID })
-    const credentials = Credentials.anonymous()
-    let allSuggestions = []
+    //fetch the suggestions based on the search term
     try {
-      console.log('Fetching suggestions')
-      const user = await app.logIn(credentials)
-      allSuggestions = await user.functions.searchProductsAutoComplete(
-        searchTerm
-      )
-
-      console.log('SUGGESTIONS  : ', allSuggestions)
-      setSuggestions(allSuggestions)
-    } catch (error) {
-      console.error(error)
+      const response = await fetch(`/api/products/productsAutoComplete`, {
+        method: 'POST',
+        body: JSON.stringify({
+          query: searchTerm,
+        }),
+      })
+      await response.json().then((data) => {
+        setSuggestions(data)
+      })
+    } catch (err) {
+      alert(err)
     }
   }
 

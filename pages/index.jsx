@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 const Head = dynamic(() => import('next/head'))
 const Hero = dynamic(() => import('../components/landingPage/Hero'))
-const Layout=dynamic(()=> import('../components/landingPage/Layout/Layout'))
+const Layout = dynamic(() => import('../components/landingPage/Layout/Layout'))
 
 export default function Home() {
   return (

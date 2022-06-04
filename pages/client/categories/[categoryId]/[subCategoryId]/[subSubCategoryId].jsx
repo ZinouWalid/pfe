@@ -1,18 +1,32 @@
-import React from 'react'
-const Body = dynamic(() => import('../../../../../components/HomeBody'))
-const CategoriesFilter = dynamic(() =>
-  import('../../../../../components/CategoriesFilter')
-)
-const Header = dynamic(() => import('../../../../../components/Header'))
-const Footer = dynamic(() => import('../../../../../components/Footer'))
-const ProductsCategories = dynamic(() =>
-  import('../../../../../components/ProductsCategories')
-)
-import { App, Credentials } from 'realm-web'
+import React, { useEffect } from 'react'
+//const Body = dynamic(() => import('../../../../../components/HomeBody'))
+//const CategoriesFilter = dynamic(() =>
+//  import('../../../../../components/CategoriesFilter')
+//)
+//const Header = dynamic(() => import('../../../../../components/Header'))
+//const Footer = dynamic(() => import('../../../../../components/Footer'))
+//const ProductsCategories = dynamic(() =>
+//  import('../../../../../components/ProductsCategories')
+//)
+import CategoriesFilter from '../../../../../components/CategoriesFilter'
+import Header from '../../../../../components/Header'
+import Footer from '../../../../../components/Footer'
+import Body from '../../../../../components/HomeBody'
+
+import * as Realm from 'realm-web'
 import { motion } from 'framer-motion'
+import { unfilterProducts } from '../../../../../React-Context-Api/Actions/productsActions'
+
 import dynamic from 'next/dynamic'
+import { useStateValue } from '../../../../../React-Context-Api/context'
 
 const CategoryId = ({ products, categories }) => {
+  const [{}, dispatch] = useStateValue()
+  useEffect(() => {
+    dispatch(unfilterProducts())
+  }, [])
+
+  console.log('PRODUCTS : ', products)
   return (
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       <div className='min-h-screen bg-gray-200 p-1'>
@@ -76,18 +90,23 @@ export default CategoryId
 
 //getting URL params
 export async function getServerSideProps(context) {
-  const { params } = context
-
+  const { params, req } = context
   let products = []
   let categories = []
-  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new App({ id: REALM_APP_ID })
-  const credentials = Credentials.anonymous()
+
   try {
-    const user = await app.logIn(credentials)
-    products = await user.functions.getProductsByCategory({
-      category: params.subSubCategoryId,
-      page: 1,
+    const response = await fetch(
+      `http://${req.headers.host}/api/products/productsByCategory`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          category: params.subSubCategoryId,
+          page: 1,
+        }),
+      }
+    )
+    await response.json().then(async (data) => {
+      products = data
     })
   } catch (error) {
     console.error(error)
@@ -103,7 +122,6 @@ export async function getServerSideProps(context) {
   const subCategory = categories[0].subCategories.filter(
     (subCategory) => subCategory.key === params.subCategoryId
   )
-
   return {
     props: {
       products: products,

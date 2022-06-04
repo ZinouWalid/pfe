@@ -182,12 +182,12 @@ const Footer = () => {
               </h3>
               <ul className='space-y-1'>
                 <li>
-                  <Link href='aide' passHref>
+                  <Link href='/aide' passHref>
                     <a className='hover:text-amber-300'>Livrer une commande</a>
                   </Link>
                 </li>
                 <li>
-                  <Link href='aide' passHref>
+                  <Link href='/aide' passHref>
                     <a className='hover:text-amber-300'>Compte livreur</a>
                   </Link>
                 </li>

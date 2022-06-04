@@ -27,13 +27,32 @@ export const initialState = {
 //Selector
 //0 is initial value of amount
 export const getBasketTotal = (basket) =>
-  basket?.reduce(
-    (amount, item) =>
-      parseInt(item.price?.replace(',', '').split(' ')[0]) *
-        parseInt(item.quantity) +
-      amount,
-    0
-  )
+  //counting the total of basket
+  basket?.reduce((amount, item) =>
+    //check if the products have discount
+
+    {
+      //if the product has discount
+      if (item.promotion!="0%") {
+        //calculate the total of the product after discount
+        const newItemTotal = Math.floor(
+          parseInt(item.price?.replace(',', '').split(' ')[0]) -
+            (parseInt(item.price?.replace(',', '').split(' ')[0]) *
+              parseInt(item?.promotion.split('%')[0])) /
+              100
+        )
+        //return the total of the product
+        return amount + newItemTotal * parseInt(item.quantity)
+
+        //if the product doesn't have discount
+      } else {
+        return (
+          parseInt(item.price?.replace(',', '').split(' ')[0]) *
+            parseInt(item.quantity) +
+          amount
+        )
+      }
+    }, 0)
 
 //The reducer is always listening and when we dispatch an action t's gonna get manipulated by the reducer and do some actions
 const reducer = (state = initialState, action) => {
@@ -119,13 +138,15 @@ const reducer = (state = initialState, action) => {
     case SET_CLIENT_SESSION:
       console.log('SET_CLIENT_SESSION : ', action.payload)
 
-      //create a cookie with the client session
+      //create a cookie with the client session and delete the old one
+      removeCookie('clientSession')
+
       setCookie('clientSession', action.payload)
       return { ...state, client: action.payload }
 
     case REMOVE_CLIENT_SESSION:
       console.log('REMOVE_CLIENT_SESSION')
-      //remove the client session from the cookie
+      //remove the client session from the cookies
       removeCookie('clientSession')
       return { ...state, client: {} }
 
@@ -133,6 +154,7 @@ const reducer = (state = initialState, action) => {
       console.log('SET_RIDER_SESSION : ', action.payload)
 
       //create a cookie with the RIDER session
+      removeCookie('riderSession')
       setCookie('riderSession', action.payload)
       return { ...state, rider: action.payload }
 

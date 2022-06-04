@@ -2,47 +2,15 @@ import React, { useEffect, useState } from 'react'
 const Body = dynamic(() => import('../../../components/HomeBody'))
 const Header = dynamic(() => import('../../../components/Header'))
 const Footer = dynamic(() => import('../../../components/Footer'))
-const CategoriesFilter = dynamic(() => import('../../../components/CategoriesFilter'))
+const CategoriesFilter = dynamic(() =>
+  import('../../../components/CategoriesFilter')
+)
 const Pagination = dynamic(() => import('../../../components/Pagination'))
-import { App, Credentials } from 'realm-web'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
+import absoluteUrl from 'next-absolute-url'
 
 const Page = ({ products, currentPage, pages }) => {
-  //const [pages, setPages] = useState([])
-  //
-  ////Fetch the pages
-  //useEffect(() => {
-  //  const fetchPages = async () => {
-  //    const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  //    const app = new  App({ id: REALM_APP_ID })
-  //    const credentials =  Credentials.anonymous()
-  //    let pages = {}
-  //    try {
-  //      const user = await app.logIn(credentials)
-  //      pages = await user.functions.getAllProducts().then((data) => {
-  //        for (
-  //          let index = 0;
-  //          index < Math.floor(data?.length / 32) + 1;
-  //          index++
-  //        ) {
-  //          setPages((pages) => [
-  //            ...pages,
-  //            {
-  //              page: '/client/pages/page_' + (index + 1),
-  //              value: index + 1,
-  //            },
-  //          ])
-  //        }
-  //        return data
-  //      })
-  //    } catch (error) {
-  //      console.error(error)
-  //    }
-  //  }
-  //  fetchPages()
-  //}, [])
-
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
@@ -78,63 +46,77 @@ const Page = ({ products, currentPage, pages }) => {
 
 export default Page
 
-export async function getStaticProps(context) {
-  const { params } = context
+export async function getServerSideProps(context) {
+  const { params, req } = context
 
-  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new App({ id: REALM_APP_ID })
-  const credentials = Credentials.anonymous()
-  let products = {}
+  const pageNumber = params.page.split('_')[1]
+  let products = []
   let pages = []
+
   try {
     // Get the prducts of each page
-    const user = await app.logIn(credentials)
-    products = await user.functions.getPageProducts({
-      pageNumber: params.page.split('_')[1],
-      nPerPage: 10,
+    const response1 = await fetch(
+      `http://${req.headers.host}/api/products/pageProducts`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          pageNumber: pageNumber,
+          nPerPage: 30,
+        }),
+      }
+    )
+    await response1.json().then((data) => {
+      products = data
     })
 
-    //Fetch the pages
-    await user.functions.getAllProducts().then((data) => {
-      for (let index = 0; index < Math.floor(data?.length / 30) + 1; index++) {
-        pages = [
-          ...pages,
-          {
-            page: '/client/pages/page_' + (index + 1),
-            value: index + 1,
-          },
-        ]
+    //setting the pages urls and there number
+    const response2 = await fetch(
+      `http://${req.headers.host}/api/products/allProducts`
+    )
+    await response2.json().then((data) => {
+      // Get the number of pages by dividing the number of products by the number of products per page
+      const totalPages = Math.floor(data?.length / 30) + 1
+
+      for (let index = 0; index < totalPages; index++) {
+        pages.push({
+          page: '/client/pages/page_' + (index + 1),
+          value: index + 1,
+        })
       }
     })
-  } catch (error) {
-    console.error(error)
+  } catch (err) {
+    console.error(err)
   }
-  //send first 10 products
 
+  //send first 30 products
   return {
-    props: { products, currentPage: params.page.split('_')[1], pages },
+    props: { products, currentPage: pageNumber, pages },
   }
 }
 
-export async function getStaticPaths() {
-  const paths = []
-  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new App({ id: REALM_APP_ID })
-  const credentials = Credentials.anonymous()
-  let products = []
-  try {
-    const user = await app.logIn(credentials)
-    products = await user.functions.getAllProducts()
-  } catch (error) {
-    console.error(error)
-  }
-
-  for (let index = 0; index < Math.floor(products?.length / 30) + 1; index++) {
-    paths.push({ params: { page: 'page_' + (index + 1) } })
-  }
-
-  return {
-    paths,
-    fallback: false,
-  }
-}
+//export async function getStaticPaths(req) {
+//
+//  const paths = []
+//  try {
+//    //setting the pages urls and there number
+//    const response = await fetch(
+//      `/api/products/allProducts`
+//    )
+//    await response.json().then((data) => {
+//      // Get the number of pages by dividing the number of products by the number of products per page
+//      const totalPages = Math.floor(data?.length / 30) + 1
+//
+//      for (let index = 0; index < totalPages; index++) {
+//        paths.push({ params: { page: 'page_' + (index + 1) } })
+//      }
+//    })
+//  } catch (err) {
+//    console.error(err)
+//  }
+//  console.log('paths : ', paths)
+//  return {
+//    paths,
+//    fallback: false,
+//  }
+//}
+//

@@ -35,47 +35,31 @@ const ProductId = ({ product }) => {
 export default ProductId
 
 export async function getServerSideProps(context) {
-  const { params } = context
+  const { params,req } = context
+  const { productId } = params
+  let product = []
 
-  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-  const app = new App({ id: REALM_APP_ID })
-  const credentials = Credentials.anonymous()
-  let product = {}
   try {
-    const user = await app.logIn(credentials)
-    product = await user.functions.getSingleProduct(params.productId)
-    console.log('Product : ', product)
-  } catch (error) {
-    console.error(error)
+    const response = await fetch(
+      `http://${req.headers.host}/api/products/singleProduct`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          productId: productId,
+        }),
+      }
+    )
+    await response.json().then((data) => {
+      console.log('PRODUCT : ', data);
+      product = data
+    })
+  } catch (err) {
+    alert(err)
   }
+  
   return {
-    props: { product },
+    props: {
+      product,
+    },
   }
 }
-//
-//export async function getStaticPaths() {
-//  const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-//  const app = new  App({ id: REALM_APP_ID })
-//  const credentials =  Credentials.anonymous()
-//  let products = []
-// try {
-//   const user = await app.logIn(credentials)
-//   products = await user.functions.getAllProducts()
-// } catch (error) {
-//   console.error(error)
-// }
-//
-//
-//  const paths = products.map((product) => {
-//    return {
-//      params: {
-//        productId: product.id,
-//      },
-//    }
-//  })
-//
-//  return {
-//    paths,
-//    fallback: false,
-//  }
-//}

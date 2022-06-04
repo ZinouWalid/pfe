@@ -20,21 +20,22 @@ const Notifications = () => {
     console.log('-------- client notifications page --------')
     setUser(getCookie('clientSession'))
   }, [client])
-  //getting the user notifications
 
   useEffect(() => {
-    //fetches the realm object from the server for the client notifications
+    //fetche the client orders
     const fetchNotifications = async () => {
-      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new App({ id: REALM_APP_ID })
-      const credentials = Credentials.anonymous()
-      let notifs = []
       try {
-        const realm = await app.logIn(credentials)
-        notifs = await realm.functions.getClientNotifications(user?.id)
-        setNotifications(notifs)
-      } catch (error) {
-        console.error(error)
+        const response = await fetch(`/api/clients/clientNotifications`, {
+          method: 'POST',
+          body: JSON.stringify({
+            clientId: user.id,
+          }),
+        })
+        await response.json().then((data) => {
+          setNotifications(data)
+        })
+      } catch (err) {
+        alert(err)
       }
     }
     fetchNotifications()

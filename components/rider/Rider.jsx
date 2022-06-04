@@ -6,7 +6,6 @@ import InventoryIcon from '@mui/icons-material/Inventory'
 import OrdersPage from './OrdersPage'
 import ProfilePage from './ProfilePage'
 import DeliveriesPage from './DeliveriesPage'
-import { App, Credentials } from 'realm-web'
 import { getCookie } from '../../lib/useCookie'
 
 const Rider = () => {
@@ -17,28 +16,34 @@ const Rider = () => {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new App({ id: REALM_APP_ID })
-      const credentials = Credentials.anonymous()
-
+    const fetchRiderAndOrders = async () => {
+      //fetch the rider info
       try {
-        const user = await app.logIn(credentials)
-
-        //fetching the myRider informations
-        await user.functions.getSingleRider(rider.id).then(async (rider) => {
-          setRider(rider)
+        const response1 = await fetch(`/api/riders/singleRider`, {
+          method: 'POST',
+          body: JSON.stringify({
+            riderId: rider?.id,
+          }),
+        })
+        await response1.json().then((data) => {
+          setRider(data)
         })
 
-        //fetching the orders that coresponds to the rider region
-        await user.functions.getAllOrders(rider?.region).then((orders) => {
-          setOrders(orders)
+        //fetch the orders based on the rider region
+        const response2 = await fetch(`/api/orders/ordersByRegion`, {
+          method: 'POST',
+          body: JSON.stringify({
+            region: rider?.region,
+          }),
         })
-      } catch (error) {
-        console.warn(error)
+        await response2.json().then((data) => {
+          setOrders(data)
+        })
+      } catch (err) {
+        alert(err)
       }
     }
-    fetchOrders()
+    fetchRiderAndOrders()
   }, [])
 
   return (

@@ -15,6 +15,13 @@ const Orders = () => {
   const [user, setUser] = useState({})
   const [{ client }, dispatch] = useStateValue()
 
+  useEffect(async () => {
+    await fetch('/api/orders', {
+      method: 'some',
+      body: {},
+    })
+  }, [])
+
   useEffect(() => {
     console.log('-------- client orders page --------')
     setUser(getCookie('clientSession'))
@@ -22,25 +29,24 @@ const Orders = () => {
 
   console.log('client orders  : ', user)
 
-  //fetches the realm object from the server for the client orders
   useEffect(() => {
+    //fetche the client orders
     const fetchOrders = async () => {
-      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new App({ id: REALM_APP_ID })
-      const credentials = Credentials.anonymous()
-      let ords = []
       try {
-        const realm = await app.logIn(credentials)
-
-        //You can pass the user id here instead of the session.user.email
-        ords = await realm.functions.getClientOrders(user.id)
-        setOrders(ords)
-      } catch (error) {
-        console.error(error)
+        const response = await fetch(`/api/clients/clientOrders`, {
+          method: 'POST',
+          body: JSON.stringify({
+            clientId: user.id,
+          }),
+        })
+        await response.json().then((data) => {
+          setOrders(data)
+        })
+      } catch (err) {
+        alert(err)
       }
     }
     fetchOrders()
-    console.log(user.name + ' orders : ' + orders)
   }, [user])
 
   console.log('orders : ', orders)

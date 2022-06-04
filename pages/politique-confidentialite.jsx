@@ -1,12 +1,53 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 const Footer = dynamic(() => import('../components/Footer'))
 const Header = dynamic(() => import('../components/Header'))
 import { useRouter } from 'next/router'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import dynamic from 'next/dynamic'
+import axios from 'axios'
 
 const PolitiqueConf = () => {
   const router = useRouter()
+
+  //fetching products from mongodb Data API
+  useEffect(() => {
+    const fetchData = async () => {
+      var data = JSON.stringify({
+        collection: 'products',
+        database: 'pfe',
+        dataSource: 'Cluster0',
+        projection: {
+          _id: 1,
+        },
+      })
+      var config = {
+        method: 'post',
+        url: 'https://data.mongodb-api.com/app/data-awinh/endpoint/data/v1/action/findOne',
+        headers: {
+          'Content-Type': 'application/json',
+          //'Access-Control-Request-Headers': '*',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Authorization',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE,OPTIONS',
+          'api-key':
+            '7WzEwZqPNzt5b8jaZtKYOhveqhrfmhfmel30CEebV6NQUIhaKiIWrJ9bsYqoSSGX',
+        },
+        data: data,
+      }
+
+      axios(config)
+        .then(function (response) {
+          console.log(
+            '_______________________________My product : ',
+            JSON.stringify(response.data)
+          )
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    }
+    fetchData()
+  }, [])
 
   return (
     <div className='flex flex-col overflow-x-hidden bg-gray-100'>
@@ -54,7 +95,7 @@ const PolitiqueConf = () => {
                 sur vous
               </h3>
 
-              <p className='text-slate-700 w-5/6 ml-4'>
+              <div className='text-slate-700 w-5/6 ml-4'>
                 Nous collectons vos données personnelles afin de fournir et
                 d&apos;améliorer continuellement nos produits et services. Nous
                 pouvons collecter, utiliser, stocker et transférer les
@@ -75,7 +116,7 @@ const PolitiqueConf = () => {
                     recherches, vues, téléchargements et achats.
                   </li>
                 </ul>
-              </p>
+              </div>
             </div>
 
             {/* --------------Les cookies et comment nous les utilisons-------------- */}
@@ -84,8 +125,7 @@ const PolitiqueConf = () => {
                 <span className=' mr-3'>3.</span>Les cookies et comment nous les
                 utilisons
               </h3>
-              <p className='text-slate-700 w-5/6 ml-4' />
-              <p className='text-slate-700 w-5/6 ml-4'>
+              <div className='text-slate-700 w-5/6 ml-4'>
                 <p>
                   Un cookie est un petit fichier de lettres et de chiffres que
                   nous mettons sur votre ordinateur si vous y consentez.
@@ -108,7 +148,7 @@ const PolitiqueConf = () => {
                     9odyani.
                   </li>
                 </ul>
-              </p>
+              </div>
             </div>
 
             {/* --------------Comment nous utilisons vos données personnelles-------------- */}
@@ -118,7 +158,7 @@ const PolitiqueConf = () => {
                 <span className=' mr-3'>4.</span>Comment nous utilisons vos
                 données personnelles
               </h3>
-              <p className='text-slate-700 w-5/6 ml-4'>
+              <div className='text-slate-700 w-5/6 ml-4'>
                 Nous utilisons vos données personnelles pour exploiter, fournir,
                 développer et améliorer les produits et services que nous
                 proposons, notamment les suivants:
@@ -134,7 +174,7 @@ const PolitiqueConf = () => {
                   </li>
                   <li>- Détecter les fraudes.</li>
                 </ul>
-              </p>
+              </div>
             </div>
           </div>
         </div>

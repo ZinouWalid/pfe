@@ -19,6 +19,10 @@ export default async function handler(req, res) {
     case 'DELETE': {
       return deleteOrder(req, res)
     }
+
+    case 'some': {
+      return console.log('------------------------SOME------------------------')
+    }
   }
 }
 

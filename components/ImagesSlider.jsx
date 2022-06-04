@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Slider from 'react-slick'
-import * as Realm from 'realm-web'
 import Link from 'next/link'
 
-function ImagesSlider({ products }) {
+function ImagesSlider() {
   const [sliderProducts, setSliderProducts] = useState([])
   const settings = {
     dots: false,
@@ -18,22 +17,19 @@ function ImagesSlider({ products }) {
 
   useEffect(() => {
     const fetchAds = async () => {
-      //setSliderProducts(products?.map((product) => product.img))
-      const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-      const app = new Realm.App({ id: REALM_APP_ID })
-      const credentials = Realm.Credentials.anonymous()
-      let ads = []
+    
+      //fetching the api for the allAds route
+      const response = await fetch(`/api/ads/allActiveAds`)
+      const data = await response.json().then((data) => {
+        console.log('data : ', data)
+        return data
+      })
 
-      try {
-        const user = await app.logIn(credentials)
-        ads = await user.functions.getAllActiveAds()
-        setSliderProducts(ads)
-      } catch (error) {
-        console.error(error)
-      }
+      setSliderProducts(data)
     }
     fetchAds()
   }, [])
+  console.log('ADS : ', sliderProducts)
 
   return (
     <div className='overflow-hidden lg:mt-12 flex h-[80vh] w-full items-center justify-center rounded bg-gradient-to-b from-white to-gray-200 '>

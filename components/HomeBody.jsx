@@ -3,21 +3,16 @@ import Product from './Product'
 import ImagesSlider from './ImagesSlider'
 import { useStateValue } from '../React-Context-Api/context'
 import { motion } from 'framer-motion'
-import { App, Credentials } from 'realm-web'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { unfilterProducts } from '../React-Context-Api/Actions/productsActions'
-import { useRouter } from 'next/router'
 
 function Body({ products }) {
   const [{ filteredProducts }, dispatch] = useStateValue()
-  const router = useRouter()
   //implement infinite scroll
   const [myProducts, setMyProducts] = useState(products)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
 
   //track changes on page url to unfilter the searched products
-  
 
   //track changes on products
   useEffect(() => {
@@ -25,24 +20,31 @@ function Body({ products }) {
   }, [products])
 
   const getMoreProducts = async () => {
-    const REALM_APP_ID = process.env.REALM_APP_ID || 'pfe-etnhz'
-    const app = new App({ id: REALM_APP_ID })
-    const credentials = Credentials.anonymous()
-    let newProducts = []
-
+    //fetch the next page products
     try {
-      const user = await app.logIn(credentials)
-      newProducts = await user.functions.getProductsByCategory({
-        category: products[0].category,
-        page: page + 1,
+      const response = await fetch(`/api/products/productsByCategory`, {
+        method: 'POST',
+        body: JSON.stringify({
+          category: products[0].category,
+          page: page + 1,
+        }),
       })
-      setMyProducts([...myProducts, ...newProducts])
-      setPage(page + 1)
-      newProducts.length < 20 && setHasMore(false)
-    } catch (error) {
-      console.error(error)
+      await response.json().then((data) => {
+        console.log('data : ', data)
+        //append the new products to the current products
+        setMyProducts([...myProducts, ...data])
+
+        //increment the page number to get the next 20 products
+        setPage(page + 1)
+
+        //check if we have more products to load (< 20 => we don't have more products)
+        data.length < 20 && setHasMore(false)
+      })
+    } catch (err) {
+      alert(err)
     }
   }
+
   const easing = [0.6, -0.05, 0.01, 1]
   const fadeInUP = {
     initial: {
@@ -69,11 +71,11 @@ function Body({ products }) {
   return (
     <motion.div exit={{ opacity: 0 }} initial='initial' animate='animate'>
       {/*Images Slider*/}
-      <ImagesSlider products={products.slice(0, 5)} />
+      <ImagesSlider />
 
       {/* Products */}
       <InfiniteScroll
-        dataLength={myProducts.length}
+        dataLength={myProducts?.length}
         next={getMoreProducts}
         hasMore={hasMore}
         loader={
