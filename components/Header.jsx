@@ -118,6 +118,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       )} */}
       {/* Logo and title */}
       {/* check if the window url contains "client" */}
+      
       <Link href={'/'} passHref>
         <a className='flex items-center p-4 mr-auto'>
           <Image
