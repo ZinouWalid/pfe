@@ -153,8 +153,9 @@ const OrdersPage = ({ rider, deliveries }) => {
                   <CurrencyFormat
                     renderText={(value) => (
                       <div className=' flex flex-col'>
-                        <p className='mb-1 text-sm font-normal text-red-600'>
-                          Montant : {value} DA
+                        <p className='mb-1 text-sm font-normal '>
+                          Montant :{' '}
+                          <span className='text-red-600'>{value} DA</span>
                         </p>
                       </div>
                     )}
@@ -166,10 +167,23 @@ const OrdersPage = ({ rider, deliveries }) => {
                 </div>
 
                 {/* -----------Votre paiment----------- */}
-                <p className='mb-1 text-sm font-normal text-green-600'>
-                  Coûts de livraison : {delivery?.coast || 20} DA
+                <p className='mb-1 text-sm font-normal '>
+                  Coûts de livraison :{' '}
+                  <span className='text-green-600'>
+                    {delivery?.coast || 20} DA
+                  </span>
                 </p>
-
+                {/* -----------État----------- */}
+                <p className={`mb-1 text-sm font-normal `}>
+                  État :
+                  <span
+                    className={`${
+                      delivery?.state == 2 ? 'text-amber-500' : 'text-green-600'
+                    }`}
+                  >
+                    {delivery?.state == 2 ? ' En cours de livraison' : ' Livré'}
+                  </span>
+                </p>
                 {/* -----------Produits----------- */}
 
                 <button
