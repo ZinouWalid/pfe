@@ -25,22 +25,24 @@ const Rider = () => {
             riderId: rider?.id,
           }),
         })
-        await response1.json().then((data) => {
+        await response1.json().then(async (data) => {
           setRider(data)
-        })
 
-        //fetch the orders based on the rider region
-        const response2 = await fetch(`/api/orders/ordersByRegion`, {
-          method: 'POST',
-          body: JSON.stringify({
-            region: rider?.region,
-          }),
-        })
-        await response2.json().then((data) => {
-          setOrders(data)
+          //fetch the orders based on the rider region
+          const response2 = await fetch(`/api/orders/ordersByRegion`, {
+            method: 'POST',
+            body: JSON.stringify({
+              region: data?.region,
+            }),
+          })
+          await response2.json().then((data) => {
+            setOrders(data)
+            console.log('ORDERS : ', data)
+          })
         })
       } catch (err) {
-        alert(err)
+        //alert(err)
+        console.error(err)
       }
     }
     fetchRiderAndOrders()
@@ -51,23 +53,23 @@ const Rider = () => {
       <Header hideSearch={true} hideBasket={true} hideOptions={true} />
 
       <nav className='bg-white '>
-        <div className='flex justify-around items-center h-20 rounded bg-gray-200 mb-4 transition duration-300 ease-in-out mt-14 lg:mt-16'>
+        <div className='flex justify-around items-center h-20 rounded bg-gray-200 mb-4 transition duration-500 ease-in-out mt-14 lg:mt-16'>
           {/* -------------Notifications----------- */}
           <button
-            className={`mx-auto relative border-b-2 border-transparent h-full text-gray-800 hover:text-gray-400 hover:bg-gray-300 transition duration-200 ease-in-out  ${
+            className={`w-full mx-auto flex items-center justify-center border-b-2 border-transparent h-full text-gray-800 hover:text-gray-400 hover:bg-gray-300 transition duration-200 ease-in-out  ${
               showNotifications && 'border-slate-800'
             }`}
-            title='Notifications'
+            title='commandes disponibles'
             onClick={() => {
               setShowProfile(false)
               setShowDeliveries(false)
               setShowNotifications(true)
             }}
           >
-            <NotificationsIcon className='text-gray-500 text-4xl hover:cursor-pointer hover:bg-slate-300 rounded-full p-1' />
+            <NotificationsIcon className='text-gray-500 !text-[35px] hover:cursor-pointer hover:bg-slate-300 rounded-full p-1' />
             {orders?.length > 0 && (
-              <span className='absolute text-center inset-y-2 inset-x-3 object-right-top -mr-6 '>
-                <div className='items-center mx-auto px-1 py-0.5 border-2 border-white rounded-full text-xs font-semibold bg-red-500 text-white'>
+              <span className=' text-center'>
+                <div className=' bg-red-500 border-2 border-white rounded-full p-0.5 mb-6 -ml-2 text-xs font-semibold text-white '>
                   {orders?.length}
                 </div>
               </span>
@@ -78,7 +80,7 @@ const Rider = () => {
 
           {/* -------------Orders----------- */}
           <button
-            className={`mx-auto h-full border-b-2  border-transparent hover:bg-gray-300 transition duration-200 ease-in-out ${
+            className={`w-full  mx-auto h-full border-b-2  border-transparent hover:bg-gray-300 transition duration-200 ease-in-out ${
               showDeliveries && 'border-slate-800'
             }`}
             onClick={() => {
@@ -86,19 +88,16 @@ const Rider = () => {
               setShowProfile(false)
               setShowDeliveries(true)
             }}
-            title='Profile'
+            title='commandes livrées'
           >
-            <InventoryIcon
-              className='text-gray-500 text-4xl p-1  hover:cursor-pointer hover:bg-slate-300 rounded-full  hover:scale-105'
-              titleAccess='Mes commandes'
-            />
+            <InventoryIcon className='text-gray-500 !text-[35px] p-1  hover:cursor-pointer hover:bg-slate-300 rounded-full  hover:scale-105' />
           </button>
 
           <div className='my-auto h-full border border-gray-300'></div>
 
           {/* ------------Profile----------- */}
           <button
-            className={`mx-auto h-full border-b-2  border-transparent hover:bg-gray-300 transition duration-200 ease-in-out ${
+            className={`w-full  mx-auto h-full border-b-2  border-transparent hover:bg-gray-300 transition duration-200 ease-in-out ${
               showProfile && 'border-slate-800'
             }`}
             onClick={() => {
@@ -106,17 +105,19 @@ const Rider = () => {
               setShowDeliveries(false)
               setShowProfile(true)
             }}
-            title='Profile'
+            title='profile'
           >
             <AccountCircleIcon
-              className='text-gray-500 text-4xl p-1  hover:cursor-pointer hover:bg-slate-300 rounded-full  hover:scale-105'
-              titleAccess='Profile'
+              className='text-gray-500 !text-[35px] p-1  hover:cursor-pointer hover:bg-slate-300 rounded-full  hover:scale-105'
+              titleAccess='profile'
             />
           </button>
         </div>
       </nav>
       {showNotifications && <OrdersPage rider={rider} orders={orders} />}
+
       {showProfile && <ProfilePage rider={rider} />}
+
       {showDeliveries && (
         <DeliveriesPage rider={rider} deliveries={rider?.orders} />
       )}

@@ -35,7 +35,8 @@ const Notifications = () => {
           setNotifications(data)
         })
       } catch (err) {
-        alert(err)
+        //alert(err)
+        console.error(err)
       }
     }
     fetchNotifications()

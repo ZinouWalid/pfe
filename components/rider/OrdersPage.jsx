@@ -9,14 +9,14 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 // --- THE ORDERS AVAILABLE FOR THE RIDER ---
 
 const OrdersPage = ({ rider, orders }) => {
-  const [myOrders, setMyOrders] = useState(orders)
-  const [buttonMsg, setButtonMsg] = useState('')
+  const [myOrders, setMyOrders] = useState()
 
   //show order products
   useEffect(() => {
     const ordersClone = orders.map((order) => {
       return { ...order, showMore: false }
     })
+
     setMyOrders(ordersClone)
   }, [orders])
 
@@ -62,6 +62,9 @@ const OrdersPage = ({ rider, orders }) => {
                 message: 'UPDATE ORDERS',
                 date: new Date(),
               }),
+            }).then((msg) => {
+              //refresh page to let changes take effect
+              window.location.reload(false)
             })
           },
         },
@@ -77,14 +80,13 @@ const OrdersPage = ({ rider, orders }) => {
       {myOrders?.length == 0 ? (
         <div className='bg-white flex flex-col items-center text-amber-500'>
           <h1 className='uppercase text-3xl font-bold'>pas de commandes</h1>
-
           <img
             src='https://cdn.dribbble.com/users/357929/screenshots/2276751/media/678caef6068a976e4a0d94bbdba6b660.png?compress=1&resize=400x300&vertical=top'
             className='h-64 w-full mx-auto object-contain'
           />
         </div>
       ) : (
-        myOrders.map((order, index) => (
+        myOrders?.map((order, index) => (
           <div
             key={order?.id}
             className='w-full max-w-screen p-4 text-gray-800 bg-white rounded-lg shadow dark:bg-gray-100 dark:text-gray-800'

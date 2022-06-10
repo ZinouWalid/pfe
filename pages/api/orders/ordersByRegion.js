@@ -6,9 +6,10 @@ export default async function handler(req, res) {
     //get the category key from the request body
     const { region } = JSON.parse(req.body)
 
+    //get only the non delivered orders
     const orders = await db
       .collection('orders')
-      .find({ region: region }, { _id: false })
+      .find({ region: region, state: 1 }, { _id: false })
       .toArray()
 
     //return the orders as json

@@ -26,7 +26,7 @@ const ProfilePage = ({ rider }) => {
             <div className='flex flex-wrap justify-center'>
               <div className='w-full px-4 flex justify-center'>
                 <div className=''>
-                  <AccountCircleIcon className=' text-gray-500 text-9xl' />
+                  <AccountCircleIcon className=' text-gray-500 !text-[90px]' />
                 </div>
               </div>
               <div className='w-full px-4 text-center mt-4'>

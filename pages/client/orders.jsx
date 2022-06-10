@@ -43,7 +43,8 @@ const Orders = () => {
           setOrders(data)
         })
       } catch (err) {
-        alert(err)
+        //alert(err)
+        console.error(err)
       }
     }
     fetchOrders()

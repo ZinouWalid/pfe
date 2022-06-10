@@ -160,18 +160,17 @@ async function updateRider(req, res) {
       },
       { _id: false }
     )
-    console.log('My Orders : ', rider.orders)
 
     if (delivery.message == 'UPDATE ORDERS') {
-      console.log('UPDATE ORDERS : ', delivery)
+            console.log('MESSAGE : ', delivery.message)
 
       //Add to the orders array
-      // update the Orders with the new Order
+      // update the Orders with the new Order a,d overwrite it's state
       await db.collection('riders').updateOne(
         {
           id: delivery.riderId,
         },
-        { $addToSet: { orders: { ...delivery } } }
+        { $addToSet: { orders: { ...delivery, state: 2 } } }
       )
     } else if (delivery.message == 'DELETE ORDER') {
       console.log('DELETE ORDER : ', delivery)
@@ -184,7 +183,7 @@ async function updateRider(req, res) {
         { $pull: { orders: { id: delivery?.orderId } } }
       )
     } else if (delivery.message == 'UPDATE STATE') {
-      console.log('UPDATE STATE : ', delivery)
+      console.log('MESSAGE : ', delivery.message)
 
       //Delete from the orders array
       await db.collection('riders').updateOne(

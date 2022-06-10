@@ -15,6 +15,7 @@ const OrdersPage = ({ rider, deliveries }) => {
 
   //show delivery products
   useEffect(() => {
+    console.log('DELEVERIES : ', deliveries)
     const ordersClone = deliveries?.map((order) => {
       return { ...order, showMore: false }
     })
@@ -67,6 +68,9 @@ const OrdersPage = ({ rider, deliveries }) => {
                 message: 'UPDATE STATE',
                 orderState: 3,
               }),
+            }).then((msg) => {
+              //refresh page to let changes take effect
+              window.location.reload(false)
             })
           },
         },
@@ -102,9 +106,11 @@ const OrdersPage = ({ rider, deliveries }) => {
               body: JSON.stringify({
                 riderId: rider.id,
                 orderId: order?.id,
-                date: new Date(),
                 message: 'DELETE ORDER',
               }),
+            }).then((msg) => {
+              //refresh page to let changes take effect
+              window.location.reload(false)
             })
           },
         },
@@ -181,7 +187,9 @@ const OrdersPage = ({ rider, deliveries }) => {
                       delivery?.state == 2 ? 'text-amber-500' : 'text-green-600'
                     }`}
                   >
-                    {delivery?.state == 2 ? ' En cours de livraison' : ' Livré'}
+                    {delivery?.state == 2
+                      ? ' En cours de livraison...'
+                      : ' Livré'}
                   </span>
                 </p>
                 {/* -----------Produits----------- */}

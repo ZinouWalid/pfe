@@ -13,9 +13,8 @@ const RiderId = ({}) => {
   const [{ rider }, dispatch] = useStateValue()
 
   useEffect(() => {
-    console.log('-------- / page --------')
+    console.log('-------- /rider page --------')
     setRiderSession(getCookie('riderSession'))
-    console.log('Rider Session : ', riderSession)
   }, [rider])
 
   if (riderSession?.provider === 'rider-provider') {

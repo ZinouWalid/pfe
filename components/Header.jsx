@@ -58,7 +58,8 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
           dispatch(filterProducts(data))
         })
       } catch (err) {
-        alert(err)
+        //alert(err)
+        console.error(err)
       }
 
       setSearchTerm('')
@@ -79,7 +80,8 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
         setSuggestions(data)
       })
     } catch (err) {
-      alert(err)
+      //alert(err)
+      console.error(err)
     }
   }
 
@@ -118,7 +120,7 @@ function Header({ hideSearch, hideBasket, hideOptions }) {
       )} */}
       {/* Logo and title */}
       {/* check if the window url contains "client" */}
-      
+
       <Link href={'/'} passHref>
         <a className='flex items-center p-4 mr-auto'>
           <Image

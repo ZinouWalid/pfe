@@ -41,7 +41,8 @@ function Body({ products }) {
         data.length < 20 && setHasMore(false)
       })
     } catch (err) {
-      alert(err)
+      //alert(err)
+      console.error(err)
     }
   }
 
