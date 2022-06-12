@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 function ImagesSlider() {
   const [sliderProducts, setSliderProducts] = useState([])
+  
   const settings = {
     dots: false,
     infinite: true,

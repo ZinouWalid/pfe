@@ -114,12 +114,21 @@ export async function getServerSideProps(context) {
 
   //fetch the products API for categories
   const response2 = await fetch(
-    `https://zino-products-api.herokuapp.com/categories?key=${params.categoryId}`
+    `http://${req.headers.host}/api/categories/categoryById`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        categoryId: params.categoryId,
+      }),
+    }
   )
+  /*await fetch(
+    `https://zino-products-api.herokuapp.com/categories?key=${params.categoryId}`
+  )*/
   categories = await response2.json()
   //search the sub category in the category subCategories array
 
-  const subCategory = categories[0].subCategories.filter(
+  const subCategory = categories.subCategories.filter(
     (subCategory) => subCategory.key === params.subCategoryId
   )
   return {

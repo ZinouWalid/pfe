@@ -19,7 +19,6 @@ const Hero = () => {
   useEffect(() => {
     console.log('-------- / page --------')
     setRiderSession(getCookie('riderSession'))
-    console.log('Rider Session : ', riderSession)
   }, [status, session])
 
   return (
