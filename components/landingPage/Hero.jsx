@@ -36,33 +36,37 @@ const Hero = () => {
           {/* ---Client and rider buttons */}
           <div className='mt-8 flex items-center justify-evenly w-full '>
             <Link href='/client' passHref>
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.5 }}
-                className='rounded bg-amber-400 px-6 py-3 text-slate-900 font-bold hover:bg-amber-500 '
-              >
-                Client
-                <span className='mx-4'>
-                  <AddShoppingCartIcon />
-                </span>
-              </motion.a>
+              <a>
+                <motion.p
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.5 }}
+                  className='px-6 py-3 rounded bg-amber-400 text-slate-900 font-bold hover:bg-amber-500 '
+                >
+                  Client
+                  <span className='mx-4'>
+                    <AddShoppingCartIcon />
+                  </span>
+                </motion.p>
+              </a>
             </Link>
-
-            {/* we check if the rider is authenticated to see if we send him to the authentication page or directly to his profile */}
+            
+            {/* we check if the rider is authenticated to see if we direct him to the authentication page or directly to his profile */}
             <Link
               href={riderSession ? '/rider' : '/rider/auth/signin'}
               passHref
             >
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.5 }}
-                className='rounded bg-amber-400 px-6 py-3 text-slate-900 font-bold hover:bg-amber-500 '
-              >
-                livreur
-                <span className='mx-4'>
-                  <LocalShippingIcon />
-                </span>
-              </motion.a>
+              <a>
+                <motion.p
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.5 }}
+                  className='rounded bg-amber-400 px-6 py-3 text-slate-900 font-bold hover:bg-amber-500 '
+                >
+                  livreur
+                  <span className='mx-4'>
+                    <LocalShippingIcon />
+                  </span>
+                </motion.p>
+              </a>
             </Link>
           </div>
         </div>

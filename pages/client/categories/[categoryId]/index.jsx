@@ -1,21 +1,20 @@
 import React from 'react'
-//const CategoriesFilter = dynamic(() =>
-//  import('../../../../components/CategoriesFilter')
-//)
-//const Header = dynamic(() => import('../../../../components/Header'))
-//const Footer = dynamic(() => import('../../../../components/Footer'))
-//const ProductsCategories = dynamic(() =>
-//  import('../../../../components/ProductsCategories')
-//)
-//const ImagesSlider = dynamic(() =>
-//  import('../../../../components/ImagesSlider')
-//)
-import CategoriesFilter from '../../../../components/CategoriesFilter'
-import Header from '../../../../components/Header'
-import Footer from '../../../../components/Footer'
-import ProductsCategories from '../../../../components/ProductsCategories'
-import ImagesSlider from '../../../../components/ImagesSlider'
-import { App, Credentials } from 'realm-web'
+const CategoriesFilter = dynamic(() =>
+  import('../../../../components/CategoriesFilter')
+)
+const Header = dynamic(() => import('../../../../components/Header'))
+const Footer = dynamic(() => import('../../../../components/Footer'))
+const ProductsCategories = dynamic(() =>
+  import('../../../../components/ProductsCategories')
+)
+const ImagesSlider = dynamic(() =>
+  import('../../../../components/ImagesSlider')
+)
+//import CategoriesFilter from '../../../../components/CategoriesFilter'
+//import Header from '../../../../components/Header'
+//import Footer from '../../../../components/Footer'
+//import ProductsCategories from '../../../../components/ProductsCategories'
+//import ImagesSlider from '../../../../components/ImagesSlider'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 

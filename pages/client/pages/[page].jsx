@@ -8,7 +8,6 @@ const CategoriesFilter = dynamic(() =>
 const Pagination = dynamic(() => import('../../../components/Pagination'))
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
-import absoluteUrl from 'next-absolute-url'
 
 const Page = ({ products, currentPage, pages }) => {
   const [categories, setCategories] = useState([])

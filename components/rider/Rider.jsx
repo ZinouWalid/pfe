@@ -21,13 +21,13 @@ const Rider = () => {
       try {
         const response1 = await fetch(`/api/riders/singleRider`, {
           method: 'POST',
-          body: JSON.stringify({
+          body: {
             riderId: rider?.id,
-          }),
+          },
         })
         await response1.json().then(async (data) => {
           setRider(data)
-
+          console.log('Rider :', data)
           //fetch the orders based on the rider region
           const response2 = await fetch(`/api/orders/ordersByRegion`, {
             method: 'POST',
@@ -37,7 +37,6 @@ const Rider = () => {
           })
           await response2.json().then((data) => {
             setOrders(data)
-            console.log('ORDERS : ', data)
           })
         })
       } catch (err) {

@@ -11,7 +11,6 @@ const ProductsCategories = dynamic(() =>
 const ImagesSlider = dynamic(() =>
   import('../../../../../components/ImagesSlider')
 )
-import * as Realm from 'realm-web'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 

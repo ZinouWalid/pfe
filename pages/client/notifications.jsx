@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { App, Credentials } from 'realm-web'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 const NotificationsPage = dynamic(() =>

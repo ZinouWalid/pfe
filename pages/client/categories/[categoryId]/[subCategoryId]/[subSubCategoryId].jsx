@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react'
-//const Body = dynamic(() => import('../../../../../components/HomeBody'))
-//const CategoriesFilter = dynamic(() =>
-//  import('../../../../../components/CategoriesFilter')
-//)
-//const Header = dynamic(() => import('../../../../../components/Header'))
-//const Footer = dynamic(() => import('../../../../../components/Footer'))
-//const ProductsCategories = dynamic(() =>
-//  import('../../../../../components/ProductsCategories')
-//)
-import CategoriesFilter from '../../../../../components/CategoriesFilter'
-import Header from '../../../../../components/Header'
-import Footer from '../../../../../components/Footer'
-import Body from '../../../../../components/HomeBody'
+const Body = dynamic(() => import('../../../../../components/HomeBody'))
+const CategoriesFilter = dynamic(() =>
+  import('../../../../../components/CategoriesFilter')
+)
+const Header = dynamic(() => import('../../../../../components/Header'))
+const Footer = dynamic(() => import('../../../../../components/Footer'))
 
-import * as Realm from 'realm-web'
+//import CategoriesFilter from '../../../../../components/CategoriesFilter'
+//import Header from '../../../../../components/Header'
+//import Footer from '../../../../../components/Footer'
+//import Body from '../../../../../components/HomeBody'
+
 import { motion } from 'framer-motion'
 import { unfilterProducts } from '../../../../../React-Context-Api/Actions/productsActions'
 
