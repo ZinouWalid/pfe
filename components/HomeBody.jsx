@@ -4,6 +4,7 @@ import ImagesSlider from './ImagesSlider'
 import { useStateValue } from '../React-Context-Api/context'
 import { motion } from 'framer-motion'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import Search from './Search'
 
 function Body({ products }) {
   const [{ filteredProducts }, dispatch] = useStateValue()
@@ -94,17 +95,15 @@ function Body({ products }) {
           variants={stagger}
           className='mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5 transition ease-in-out duration-500'
         >
-          {filteredProducts?.length > 0
-            ? filteredProducts.map((product) => (
+          {/* <Search/> */}
+          {myProducts.map((product) => {
+            if (product?.units > 0)
+              return (
                 <motion.div key={product.id} variants={fadeInUP}>
                   <Product key={product.id} product={product} />
                 </motion.div>
-              ))
-            : myProducts.map((product) => (
-                <motion.div key={product.id} variants={fadeInUP}>
-                  <Product key={product.id} product={product} />
-                </motion.div>
-              ))}
+              )
+          })}
         </motion.div>
       </InfiniteScroll>
     </motion.div>

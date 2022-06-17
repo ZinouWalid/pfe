@@ -12,7 +12,7 @@ import { motion } from 'framer-motion'
 import { getCookie } from '../lib/useCookie'
 
 function Product({ product }) {
-  const { id, img, name, price, rating, promotion } = { ...product }
+  const { id, img, name, price, rating, votes, promotion } = { ...product }
   const [{}, dispatch] = useStateValue()
   const [showButton, setShowButton] = useState(false)
   const [showQuantity, setShowQuantity] = useState(false)
@@ -81,19 +81,22 @@ function Product({ product }) {
       </motion.div>
       <div className='flex flex-col transition ease-in-out duration-500'>
         <p>{name}</p>
-        <Rating
-          name='read-only'
-          value={parseInt(rating?.split(' ')[0]) || 2.5}
-          precision={0.1}
-          readOnly
-        />
+        <div className='flex'>
+          <Rating
+            name='read-only'
+            value={parseInt(rating?.split(' ')[0]) || 2.5}
+            precision={0.1}
+            readOnly
+          />
+          <p className='text-gray-600 ml-2'>( {votes || 1} avis )</p>
+        </div>
         {parseInt(promotion?.split('%')[0]) <= 0 ? (
           <CurrencyFormat
             renderText={(value) => (
               <span className='text-gray-700 mt-2'>{value + ' '}DA</span>
             )}
             decimalScale={2}
-            value={price}
+            value={price.split('-')[0]}
             displayType={'text'}
             thousandSeparator={true}
           />

@@ -53,6 +53,7 @@ const ProductInfo = ({ product }) => {
   //Update the product quantity when it changes
   useEffect(() => {
     dispatch(updateQuantity({ ...product, tags: [], quantity }))
+    console.log(product);
   }, [quantity])
 
   const easing = [0.6, -0.05, 0.01, 1]
@@ -176,7 +177,7 @@ const ProductInfo = ({ product }) => {
               >
                 {promotion.split('%')[0] <= 0 ? (
                   <span className='title-font text-2xl font-medium text-gray-900 '>
-                    {price}
+                    {price.split("-")[0]}
                   </span>
                 ) : (
                   <div className='flex flex-col '>

@@ -42,7 +42,7 @@ function CheckoutProduct({ product }) {
                         parseInt(promotion?.split('%')[0])) /
                         100
                   )
-                : price}
+                : price.split('-')[0]}
             </p>
             <p className='font-semibold my-4'>Quantité : {quantity}</p>
             <button
