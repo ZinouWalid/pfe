@@ -57,7 +57,7 @@ export default function PayementForm() {
 
     console.log('Order Validated')
     //return to page 01
-    router.push('/client/pages/page_1')
+    router.push('/client')
   }
 
   const handleInputChange = (e) => {

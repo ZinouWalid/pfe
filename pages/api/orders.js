@@ -36,7 +36,7 @@ async function addOrder(req, res) {
       .collection('orders')
       .insertOne({ id: v4().toString(), ...JSON.parse(req.body), state: 1 })
     // return a message
-    client.close()
+    // client.close()
     return res.json({
       message: 'Order added successfully',
       success: true,
@@ -61,7 +61,7 @@ async function getOrders(req, res) {
       .sort({ published: -1 })
       .toArray()
     // return the Orders
-    client.close()
+    //client.close()
     return res.json({
       message: JSON.parse(JSON.stringify(Orders)),
       success: true,
@@ -124,7 +124,7 @@ async function updateOrder(req, res) {
     }
 
     // return a message
-    client.close()
+    //client.close()
     console.log('Order updated successfully : ', id)
     return res.json({
       message: 'Order updated successfully',
@@ -152,7 +152,7 @@ async function deleteOrder(req, res) {
     })
 
     // returning a message
-    client.close()
+    // client.close()
     return res.json({
       message: 'Order deleted successfully',
       success: true,
