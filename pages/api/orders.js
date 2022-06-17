@@ -35,6 +35,18 @@ async function addOrder(req, res) {
     await db
       .collection('orders')
       .insertOne({ id: v4().toString(), ...JSON.parse(req.body), state: 1 })
+
+    //reduce the quantity of the products in the database
+    const { products } = JSON.parse(req.body)
+    products.forEach(async (product) => {
+      await db
+        .collection('products')
+        .updateOne(
+          { id: product.id },
+          { $set: { units: product.units - product.quantity } }
+        )
+    })
+
     // return a message
     // client.close()
     return res.json({

@@ -33,7 +33,7 @@ export const getBasketTotal = (basket) =>
 
     {
       //if the product has discount
-      if (item.promotion!="0%") {
+      if (item.promotion != '0%') {
         //calculate the total of the product after discount
         const newItemTotal = Math.floor(
           parseInt(item.price?.replace(',', '').split(' ')[0]) -
@@ -72,10 +72,7 @@ const reducer = (state = initialState, action) => {
       //remove old basket and add the new one to the cookie
       removeCookie('basket')
       setCookie('basket', [...state.basket, action.payload])
-      console.log(
-        'Reducer Basket : ',
-        JSON.stringify([...state.basket, action.payload])
-      )
+
       return { ...state, basket: [...state.basket, action.payload] }
 
     case REMOVE_FROM_BASKET:
@@ -91,7 +88,7 @@ const reducer = (state = initialState, action) => {
 
         newBasket1.splice(index, 1)
       } else {
-        console.warn(
+        console.log(
           `Can't remove the product (id: ${action.id}) as it's not in your basket.`
         )
       }
@@ -100,7 +97,6 @@ const reducer = (state = initialState, action) => {
       removeCookie('basket')
       setCookie('basket', newBasket1)
 
-      console.log('Reducer Basket : ', JSON.stringify(newBasket1))
       return { ...state, basket: newBasket1 }
 
     case UPDATE_QUANTITY:
@@ -115,6 +111,7 @@ const reducer = (state = initialState, action) => {
       //remove old basket and add the new one to the cookie
       removeCookie('basket')
       setCookie('basket', newBasket2)
+
       return {
         ...state,
         basket: newBasket2,
@@ -126,13 +123,15 @@ const reducer = (state = initialState, action) => {
       return { ...state, basket: [] }
 
     case SEARCH_PRODUCTS:
-      console.log('Reducer data : ', action.payload)
+      console.log('SEARCH_PRODUCTS')
       return { ...state, products: action.payload }
 
     case FILTER_PRODUCTS:
+      console.log('FILTER_PRODUCTS')
       return { ...state, filteredProducts: action.payload }
 
     case UNFILTER_PRODUCTS:
+      console.log('UNFILTER_PRODUCTS')
       return { ...state, filteredProducts: [] }
 
     case SET_CLIENT_SESSION:

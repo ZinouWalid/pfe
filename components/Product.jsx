@@ -12,12 +12,14 @@ import { motion } from 'framer-motion'
 import { getCookie } from '../lib/useCookie'
 
 function Product({ product }) {
-  const { id, img, name, price, rating, votes, promotion } = { ...product }
+  const { id, img, name, price, rating, votes, promotion, units } = {
+    ...product,
+  }
   const [{}, dispatch] = useStateValue()
   const [showButton, setShowButton] = useState(false)
   const [showQuantity, setShowQuantity] = useState(false)
   const [quantity, setQuantity] = useState(1)
-
+  const [outOfStock, setOutOfStock] = useState(false)
   useEffect(() => {
     const basket = getCookie('basket')
     if (basket) {
@@ -29,6 +31,13 @@ function Product({ product }) {
       }
     }
   }, [])
+
+  //Add to basket button
+  const addToBasketHandler = async () => {
+    //if the product is not in the basket we add it
+    setShowQuantity(true)
+    dispatch(addToBasket({ ...product, tags: [], quantity }))
+  }
 
   //increase quantity function
   function increaseQuantity() {
@@ -48,7 +57,13 @@ function Product({ product }) {
   }
   //Update the product quantity when it changes
   useEffect(() => {
-    dispatch(updateQuantity({ ...product, tags: [], quantity }))
+    if (quantity <= units) {
+      dispatch(updateQuantity({ ...product, tags: [], quantity }))
+      //check if the product is out of stock
+      if (outOfStock) setOutOfStock(false)
+    } else {
+      setOutOfStock(true)
+    }
   }, [quantity])
 
   return (
@@ -81,14 +96,14 @@ function Product({ product }) {
       </motion.div>
       <div className='flex flex-col transition ease-in-out duration-500'>
         <p>{name}</p>
-        <div className='flex'>
+        <div className='flex items-center'>
           <Rating
             name='read-only'
             value={parseInt(rating?.split(' ')[0]) || 2.5}
             precision={0.1}
             readOnly
           />
-          <p className='text-gray-600 ml-2'>( {votes || 1} avis )</p>
+          <p className='text-gray-500 text-xs ml-1'>( {votes || 1} avis )</p>
         </div>
         {parseInt(promotion?.split('%')[0]) <= 0 ? (
           <CurrencyFormat
@@ -127,23 +142,25 @@ function Product({ product }) {
             </span>
           </div>
         )}
+        {outOfStock && (
+          <p className='text-red-500 text-xs '>
+            vous avez dépassé la quantité disponible !
+          </p>
+        )}
 
         {/* show the button if the quantity is 0 or showButton = true */}
         <div className='h-10'>
           {showButton && (
             <button
               className='mt-2 rounded border border-amber-500 bg-amber-300 p-1 text-sm hover:border-amber-600 hover:bg-amber-500'
-              onClick={() => {
-                setShowQuantity(true)
-                dispatch(addToBasket({ ...product, tags: [], quantity }))
-              }}
+              onClick={() => addToBasketHandler()}
             >
               Ajouter au Panier
             </button>
           )}
         </div>
         {showQuantity && (
-          <div className='mt-2 h-10 w-32'>
+          <div className='h-10 w-32'>
             <div className='relative mt-1 flex w-full flex-row rounded-lg bg-transparent'>
               {/* Decrease Button */}
               <button
