@@ -76,7 +76,7 @@ async function addRider(req, res) {
         message: "E-mail de l'utilisateur existe déjà",
         success: false,
       })
-      client.close()
+      //client.close()
       return
     }
     if (checkExistingPhoneNumber?.length) {
@@ -88,7 +88,7 @@ async function addRider(req, res) {
         message: "Le numéro de téléphone de l'utilisateur existe déjà",
         success: false,
       })
-      client.close()
+      //client.close()
       return
     }
     const hashedPass = await hashPassword(password)
@@ -133,7 +133,7 @@ async function getRiders(req, res) {
       .find({ name: 'rider 1' })
       .toArray()
     // return the Riders
-    client.close()
+    //client.close()
     return res.json({
       message: riders,
       success: true,
@@ -195,7 +195,7 @@ async function updateRider(req, res) {
       )
     }
 
-    client.close()
+    //client.close()
     res.status(200).json({ message: 'Rider Orders updated!' })
   } catch (error) {
     // return an error
@@ -215,7 +215,7 @@ async function deleteRider(req, res) {
     await db.collection('riders').deleteOne({})
 
     // returning a message
-    client.close()
+    //client.close()
     return res.json({
       message: 'Rider deleted successfully',
       success: true,

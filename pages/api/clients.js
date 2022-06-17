@@ -52,7 +52,7 @@ async function addClient(req, res) {
         message: "E-mail de l'utilisateur existe déjà",
         success: false,
       })
-      client.close()
+      //client.close()
       return
     }
 
@@ -71,7 +71,7 @@ async function addClient(req, res) {
         message: "Username de l'utilisateur existe déjà",
         success: false,
       })
-      client.close()
+      //client.close()
       return
     }
 
@@ -143,7 +143,7 @@ async function updateClient(req, res) {
     const rider = await db.collection('clients').findOne({ email: userEmail })
     if (!rider) {
       res.status(404).json({ message: 'User not found.' })
-      client.close()
+      //client.close()
       return
     }
 
@@ -153,7 +153,7 @@ async function updateClient(req, res) {
 
     if (!passwordsAreEqual) {
       res.status(403).json({ message: 'Invalid password.' })
-      client.close()
+      //client.close()
       return
     }
 
@@ -164,7 +164,7 @@ async function updateClient(req, res) {
       .collection('clients')
       .updateOne({ email: userEmail }, { $set: { password: hashedPassword } })
 
-    client.close()
+    //client.close()
     res.status(200).json({ message: 'Password updated!' })
   } catch (error) {
     // return an error

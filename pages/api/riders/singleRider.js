@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     let { db, client } = await connectToDatabase()
     //get the category key from the request body
-    const { riderId } = req.body
+    const { riderId } = JSON.parse(req.body)
 
     const rider = await db
       .collection('riders')

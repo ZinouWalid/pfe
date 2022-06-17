@@ -16,14 +16,15 @@ const Rider = () => {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
+    console.log(rider);
     const fetchRiderAndOrders = async () => {
       //fetch the rider info
       try {
         const response1 = await fetch(`/api/riders/singleRider`, {
           method: 'POST',
-          body: {
+          body: JSON.stringify({
             riderId: rider?.id,
-          },
+          }),
         })
         await response1.json().then(async (data) => {
           setRider(data)
