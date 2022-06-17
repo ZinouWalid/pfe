@@ -51,6 +51,9 @@ const OrdersPage = ({ orders }) => {
               body: JSON.stringify({
                 id: orderId,
               }),
+            }).then((msg) => {
+              //refresh page to let changes take effect
+              window.location.reload(false)
             })
           },
         },
@@ -229,8 +232,8 @@ const OrdersPage = ({ orders }) => {
                     order?.state == 1
                       ? 'bg-red-400 hover:bg-red-500'
                       : order?.state == 2
-                      ? 'bg-amber-400 hover:bg-amber-500'
-                      : 'bg-green-400 hover:bg-green-500'
+                      ? 'text-amber-400 hover:bg-amber-500'
+                      : 'text-green-400 hover:bg-green-500'
                   }`}
                   onClick={() => order?.state == 1 && cancelOrder(order?.id)}
                 >
@@ -243,7 +246,7 @@ const OrdersPage = ({ orders }) => {
                     ) : order?.state == 2 ? (
                       'En cours de livraison ...'
                     ) : (
-                      <div className=''>
+                      <div className='flex items-center'>
                         Livré
                         <CheckIcon className='ml-2' />
                       </div>
