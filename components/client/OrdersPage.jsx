@@ -16,7 +16,7 @@ const OrdersPage = ({ orders }) => {
   const [myOrders, setMyOrders] = useState(orders)
   const router = useRouter()
 
-  //show order products
+  //show the products list of the order
   useEffect(() => {
     const ordersClone = orders.map((order) => {
       return { ...order, showMore: false }
@@ -27,6 +27,7 @@ const OrdersPage = ({ orders }) => {
   console.log('My orders : ', orders)
 
   const handleClick = (index) => {
+    //hide other products list and display the current one
     let updatedOrder = {
       ...myOrders[index],
       showMore: !myOrders[index].showMore,
